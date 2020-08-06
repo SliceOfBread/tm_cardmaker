@@ -1,3 +1,4 @@
+// @ts-check
 // Accordion 
 function myAccFunc(acc) {
   var x = document.getElementById(acc);
@@ -24,10 +25,22 @@ function w3_close() {
 }
 
 function addBlock(info) {
+  let c = document.getElementById("cmcanvas");
+  let ctx = c.getContext("2d");
+  
   let cmd = info.split(':');
   switch (cmd[0]) {
     case 'template':
-      let pngName = cmd[1] + "_normal.png";
+        let pngName = cmd[1] + "_normal.png";
+      break;
+    case 'production':
+      let img = document.getElementById("prod");
+      let sz = 10;
+      for (let x=40; x < 80; x += sz) {
+        for (let y=100; y < 120; y += sz) {
+          ctx.drawImage(img,x,y,sz,sz);
+        }
+      }
       break;
   
     default:

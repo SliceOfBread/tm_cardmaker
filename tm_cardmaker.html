@@ -49,6 +49,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         <a href="#" class="w3-bar-item w3-button">City</a>
         <a href="#" class="w3-bar-item w3-button">Earth</a>
       </div>
+      <a onclick="addBlock('production:self')" href="#" class="w3-bar-item w3-button">Production box</a>
     </div>
   </div>
 </nav>
@@ -68,10 +69,14 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   <div class="w3-hide-large" style="margin-top:83px"></div>
   
   <div class="w3-padding w3-container w3-text-grey" id="canvas">
-    <canvas height="462px" width="340px" style="border:1px solid #101010;"></canvas>
+    <canvas id="cmcanvas" height="462px" width="340px" style="border:1px solid #101010;"></canvas>
   </div>
 
   <!-- End page content -->
+</div>
+
+<div class="w3-hide">
+  <img id="prod" src="productionboxes/nxn.png">
 </div>
 
 
