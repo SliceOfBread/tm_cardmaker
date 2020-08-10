@@ -14,7 +14,7 @@ or more specifically https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css
 .w3-sidebar a {font-family: "Roboto", sans-serif}
 body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
 </style>
-<body class="w3-content" style="max-width:1200px">
+<body class="w3-content" style="max-width:1600px">
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="z-index:3;width:250px" id="mySidebar">
@@ -23,7 +23,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       File <i class="fa fa-caret-down"></i>
     </a>
     <div id="file" class="w3-bar-block w3-hide w3-padding-large w3-medium">
-      <a href="#" class="w3-bar-item w3-button">New</a>
+      <a onclick="resetProject()" href="#" class="w3-bar-item w3-button">New</a>
       <a href="#" class="w3-bar-item w3-button">Load</a>
       <a href="#" class="w3-bar-item w3-button">Save</a>
     </div>
@@ -31,23 +31,59 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       Add Block <i class="fa fa-caret-down"></i>
     </a>
     <div id="design" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+      <a onclick="myAccFunc('backgrounds')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
+        Backgrounds <i class="fa fa-caret-down"></i>
+      </a>
+      <div id="backgrounds" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+        <a onclick="addUserFile()" href="#" class="w3-bar-item w3-button">Load Image</a>
+        <input type="file" id="fileselection" class="w3-hide" onchange="newBackgroundImage(this)">
+        <a onclick="addColor()" href="#" class="w3-bar-item w3-button">Set Color</a>
+      </div>
       <a onclick="myAccFunc('templates')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
         Templates <i class="fa fa-caret-down"></i>
       </a>
       <div id="templates" class="w3-bar-block w3-hide w3-padding-large w3-medium">
         <!-- <a href="#" class="w3-bar-item w3-button w3-light-grey"><i class="fa fa-caret-right w3-margin-right"></i>Skinny</a> -->
-        <a onclick="addBlock('template:green')" href="#" class="w3-bar-item w3-button">Green Card</a>
-        <a onclick="addBlock('template:blue')" href="#" class="w3-bar-item w3-button">Blue Card</a>
-        <a onclick="addBlock('template:red')" href="#" class="w3-bar-item w3-button">Red Card</a>
       </div>
       <a onclick="myAccFunc('tags')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
         Tags <i class="fa fa-caret-down"></i>
       </a>
       <div id="tags" class="w3-bar-block w3-hide w3-padding-large w3-medium">
-        <a href="#" class="w3-bar-item w3-button">Animal</a>
-        <a href="#" class="w3-bar-item w3-button">Building</a>
-        <a href="#" class="w3-bar-item w3-button">City</a>
-        <a href="#" class="w3-bar-item w3-button">Earth</a>
+      </div>
+      <a onclick="myAccFunc('globalparameters')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
+        Global Params <i class="fa fa-caret-down"></i>
+      </a>
+      <div id="globalparameters" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+      </div>
+      <a onclick="myAccFunc('misc')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
+       Misc <i class="fa fa-caret-down"></i>
+     </a>
+     <div id="misc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+      </div>
+      <a onclick="myAccFunc('parties')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
+       Parties <i class="fa fa-caret-down"></i>
+     </a>
+     <div id="parties" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+      </div>
+      <a onclick="myAccFunc('requisites')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
+       Requirements <i class="fa fa-caret-down"></i>
+     </a>
+     <div id="requisites" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+      </div>
+      <a onclick="myAccFunc('resources')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
+       Resources <i class="fa fa-caret-down"></i>
+     </a>
+     <div id="resources" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+      </div>
+      <a onclick="myAccFunc('tiles')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
+       Tiles <i class="fa fa-caret-down"></i>
+     </a>
+     <div id="tiles" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+      </div>
+      <a onclick="myAccFunc('VPs')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
+       VPs <i class="fa fa-caret-down"></i>
+     </a>
+     <div id="VPs" class="w3-bar-block w3-hide w3-padding-large w3-medium">
       </div>
       <a onclick="addBlock('production:self')" href="#" class="w3-bar-item w3-button">Production box</a>
     </div>
@@ -68,15 +104,15 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   <!-- Push down content on small screens -->
   <div class="w3-hide-large" style="margin-top:83px"></div>
   
-  <div class="w3-padding w3-container w3-text-grey" id="canvas">
-    <canvas id="cmcanvas" height="462px" width="340px" style="border:1px solid #101010;"></canvas>
+  <div class="w3-padding w3-container">
+    <canvas id="cmcanvas" height="1050px" width="750px" style="float:left; border:1px solid #101010;"></canvas>
+    <div style="display:block; float:left; margin: 10px;">
+      <section id="layerlist">
+      </section>
+    </div>
   </div>
 
   <!-- End page content -->
-</div>
-
-<div class="w3-hide">
-  <img id="prod" src="productionboxes/nxn.png">
 </div>
 
 
