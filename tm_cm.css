@@ -268,3 +268,13 @@ section { */
     top: 0;
   }
   
+  div.selected {
+    border: 3px solid black;
+  }
+
+  input[type=number]{
+    width: 5em;
+  }
+  input[type=checkbox]{
+    transform: scale(2);
+  } 

@@ -51,7 +51,7 @@ var imageList = [
   {putUnder: "resources", text: "", src:"floater"},
   {putUnder: "resources", text: "", src:"heat"},
   {putUnder: "resources", text: "", src:"microbe"},
-  {putUnder: "resources", text: "", src:"other_player_background"},
+  {putUnder: "resources", text: "res_otherbg", src:"other_player_background", hidden:true},
   {putUnder: "resources", text: "", src:"plant"},
   {putUnder: "resources", text: "", src:"power"},
   {putUnder: "resources", text: "", src:"radiation"},
@@ -104,11 +104,14 @@ var ddcount;
 
 var hiddenImage = {};
 
+var domParams = document.getElementById("params").parentNode.removeChild(document.getElementById("params"));
+domParams.classList.remove("w3-hide");
+
 resetProject();
 
 function resetProject() {
   document.getElementById("layerlist").innerHTML = "";
-  addListItem("Base",{type:"base", color:"white", height:1050, width:750});
+  addLayer("Base",{type:"base", color:"white", height:1050, width:750, params:"color"});
 
   for (let i=0; i < imageList.length; i++) {
     if (!imageList[i].obj) {
@@ -122,7 +125,7 @@ function resetProject() {
   drawProject();
 }
 
-function addListItem(title, layer) {
+function addLayer(title, layer) {
   // <div id='div1' class='divRec'><div class='inside'>item 1</div></div>
   let toAdd = document.createElement("div");
   // toAdd.appendChild(downButton());
@@ -132,6 +135,7 @@ function addListItem(title, layer) {
   let childAdd = document.createElement("div");
   childAdd.classList.add("inside");
   childAdd.innerHTML = title;
+  childAdd.onclick = selectLayer;
   // skip delete button for base layer
   if (ddcount) childAdd.appendChild(deleteButton());
   toAdd.appendChild(childAdd);
@@ -173,11 +177,33 @@ function deleteListItem() {
   drawProject();
 }
 
-// function downButton() {
-//   let toAdd = document.createElement("button");
-//   toAdd.innerHTML = "&darr;";
-//   return toAdd;
-// }
+function selectLayer() {
+  let allLayerNodes = this.parentNode.parentNode.childNodes;
+  for (let ch=0; ch < allLayerNodes.length; ch++) {
+    if (allLayerNodes[ch].classList.contains("selected")) {
+      allLayerNodes[ch].classList.remove("selected");
+      allLayerNodes[ch].removeChild(domParams);
+    } else if (allLayerNodes[ch] == this.parentNode) {
+      allLayerNodes[ch].classList.add("selected");
+      // hide/unhide correct params for this layer
+      let thisNum = Number(allLayerNodes[ch].id.slice(11));
+      
+      for (let pch=0; pch < domParams.children.length; pch++) {
+        let thispch = domParams.children[pch];
+        if (aLayers[thisNum].params.indexOf(thispch.id) == -1) {
+          // not in params, hide it
+          thispch.classList.add("w3-hide");
+        } else {
+          // in params list, show it
+          if (thispch.classList.contains("w3-hide")) {
+            thispch.classList.remove("w3-hide");
+          }
+        }
+      }
+      allLayerNodes[ch].appendChild(domParams);
+    }
+  }
+}
 
 function drawProject() {
   let c = document.getElementById("cmcanvas");
@@ -210,6 +236,24 @@ function drawProject() {
   }
 }
 
+function updateColor() {
+  // if we use this for anything aside from Base, we'll need to figure
+  // out what layer it is attached to
+  let lNum = 0;
+  let hexColor = "#";
+  hexColor += twoCharHexColor("inputred");
+  hexColor += twoCharHexColor("inputgreen");
+  hexColor += twoCharHexColor("inputblue");
+  aLayers[lNum].color = hexColor;
+  drawProject();
+}
+
+function twoCharHexColor(el) {
+  let h = Number(document.getElementById(el).value).toString(16);
+  if (h.length < 2) h = "0" + h;
+  return(h);
+}
+
 function onImageLoad() {
   if (imageList[this.dataindex].hidden) {
     // hidden images don't get menu items
@@ -235,13 +279,13 @@ function onImageLoad() {
 }
 
 function addImage() {
-  let layer = {type:"block", obj:{}, x:0, y:0, width:0, height:0};
+  let layer = {type:"block", obj:{}, x:0, y:0, width:0, height:0, params:"allimages"};
   let myIndex = this.id.slice(5);
   layer.obj = imageList[myIndex].obj;
   let c = document.getElementById("cmcanvas");
   layer.width = Math.min(layer.obj.width, c.width);
   layer.height = Math.min(layer.obj.height, c.height);
-  addListItem(imageList[myIndex].text, layer);
+  addLayer(imageList[myIndex].text, layer);
   drawProject();
   //let ctx = c.getContext("2d");
 
