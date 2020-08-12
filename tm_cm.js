@@ -111,7 +111,7 @@ resetProject();
 
 function resetProject() {
   document.getElementById("layerlist").innerHTML = "";
-  addLayer("Base",{type:"base", color:"white", height:1050, width:750, params:"color"});
+  addLayer("Base",{type:"base", red:255, green:255, blue:255, height:1050, width:750, params:"color"});
 
   for (let i=0; i < imageList.length; i++) {
     if (!imageList[i].obj) {
@@ -162,7 +162,7 @@ function deleteListItem() {
   let toDelete = this.parentNode.parentNode;
   let deleteNum = Number(toDelete.id.slice(11));
   // for every list numbered > than the one being deleted, subtract 1
-  let allLayerNodes = toDelete.parentNode.childNodes;
+  let allLayerNodes = toDelete.parentNode.children;
   for (let ch=0; ch < allLayerNodes.length; ch++) {
     let thisNum = Number(allLayerNodes[ch].id.slice(11));
     if (thisNum > deleteNum)   {
@@ -178,7 +178,7 @@ function deleteListItem() {
 }
 
 function selectLayer() {
-  let allLayerNodes = this.parentNode.parentNode.childNodes;
+  let allLayerNodes = this.parentNode.parentNode.children;
   for (let ch=0; ch < allLayerNodes.length; ch++) {
     if (allLayerNodes[ch].classList.contains("selected")) {
       allLayerNodes[ch].classList.remove("selected");
@@ -198,11 +198,25 @@ function selectLayer() {
           if (thispch.classList.contains("w3-hide")) {
             thispch.classList.remove("w3-hide");
           }
+          let chInputs = thispch.getElementsByTagName("input");
+          for (let subch of chInputs) {
+            subch.value = aLayers[thisNum][subch.id.slice(5)];
+            let x=2;
+            //setDomValue(subch, thisNum);
+          }
         }
       }
       allLayerNodes[ch].appendChild(domParams);
     }
   }
+}
+
+function setDomValue(dom, layer) {
+  // if (dom.id.indexOf("input") != 0) {
+  //   window.alert("Bad DOM id:" + dom);
+  //   return;
+  // }
+  dom.value = aLayers[layer][dom.id.slice(5)];
 }
 
 function drawProject() {
@@ -225,7 +239,8 @@ function drawProject() {
         c.height = layer.height; // changing width forces clearing
         c.width = layer.width;
         // clear to background color
-        ctx.fillStyle = layer.color;
+        ctx.fillStyle = "rgb(" + layer.red + "," + layer.blue + "," + layer.green + ")";
+        // ctx.fillStyle = rgb(layer.red, layer.blue, layer.green);
         ctx.fillRect(0,0,layer.width, layer.height);
         break;
     
@@ -236,23 +251,23 @@ function drawProject() {
   }
 }
 
-function updateColor() {
-  // if we use this for anything aside from Base, we'll need to figure
-  // out what layer it is attached to
-  let lNum = 0;
-  let hexColor = "#";
-  hexColor += twoCharHexColor("inputred");
-  hexColor += twoCharHexColor("inputgreen");
-  hexColor += twoCharHexColor("inputblue");
-  aLayers[lNum].color = hexColor;
+function updateValue(th) {
+  let lNum = th.parentNode.parentNode.parentNode.parentNode.id.slice(11);
+  if (th.type == "checkbox") {
+    aLayers[lNum][th.id.slice(5)] = th.checked;
+  } else {
+    aLayers[lNum][th.id.slice(5)] = th.value;
+  }
   drawProject();
 }
 
-function twoCharHexColor(el) {
-  let h = Number(document.getElementById(el).value).toString(16);
-  if (h.length < 2) h = "0" + h;
-  return(h);
-}
+// function updateColor(id) {
+//   // if we use this for anything aside from Base, we'll need to figure
+//   // out what layer it is attached to
+//   let lNum = 0;
+//   aLayers[lNum][id] = document.getElementById("input" + id).value;
+//   drawProject();
+// }
 
 function onImageLoad() {
   if (imageList[this.dataindex].hidden) {
@@ -456,7 +471,7 @@ function sortable(section, onUpdate){
 }
                                         
 function rebuildLayerOrder() {
-  let cList = document.getElementById("layerlist").childNodes;
+  let cList = document.getElementById("layerlist").children;
   aLayerOrder = [];
   for (let n = 0; n < cList.length; n++) {
     aLayerOrder.push(Number(cList[n].id.slice(11)));

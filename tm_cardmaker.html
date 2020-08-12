@@ -115,24 +115,24 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   <!-- End page content -->
   <div id="params" class="w3-hide">
     <div id="allimages" class="w3-hide">
-      <span style="float: right;">X:<input id="inputx" type="number"></span><br>
-      <span style="float: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y:<input id="inputy" type="number"></span><br>
-      <span style="float: right;">width:<input id="inputwidth" type="number" min="1"></span><br>
-      <span style="float: right;">height:<input id="inputheight" type="number" min="1"></span><br>
+      <span style="float: right;">X:<input id="inputx" type="number" onchange="updateValue(this)"></span><br>
+      <span style="float: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y:<input id="inputy" type="number" onchange="updateValue(this)""></span><br>
+      <span style="float: right;">width:<input id="inputwidth" type="number" min="1" onchange="updateValue(this)""></span><br>
+      <span style="float: right;">height:<input id="inputheight" type="number" min="1" onchange="updateValue(this)""></span><br>
     </div>
     <div id="clipimages" class="w3-hide">
-        <span style="float: right;">sX:<input id="inputsx" type="number" min="0"></span><br>
-        <span style="float: right;">sY:<input id="inputsy" type="number" min="0"></span><br>
-        <span style="float: right;">swidth:<input id="inputswidth" type="number" min="1"></span><br>
-        <span style="float: right;">sheight:<input id="inputsheight" type="number" min="1"></span><br>
+        <span style="float: right;">sX:<input id="inputsx" type="number" min="0" onchange="updateValue(this)"></span><br>
+        <span style="float: right;">sY:<input id="inputsy" type="number" min="0" onchange="updateValue(this)"></span><br>
+        <span style="float: right;">swidth:<input id="inputswidth" type="number" min="1" onchange="updateValue(this)"></span><br>
+        <span style="float: right;">sheight:<input id="inputsheight" type="number" min="1" onchange="updateValue(this)"></span><br>
       </div>
     <div id="otherbg" class="w3-hide">
       <span>'Others' background:&nbsp;&nbsp;<input id="inputobg" type="checkbox"></span>
     </div>
     <div id="color" class="w3-hide">
-      <span style="float: right;">Red</label><input type="range" id="inputred" min="0" max="255" value="255" onchange="updateColor()"></span><br>
-      <span style="float: right;">Green</label><input type="range" id="inputgreen" min="0" max="255" value="255" onchange="updateColor()"></span><br>
-      <span style="float: right;">Blue</label><input type="range" id="inputblue" min="0" max="255" value="255" onchange="updateColor()"></span>
+      <span style="float: right;">Red</label><input type="range" id="inputred" min="0" max="255" value="255" onchange="updateValue(this)"></span><br>
+      <span style="float: right;">Green</label><input type="range" id="inputgreen" min="0" max="255" value="255" onchange="updateValue(this)"></span><br>
+      <span style="float: right;">Blue</label><input type="range" id="inputblue" min="0" max="255" value="255" onchange="updateValue(this)"></span>
     </div>
   </div>
 </div>

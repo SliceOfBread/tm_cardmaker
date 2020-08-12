@@ -235,6 +235,11 @@ section { */
   .inside {
     background-color: #fff;
   }
+
+  .inside button {
+    height: 24px;
+    font-size: 14px;
+  }
   
   .divRec {
       cursor: move;
@@ -278,3 +283,4 @@ section { */
   input[type=checkbox]{
     transform: scale(2);
   } 
+
