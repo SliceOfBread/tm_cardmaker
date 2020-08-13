@@ -9,7 +9,7 @@ or more specifically https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css
 <link rel="stylesheet" href="tm_cm.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 <style>
 .w3-sidebar a {font-family: "Roboto", sans-serif}
 body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
@@ -43,7 +43,6 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         Templates <i class="fa fa-caret-down"></i>
       </a>
       <div id="templates" class="w3-bar-block w3-hide w3-padding-large w3-medium">
-        <!-- <a href="#" class="w3-bar-item w3-button w3-light-grey"><i class="fa fa-caret-right w3-margin-right"></i>Skinny</a> -->
       </div>
       <a onclick="myAccFunc('tags')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
         Tags <i class="fa fa-caret-down"></i>
@@ -85,7 +84,8 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
      </a>
      <div id="VPs" class="w3-bar-block w3-hide w3-padding-large w3-medium">
       </div>
-      <a onclick="addBlock('production:self')" href="#" class="w3-bar-item w3-button">Production box</a>
+      <a onclick="addTextBox('text:self')" href="#" class="w3-bar-item w3-button">Text box</a>
+      <a onclick="addProduction('production:self')" href="#" class="w3-bar-item w3-button">Production box</a>
     </div>
   </div>
 </nav>
@@ -116,9 +116,9 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   <div id="params" class="w3-hide">
     <div id="allimages" class="w3-hide">
       <span style="float: right;">X:<input id="inputx" type="number" onchange="updateValue(this)"></span><br>
-      <span style="float: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y:<input id="inputy" type="number" onchange="updateValue(this)""></span><br>
-      <span style="float: right;">width:<input id="inputwidth" type="number" min="1" onchange="updateValue(this)""></span><br>
-      <span style="float: right;">height:<input id="inputheight" type="number" min="1" onchange="updateValue(this)""></span><br>
+      <span style="float: right;">Y:<input id="inputy" type="number" onchange="updateValue(this)"></span><br>
+      <span style="float: right;">width:<input id="inputwidth" type="number" min="1" onchange="updateValue(this)"></span><br>
+      <span style="float: right;">height:<input id="inputheight" type="number" min="1" onchange="updateValue(this)"></span><br>
     </div>
     <div id="clipimages" class="w3-hide">
         <span style="float: right;">sX:<input id="inputsx" type="number" min="0" onchange="updateValue(this)"></span><br>
@@ -129,10 +129,15 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
     <div id="otherbg" class="w3-hide">
       <span>'Others' background:&nbsp;&nbsp;<input id="inputobg" type="checkbox"></span>
     </div>
+    <div id="alltext" class="w3-hide">
+      <span style="float: right;"><textarea id="inputdata" onchange="updateValue(this)"></textarea></span><br>
+      <span style="float: right;">V space:<input id="inputlineSpace" type="number" onchange="updateValue(this)"></span><br>
+    </div>
     <div id="color" class="w3-hide">
-      <span style="float: right;">Red</label><input type="range" id="inputred" min="0" max="255" value="255" onchange="updateValue(this)"></span><br>
+      <span style="float: right;">Color:<input id="inputcolor" type="color" onchange="updateValue(this)"></span>
+      <!-- <span style="float: right;">Red</label><input type="range" id="inputred" min="0" max="255" value="255" onchange="updateValue(this)"></span><br>
       <span style="float: right;">Green</label><input type="range" id="inputgreen" min="0" max="255" value="255" onchange="updateValue(this)"></span><br>
-      <span style="float: right;">Blue</label><input type="range" id="inputblue" min="0" max="255" value="255" onchange="updateValue(this)"></span>
+      <span style="float: right;">Blue</label><input type="range" id="inputblue" min="0" max="255" value="255" onchange="updateValue(this)"></span> -->
     </div>
   </div>
 </div>

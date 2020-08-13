@@ -1,6 +1,5 @@
 
-var aLayers = [];
-var aLayerOrder = [];
+var aLayers = {};
 
 var userImageList = [];
 
@@ -111,7 +110,7 @@ resetProject();
 
 function resetProject() {
   document.getElementById("layerlist").innerHTML = "";
-  addLayer("Base",{type:"base", red:255, green:255, blue:255, height:1050, width:750, params:"color"});
+  addLayer("Base",{type:"base", color:"#ffffff", height:1050, width:750, params:"color"});
 
   for (let i=0; i < imageList.length; i++) {
     if (!imageList[i].obj) {
@@ -140,8 +139,7 @@ function addLayer(title, layer) {
   if (ddcount) childAdd.appendChild(deleteButton());
   toAdd.appendChild(childAdd);
   document.getElementById("layerlist").appendChild(toAdd);
-  aLayers.push(layer);
-  aLayerOrder.push(ddcount);
+  aLayers[toAdd.id] = layer;
   ddcount++;
 
   sortable( document.getElementById('layerlist'), function (item){
@@ -153,44 +151,51 @@ function deleteButton() {
   let toAdd = document.createElement("button");
   toAdd.innerHTML = "X";
   toAdd.style.float = "right";
-  toAdd.onclick = deleteListItem;
+  toAdd.onclick = function () {deleteListItem(event, this)};
   return toAdd;
 }
 
-function deleteListItem() {
-  // delete item from layerList[] and from layerlist (DOM)
-  let toDelete = this.parentNode.parentNode;
-  let deleteNum = Number(toDelete.id.slice(11));
-  // for every list numbered > than the one being deleted, subtract 1
-  let allLayerNodes = toDelete.parentNode.children;
-  for (let ch=0; ch < allLayerNodes.length; ch++) {
-    let thisNum = Number(allLayerNodes[ch].id.slice(11));
-    if (thisNum > deleteNum)   {
-      thisNum--;
-      allLayerNodes[ch].id = "dragdropdiv" + thisNum;
-    }
+function genSpan(txt) {
+  let toAdd = document.createElement("span");
+  toAdd.innerText = txt;
+}
 
-  }
+function deleteListItem(e,th) {
+  e.stopPropagation();
+  // delete item from aLayers and from layerlist (DOM)
+  let toDelete = th.parentNode.parentNode;
+  // let deleteNum = Number(toDelete.id.slice(11));
+  // // for every list numbered > than the one being deleted, subtract 1
+  // let allLayerNodes = toDelete.parentNode.children;
+  // for (let ch=0; ch < allLayerNodes.length; ch++) {
+  //   let thisNum = Number(allLayerNodes[ch].id.slice(11));
+  //   if (thisNum > deleteNum)   {
+  //     thisNum--;
+  //     allLayerNodes[ch].id = "dragdropdiv" + thisNum;
+  //   }
+
+  // }
+  delete aLayers[toDelete.id];
   toDelete.parentNode.removeChild(toDelete);
-  aLayers.splice(deleteNum,1);
-  rebuildLayerOrder();
   drawProject();
 }
 
 function selectLayer() {
-  let allLayerNodes = this.parentNode.parentNode.children;
+  let allLayerNodes = document.getElementById("layerlist").children;
   for (let ch=0; ch < allLayerNodes.length; ch++) {
     if (allLayerNodes[ch].classList.contains("selected")) {
+      if (domParams.parentNode == allLayerNodes[ch]) {
+        allLayerNodes[ch].removeChild(domParams);
+      }
       allLayerNodes[ch].classList.remove("selected");
-      allLayerNodes[ch].removeChild(domParams);
     } else if (allLayerNodes[ch] == this.parentNode) {
       allLayerNodes[ch].classList.add("selected");
       // hide/unhide correct params for this layer
-      let thisNum = Number(allLayerNodes[ch].id.slice(11));
+      let thisLayer = aLayers[allLayerNodes[ch].id];
       
       for (let pch=0; pch < domParams.children.length; pch++) {
         let thispch = domParams.children[pch];
-        if (aLayers[thisNum].params.indexOf(thispch.id) == -1) {
+        if (thisLayer.params.indexOf(thispch.id) == -1) {
           // not in params, hide it
           thispch.classList.add("w3-hide");
         } else {
@@ -200,9 +205,11 @@ function selectLayer() {
           }
           let chInputs = thispch.getElementsByTagName("input");
           for (let subch of chInputs) {
-            subch.value = aLayers[thisNum][subch.id.slice(5)];
-            let x=2;
-            //setDomValue(subch, thisNum);
+            subch.value = thisLayer[subch.id.slice(5)];
+          }
+          chInputs = thispch.getElementsByTagName("textarea");
+          for (let subch of chInputs) {
+            subch.value = thisLayer[subch.id.slice(5)];
           }
         }
       }
@@ -211,24 +218,36 @@ function selectLayer() {
   }
 }
 
-function setDomValue(dom, layer) {
-  // if (dom.id.indexOf("input") != 0) {
-  //   window.alert("Bad DOM id:" + dom);
-  //   return;
-  // }
-  dom.value = aLayers[layer][dom.id.slice(5)];
-}
-
 function drawProject() {
   let c = document.getElementById("cmcanvas");
   let ctx = c.getContext("2d");
-  for (let o of aLayerOrder) {
-    let layer = aLayers[o];
+  let layerDivs = document.getElementsByClassName("divRec");
+  for (let i=0; i < layerDivs.length; i++) {
+    let layer = aLayers[layerDivs[i].id]
     switch (layer.type) {
       case "block":
-        //let myIndex = this.id.slice(5);
-        //let myObj = imageList[myIndex].obj;
+        // layer = {type:"block", obj:{}, x:0, y:0, width:0, height:0, params:"allimages"};
         ctx.drawImage(layer.obj,layer.x,layer.y,layer.width,layer.height);
+        break;
+      case "text":
+        // layer = {type:"text", data:"", x:0, y:0, width:0, height:0, 
+        // red:0, green:0, blue:0, 
+        // font:"Prototype", size:14, lineSpace:4, justify:"center",
+        // params:""};
+        ctx.textAlign = layer.justify;
+        ctx.font = "" + layer.height + "px " + layer.font;
+        ctx.fillStyle = layer.color;
+        // ctx.fillStyle = "rgb(" + layer.red + "," + layer.blue + "," + layer.green + ")";
+        // TBD break up long text into mutiple parts
+        if (layer.data.indexOf("\n") == -1) {
+          ctx.fillText(layer.data, layer.x, layer.y);
+        } else {
+          let lines = layer.data.split("\n");
+          for (var ln=0; ln < lines.length; ln++) {
+            ctx.fillText(lines[ln], layer.x, layer.y + (layer.height + layer.lineSpace) * ln);
+          }
+        }
+        
         break;
       case "production":
         break;
@@ -239,8 +258,8 @@ function drawProject() {
         c.height = layer.height; // changing width forces clearing
         c.width = layer.width;
         // clear to background color
-        ctx.fillStyle = "rgb(" + layer.red + "," + layer.blue + "," + layer.green + ")";
-        // ctx.fillStyle = rgb(layer.red, layer.blue, layer.green);
+        ctx.fillStyle = layer.color;
+        // ctx.fillStyle = "rgb(" + layer.red + "," + layer.blue + "," + layer.green + ")";
         ctx.fillRect(0,0,layer.width, layer.height);
         break;
     
@@ -252,11 +271,15 @@ function drawProject() {
 }
 
 function updateValue(th) {
-  let lNum = th.parentNode.parentNode.parentNode.parentNode.id.slice(11);
+  let layer = th.parentNode.parentNode.parentNode.parentNode;
+  let layerName = layer.id;
+  if (th.tagName == "TEXTAREA") {
+    layer.firstChild.firstChild.textContent = "Text:" + th.value.substr(0,10);
+  }
   if (th.type == "checkbox") {
-    aLayers[lNum][th.id.slice(5)] = th.checked;
+    aLayers[layerName][th.id.slice(5)] = th.checked;
   } else {
-    aLayers[lNum][th.id.slice(5)] = th.value;
+    aLayers[layerName][th.id.slice(5)] = th.value;
   }
   drawProject();
 }
@@ -306,6 +329,21 @@ function addImage() {
 
   //let myObj = imageList[myIndex].obj;
   //ctx.drawImage(myObj,0,0,c.width,c.height);
+}
+
+function addTextBox() {
+  let layer = {type:"text", data:"", x:0, y:0, width:100, height:20, 
+              // red:0, green:0, blue:0, 
+              color: "#000000",
+              font:"Prototype", lineSpace:4, justify:"center",
+              params:"allimages color alltext"};
+  layer.data = "Replace this text!";
+  let c = document.getElementById("cmcanvas");
+  layer.x = Math.round(c.width/2);
+  layer.y = Math.round(c.height/2);
+  layer.width = c.width;  
+  addLayer("Text:" + layer.data.substr(0,10), layer);
+  drawProject();
 }
 
 function addUserFile() {
@@ -380,10 +418,19 @@ function loadUserImage() {
 // Accordion 
 function myAccFunc(acc) {
   var x = document.getElementById(acc);
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
+  if (x.classList.contains("w3-hide")) {
+    x.classList.remove("w3-hide");
+    // if any div siblings are showing, hide them
+    let showDivs = x.parentNode.getElementsByClassName("w3-show");
+    for (let x=showDivs.length-1; x >= 0; x--) {
+      
+      showDivs[x].classList.add("w3-hide");
+      showDivs[x].classList.remove("w3-show");
+    }
+    x.classList.add("w3-show");
   } else {
-    x.className = x.className.replace(" w3-show", "");
+    x.classList.add("w3-hide");
+    x.classList.remove("w3-show");
   }
 }
 
@@ -411,6 +458,12 @@ function sortable(section, onUpdate){
   });
  
   function _onDragOver(e){
+
+      let selectedDoms = document.getElementsByClassName("selected");
+      for (let i=selectedDoms.length-1; i >= 0; i--) {
+        selectedDoms[i].removeChild(domParams);
+        selectedDoms[i].classList.remove("selected");
+      }
       e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
       
@@ -447,8 +500,6 @@ function sortable(section, onUpdate){
 
       nextEl !== dragEl.nextSibling ? onUpdate(dragEl) : false;
 
-      // extract order of layers as they are now
-      rebuildLayerOrder();
       drawProject();
   }
      
@@ -470,11 +521,3 @@ function sortable(section, onUpdate){
   });
 }
                                         
-function rebuildLayerOrder() {
-  let cList = document.getElementById("layerlist").children;
-  aLayerOrder = [];
-  for (let n = 0; n < cList.length; n++) {
-    aLayerOrder.push(Number(cList[n].id.slice(11)));
-  }
-}
-
