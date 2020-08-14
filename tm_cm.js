@@ -99,7 +99,9 @@ var imageList = [
   {putUnder: "VPs", text: "", src:"n_for"}
 ];
 
-var ddcount;
+var ddcount = 0;
+var maxToLoad;
+var numLoaded;
 
 var hiddenImage = {};
 
@@ -110,10 +112,13 @@ resetProject();
 
 function resetProject() {
   document.getElementById("layerlist").innerHTML = "";
+  ddcount = 0;
   addLayer("Base",{type:"base", color:"#ffffff", height:1050, width:750, params:"color"});
 
+  maxToLoad = 0;
   for (let i=0; i < imageList.length; i++) {
     if (!imageList[i].obj) {
+      maxToLoad++;
       let imageObj = new Image();
       imageObj.onload = onImageLoad;
       imageObj.src = imageList[i].putUnder + "/" + imageList[i].src + ".png";
@@ -121,7 +126,15 @@ function resetProject() {
       imageList[i].obj = imageObj;
     }
   }
-  drawProject();
+  if (maxToLoad) {
+    numLoaded = 0;
+    document.getElementById("files").max = maxToLoad;
+    document.getElementById("files").value = numLoaded;
+    document.getElementById("loadprogress").style.display = "block";
+    document.getElementById("cmcanvas").style.display = "none";
+  } else {
+    allLoadingDone();
+  }
 }
 
 function addLayer(title, layer) {
@@ -145,6 +158,7 @@ function addLayer(title, layer) {
   sortable( document.getElementById('layerlist'), function (item){
     /* console.log(item); */
   });
+  return layer;
 }
 
 function deleteButton() {
@@ -219,15 +233,18 @@ function selectLayer() {
 }
 
 function drawProject() {
+  if (reloading) return;
   let c = document.getElementById("cmcanvas");
   let ctx = c.getContext("2d");
   let layerDivs = document.getElementsByClassName("divRec");
+  let layersForSaving = [];
   for (let i=0; i < layerDivs.length; i++) {
-    let layer = aLayers[layerDivs[i].id]
+    let layer = aLayers[layerDivs[i].id];
+    layersForSaving.push(layer);
     switch (layer.type) {
       case "block":
         // layer = {type:"block", obj:{}, x:0, y:0, width:0, height:0, params:"allimages"};
-        ctx.drawImage(layer.obj,layer.x,layer.y,layer.width,layer.height);
+        ctx.drawImage(imageList[layer.iNum].obj,layer.x,layer.y,layer.width,layer.height);
         break;
       case "text":
         // layer = {type:"text", data:"", x:0, y:0, width:0, height:0, 
@@ -267,6 +284,18 @@ function drawProject() {
         window.alert("Invalid layer type:" + layer.type);
         break;
     }
+  }
+  autoSave(layersForSaving);
+}
+
+function autoSave(layers) {
+  try {
+    if (typeof(Storage) !== "undefined") {
+      localStorage.setItem("autosave", JSON.stringify(layers));
+    }
+
+  } catch (error) {
+    window.alert("Error with autosave");
   }
 }
 
@@ -314,36 +343,108 @@ function onImageLoad() {
     toAdd.id = "image" + this.dataindex;
     document.getElementById(imageList[this.dataindex].putUnder).appendChild(toAdd);
   }
+  numLoaded++;
+  document.getElementById("files").value = numLoaded;
+  if (numLoaded == maxToLoad) {
+    allLoadingDone();
+  }
 }
 
-function addImage() {
-  let layer = {type:"block", obj:{}, x:0, y:0, width:0, height:0, params:"allimages"};
-  let myIndex = this.id.slice(5);
-  layer.obj = imageList[myIndex].obj;
-  let c = document.getElementById("cmcanvas");
-  layer.width = Math.min(layer.obj.width, c.width);
-  layer.height = Math.min(layer.obj.height, c.height);
-  addLayer(imageList[myIndex].text, layer);
+var reloading = false;
+
+function allLoadingDone() {
+  document.getElementById("loadprogress").style.display = "none";
+  document.getElementById("cmcanvas").style.display = "block";
+  // load autosave file
+  reloading = true;
+  let saved = [];
+  try {
+    saved = JSON.parse(localStorage.getItem("autosave"));
+    for (let layer of saved) {
+      let ignore = ["type", "params"];
+      let newLayer = {};
+      switch (layer.type) {
+        case "block":
+          // layer = {type:"block", iNum:0, x:0, y:0, width:0, height:0, params:"allimages"};
+          newLayer = addImage(layer.iNum);
+          ignore.push("iNum");
+          for (let key in layer) {
+            if (ignore.indexOf(key) != -1) continue;
+            newLayer[key] = layer[key];
+          }
+          break;
+        case "text":
+          // let layer = {type:"text", data:"", x:0, y:0, width:100, height:20, 
+          // color: "#000000",
+          // font:"Prototype", lineSpace:4, justify:"center",
+          // params:"allimages color alltext"};
+          newLayer = addTextBox(layer.data);
+          for (let key in layer) {
+            if (ignore.indexOf(key) != -1) continue;
+            newLayer[key] = layer[key];
+          }
+          break;
+        case "production":
+          break;
+        case "userFile":
+          break;
+        case "base":
+          // set height/width
+          // c.height = layer.height; // changing width forces clearing
+          // c.width = layer.width;
+          // // clear to background color
+          // ctx.fillStyle = layer.color;
+          // // ctx.fillStyle = "rgb(" + layer.red + "," + layer.blue + "," + layer.green + ")";
+          // ctx.fillRect(0,0,layer.width, layer.height);
+          break;
+      
+        default:
+          window.alert("Invalid layer type:" + layer.type);
+          break;
+      }
+    }
+  } catch (error) {
+    // no autosave file
+  }
+  reloading = false;
   drawProject();
-  //let ctx = c.getContext("2d");
-
-  //let myObj = imageList[myIndex].obj;
-  //ctx.drawImage(myObj,0,0,c.width,c.height);
+  
 }
 
-function addTextBox() {
+function addImage(th) {
+  let layer = {type:"block", iNum:0, x:0, y:0, width:0, height:0, params:"allimages"};
+  let myIndex = 0;
+  if ((typeof th == "string") || (typeof th == "number")) {
+    myIndex = th;
+  } else {
+    myIndex = this.id.slice(5);
+  }
+  layer.iNum = Number(myIndex);
+  let c = document.getElementById("cmcanvas");
+  layer.width = Math.min(imageList[layer.iNum].obj.width, c.width);
+  layer.height = Math.min(imageList[layer.iNum].obj.height, c.height);
+  let newLayer = addLayer(imageList[myIndex].text, layer);
+  drawProject();
+  return newLayer;
+}
+
+function addTextBox(th) {
   let layer = {type:"text", data:"", x:0, y:0, width:100, height:20, 
-              // red:0, green:0, blue:0, 
               color: "#000000",
               font:"Prototype", lineSpace:4, justify:"center",
               params:"allimages color alltext"};
-  layer.data = "Replace this text!";
+  if ((typeof th == "string") || (typeof th == "number")) {
+    layer.data = th;
+  } else {
+    layer.data = "Replace this text!";
+  }
   let c = document.getElementById("cmcanvas");
   layer.x = Math.round(c.width/2);
   layer.y = Math.round(c.height/2);
   layer.width = c.width;  
-  addLayer("Text:" + layer.data.substr(0,10), layer);
+  let newLayer = addLayer("Text:" + layer.data.substr(0,10), layer);
   drawProject();
+  return newLayer;
 }
 
 function addUserFile() {

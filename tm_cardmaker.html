@@ -104,6 +104,10 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   <!-- Push down content on small screens -->
   <div class="w3-hide-large" style="margin-top:83px"></div>
   
+  <div id="loadprogress">
+    <label for="files">Loading images:</label>
+    <progress id="files" value="0" max="100"></progress>
+  </div>
   <div class="w3-padding w3-container">
     <canvas id="cmcanvas" height="1050px" width="750px" style="float:left; border:1px solid #101010;"></canvas>
     <div style="display:block; float:left; margin: 10px; min-width: 260px;">
