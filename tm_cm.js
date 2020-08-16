@@ -3,7 +3,7 @@ var aLayers = {};
 
 var userImageList = [];
 
-var imageList = [
+var blockList = [
   {putUnder: "templates", text: "Green Card", src:"green_normal"},
   {putUnder: "templates", text: "Green Small Bottom", src:"green_small_bottom"},
   {putUnder: "templates", text: "Green Big Bottom", src:"green_big_bottom"},
@@ -37,7 +37,7 @@ var imageList = [
   {putUnder: "parties", text: "", src:"transhumanists"},
   {putUnder: "parties", text: "", src:"unity"},
   {putUnder: "productionboxes", text: "prod_nxn", src:"nxn", hidden: true},
-  {putUnder: "productionboxes", text: "prod_otherbg", src:"other_player_background", hidden:true},
+  // {putUnder: "productionboxes", text: "prod_otherbg", src:"other_player_background", hidden:true},
   {putUnder: "requisites", text: "", src:"max_big"},
   {putUnder: "requisites", text: "", src:"min_big"},
   {putUnder: "requisites", text: "", src:"min_medium"},
@@ -116,14 +116,14 @@ function resetProject() {
   addLayer("Base",{type:"base", color:"#ffffff", height:1050, width:750, params:"color"});
 
   maxToLoad = 0;
-  for (let i=0; i < imageList.length; i++) {
-    if (!imageList[i].obj) {
+  for (let i=0; i < blockList.length; i++) {
+    if (!blockList[i].obj) {
       maxToLoad++;
       let imageObj = new Image();
-      imageObj.onload = onImageLoad;
-      imageObj.src = imageList[i].putUnder + "/" + imageList[i].src + ".png";
+      imageObj.onload = onBlockLoad;
+      imageObj.src = blockList[i].putUnder + "/" + blockList[i].src + ".png";
       imageObj.dataindex = i;
-      imageList[i].obj = imageObj;
+      blockList[i].obj = imageObj;
     }
   }
   if (maxToLoad) {
@@ -217,14 +217,21 @@ function selectLayer() {
           if (thispch.classList.contains("w3-hide")) {
             thispch.classList.remove("w3-hide");
           }
-          let chInputs = thispch.getElementsByTagName("input");
-          for (let subch of chInputs) {
-            subch.value = thisLayer[subch.id.slice(5)];
+          for (let intype of ["input", "textarea", "select"]) {
+            let chInputs = thispch.getElementsByTagName(intype);
+            for (let subch of chInputs) {
+              subch.value = thisLayer[subch.id.slice(5)];
+            }
+  
           }
-          chInputs = thispch.getElementsByTagName("textarea");
-          for (let subch of chInputs) {
-            subch.value = thisLayer[subch.id.slice(5)];
-          }
+          // let chInputs = thispch.getElementsByTagName("input");
+          // for (let subch of chInputs) {
+          //   subch.value = thisLayer[subch.id.slice(5)];
+          // }
+          // chInputs = thispch.getElementsByTagName("textarea");
+          // for (let subch of chInputs) {
+          //   subch.value = thisLayer[subch.id.slice(5)];
+          // }
         }
       }
       allLayerNodes[ch].appendChild(domParams);
@@ -244,31 +251,87 @@ function drawProject() {
     switch (layer.type) {
       case "block":
         // layer = {type:"block", obj:{}, x:0, y:0, width:0, height:0, params:"allimages"};
-        ctx.drawImage(imageList[layer.iNum].obj,layer.x,layer.y,layer.width,layer.height);
+        ctx.drawImage(blockList[layer.iNum].obj,layer.x,layer.y,layer.width,layer.height);
         break;
       case "text":
         // layer = {type:"text", data:"", x:0, y:0, width:0, height:0, 
-        // red:0, green:0, blue:0, 
-        // font:"Prototype", size:14, lineSpace:4, justify:"center",
+        // color:"#000000", 
+        // font:"Prototype", lineSpace:4, justify:"center",
         // params:""};
         ctx.textAlign = layer.justify;
-        ctx.font = "" + layer.height + "px " + layer.font;
+        if (!layer.style) layer.style = "normal";
+        ctx.font = layer.style + " " + layer.weight + " " + layer.height + "px " + layer.font;
         ctx.fillStyle = layer.color;
-        // ctx.fillStyle = "rgb(" + layer.red + "," + layer.blue + "," + layer.green + ")";
         // TBD break up long text into mutiple parts
         if (layer.data.indexOf("\n") == -1) {
           ctx.fillText(layer.data, layer.x, layer.y);
         } else {
           let lines = layer.data.split("\n");
           for (var ln=0; ln < lines.length; ln++) {
-            ctx.fillText(lines[ln], layer.x, layer.y + (layer.height + layer.lineSpace) * ln);
+            ctx.fillText(lines[ln], layer.x, 0 + layer.y + (layer.height + layer.lineSpace) * ln);
           }
         }
         
         break;
       case "production":
+        let sz = 20;
+        let border = 3;
+        let xpos = Number(layer.x);
+        let ypos = Number(layer.y);
+        let width = Number(layer.width);
+        let height = Number(layer.height);
+        let img = blockList[hiddenImage["prod_nxn"]].obj ;
+        let x=xpos;
+        let w=width % sz;
+        // if (!w) w += sz;
+        let h=height % sz;
+        // if (!h) h += sz;
+        for (x=xpos; x <= xpos+width; x += sz) {
+          let y=ypos;
+          for (y=ypos; y <= ypos+height; y += sz) {
+            if ((x <= xpos+width-sz) && (y <= ypos+height-sz)) {
+              ctx.drawImage(img,x,y,sz,sz);
+            } else {
+              if (x > xpos+width-sz) {
+                if (y > ypos+height-sz) {
+                  ctx.drawImage(img,0,0,w,h,x,y,w,h);
+                } else {
+                  ctx.drawImage(img,0,0,w,sz,x,y,w,sz);
+                }
+              } else {
+                if (y > ypos+height-sz) {
+                  ctx.drawImage(img,0,0,sz,h,x,y,sz,h);
+                } else {
+                  window.alert("What?");
+                  ctx.drawImage(img,0,0,sz,sz,x,y,sz,sz);
+                }
+              }
+            }
+           
+          }          
+        }
+        // inner gradient
+        let my_gradient = ctx.createLinearGradient(0, ypos, 0, ypos + height);
+        my_gradient.addColorStop(0, "#9d6c43");
+        my_gradient.addColorStop(1, "#5a412c");
+        ctx.fillStyle = my_gradient;
+        ctx.fillRect(xpos, ypos+border, width, border); // top
+        ctx.fillRect(xpos, ypos+height-border*2, width, border); // bottom
+        ctx.fillRect(xpos+border, ypos, border, height); // left
+        ctx.fillRect(xpos+width-border*2, ypos, border, height); // right
+      
+        // outer gradient
+        my_gradient = ctx.createLinearGradient(0, ypos, 0, ypos + height);
+        my_gradient.addColorStop(0, "#505050");
+        my_gradient.addColorStop(1, "#c0c0c0");
+        ctx.fillStyle = my_gradient;
+        ctx.fillRect(xpos, ypos, width, border);// top
+        ctx.fillRect(xpos, ypos+height-border, width, border); // bottom
+        ctx.fillRect(xpos, ypos, border, height); // left
+        ctx.fillRect(xpos+width-border, ypos, border, height); // right
         break;
       case "userFile":
+        ctx.drawImage(userImageList[layer.iNum],layer.sx,layer.sy,layer.swidth,layer.sheight,layer.x,layer.y,layer.width,layer.height);
         break;
       case "base":
         // set height/width
@@ -305,7 +368,9 @@ function updateValue(th) {
   if (th.tagName == "TEXTAREA") {
     layer.firstChild.firstChild.textContent = "Text:" + th.value.substr(0,10);
   }
-  if (th.type == "checkbox") {
+  if (th.type == "number") {
+    aLayers[layerName][th.id.slice(5)] = Number(th.value);
+  } else if (th.type == "checkbox") {
     aLayers[layerName][th.id.slice(5)] = th.checked;
   } else {
     aLayers[layerName][th.id.slice(5)] = th.value;
@@ -321,27 +386,28 @@ function updateValue(th) {
 //   drawProject();
 // }
 
-function onImageLoad() {
-  if (imageList[this.dataindex].hidden) {
+function onBlockLoad() {
+  if (blockList[this.dataindex].hidden) {
     // hidden images don't get menu items
+    hiddenImage[blockList[this.dataindex].text] = this.dataindex;
   } else {
-    let tmpText = imageList[this.dataindex].text;
+    let tmpText = blockList[this.dataindex].text;
     if (!tmpText) {
-      tmpText = imageList[this.dataindex].src;
+      tmpText = blockList[this.dataindex].src;
       tmpText = tmpText.replace(/_/g, ' ');
       tmpText = tmpText.replace(tmpText.charAt(0), tmpText.charAt(0).toUpperCase());
-      imageList[this.dataindex].text = tmpText;
+      blockList[this.dataindex].text = tmpText;
     }
     // add menu item for image
     // <a onclick="addBlock('template:green')" href="#" class="w3-bar-item w3-button">Green Card</a>
     let toAdd = document.createElement("a");
-    toAdd.onclick = addImage;
+    toAdd.onclick = addBlock;
     toAdd.innerText = tmpText;
     toAdd.classList.add("w3-bar-item");
     toAdd.classList.add("w3-button");
     toAdd.href = "#";
     toAdd.id = "image" + this.dataindex;
-    document.getElementById(imageList[this.dataindex].putUnder).appendChild(toAdd);
+    document.getElementById(blockList[this.dataindex].putUnder).appendChild(toAdd);
   }
   numLoaded++;
   document.getElementById("files").value = numLoaded;
@@ -366,7 +432,7 @@ function allLoadingDone() {
       switch (layer.type) {
         case "block":
           // layer = {type:"block", iNum:0, x:0, y:0, width:0, height:0, params:"allimages"};
-          newLayer = addImage(layer.iNum);
+          newLayer = addBlock(layer.iNum);
           ignore.push("iNum");
           for (let key in layer) {
             if (ignore.indexOf(key) != -1) continue;
@@ -385,6 +451,11 @@ function allLoadingDone() {
           }
           break;
         case "production":
+          newLayer = addProduction();
+          for (let key in layer) {
+            if (ignore.indexOf(key) != -1) continue;
+            newLayer[key] = layer[key];
+          }
           break;
         case "userFile":
           break;
@@ -411,7 +482,7 @@ function allLoadingDone() {
   
 }
 
-function addImage(th) {
+function addBlock(th) {
   let layer = {type:"block", iNum:0, x:0, y:0, width:0, height:0, params:"allimages"};
   let myIndex = 0;
   if ((typeof th == "string") || (typeof th == "number")) {
@@ -421,9 +492,9 @@ function addImage(th) {
   }
   layer.iNum = Number(myIndex);
   let c = document.getElementById("cmcanvas");
-  layer.width = Math.min(imageList[layer.iNum].obj.width, c.width);
-  layer.height = Math.min(imageList[layer.iNum].obj.height, c.height);
-  let newLayer = addLayer(imageList[myIndex].text, layer);
+  layer.width = Math.min(blockList[layer.iNum].obj.width, c.width);
+  layer.height = Math.min(blockList[layer.iNum].obj.height, c.height);
+  let newLayer = addLayer(blockList[myIndex].text, layer);
   drawProject();
   return newLayer;
 }
@@ -431,7 +502,7 @@ function addImage(th) {
 function addTextBox(th) {
   let layer = {type:"text", data:"", x:0, y:0, width:100, height:20, 
               color: "#000000",
-              font:"Prototype", lineSpace:4, justify:"center",
+              font:"Prototype", style:"normal", weight:"normal", lineSpace:4, justify:"center",
               params:"allimages color alltext"};
   if ((typeof th == "string") || (typeof th == "number")) {
     layer.data = th;
@@ -447,49 +518,7 @@ function addTextBox(th) {
   return newLayer;
 }
 
-function addUserFile() {
-  document.getElementById("fileselection").click();
-}
-
-function addProduction() {
-  let c = document.getElementById("cmcanvas");
-  let ctx = c.getContext("2d");
-  let sz = 10;
-  let xpos = 40;
-  let ypos = 100;
-  let width = 180;
-  let height = 140;
-  let border = 4;
-  // let img = document.getElementById("prod");
-  let img = hiddenImage["prod_nxn"];
-  for (let x=xpos; x < xpos+width; x += sz) {
-    for (let y=ypos; y < ypos+height; y += sz) {
-      ctx.drawImage(img,x,y,sz,sz);
-    }
-  }
-  // inner gradient
-  let my_gradient = ctx.createLinearGradient(0, ypos, 0, ypos + height);
-  my_gradient.addColorStop(0, "#9d6c43");
-  my_gradient.addColorStop(1, "#5a412c");
-  ctx.fillStyle = my_gradient;
-  ctx.fillRect(xpos, ypos+border, width, border); // top
-  ctx.fillRect(xpos, ypos+height-border*2, width, border); // bottom
-  ctx.fillRect(xpos+border, ypos, border, height); // left
-  ctx.fillRect(xpos+width-border*2, ypos, border, height); // right
-
-  // outer gradient
-  my_gradient = ctx.createLinearGradient(0, ypos, 0, ypos + height);
-  my_gradient.addColorStop(0, "#505050");
-  my_gradient.addColorStop(1, "#c0c0c0");
-  ctx.fillStyle = my_gradient;
-  ctx.fillRect(xpos, ypos, width, border);// top
-  ctx.fillRect(xpos, ypos+height-border, width, border); // bottom
-  ctx.fillRect(xpos, ypos, border, height); // left
-  ctx.fillRect(xpos+width-border, ypos, border, height); // right
-
-}
-
-function newBackgroundImage(th) {
+function addUserFile(th) {
   try {
     let file = th.files[0];
     // Check if the file is an image.
@@ -500,9 +529,8 @@ function newBackgroundImage(th) {
     const reader = new FileReader();
     reader.addEventListener('load', function() {
       let newI = new Image();
-      newI.onload = loadUserImage;
+      newI.onload = userImageLoaded;
       newI.src = reader.result;
-      userImageList.push(newI);
     });
     reader.readAsDataURL(file);  
   } catch (error) {
@@ -510,10 +538,28 @@ function newBackgroundImage(th) {
   }
 }
 
-function loadUserImage() {
-  let c = document.getElementById("cmcanvas");
-  let ctx = c.getContext("2d");
-  ctx.drawImage(this,0,0);
+function userImageLoaded() {
+  // this = image object
+  let layer = {type:"userFile", iNum:0, 
+    x:0, y:0, width:0, height:0, 
+    sx:0, sy:0, swidth:0, sheight:0, params:"allimages clipimages"};
+  layer.iNum = userImageList.length;
+  layer.width = this.width;
+  layer.swidth = this.width;
+  layer.height = this.height;
+  layer.sheight = this.height;
+  
+  userImageList.push(this);
+  let newLayer = addLayer("User img:" + layer.iNum, layer);
+  drawProject();
+}
+
+function addProduction() {
+  let layer = {type:"production", x:0, y:0, width:100, height:100, 
+              params:"allimages"};
+  let newLayer = addLayer("Production", layer);
+  drawProject();
+  return newLayer;
 }
 
 // Accordion 

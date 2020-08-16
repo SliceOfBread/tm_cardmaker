@@ -35,8 +35,8 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         Backgrounds <i class="fa fa-caret-down"></i>
       </a>
       <div id="backgrounds" class="w3-bar-block w3-hide w3-padding-large w3-medium">
-        <a onclick="addUserFile()" href="#" class="w3-bar-item w3-button">Load Image</a>
-        <input type="file" id="fileselection" class="w3-hide" onchange="newBackgroundImage(this)">
+        <a onclick="document.getElementById('fileselection').click()" href="#" class="w3-bar-item w3-button">Load Image</a>
+        <input type="file" id="fileselection" class="w3-hide" onchange="addUserFile(this)">
         <a onclick="addColor()" href="#" class="w3-bar-item w3-button">Set Color</a>
       </div>
       <a onclick="myAccFunc('templates')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
@@ -136,6 +136,23 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
     <div id="alltext" class="w3-hide">
       <span style="float: right;"><textarea id="inputdata" onchange="updateValue(this)"></textarea></span><br>
       <span style="float: right;">V space:<input id="inputlineSpace" type="number" onchange="updateValue(this)"></span><br>
+      <span style="float: right;">Font:<select id="inputfont" type="select" onchange="updateValue(this)">
+        <option value="Prototype" default>Prototype</option>
+        <option value="times">Times New Roman</option>
+      </select></span><br>
+      <span style="float: right;">Style:<select id="inputstyle" type="select" onchange="updateValue(this)">
+        <option value="normal" default>Normal</option>
+        <option value="italic">Italic</option>
+      </select></span><br> 
+      <span style="float: right;">Weight:<select id="inputweight" type="select" onchange="updateValue(this)">
+        <option value="normal" default>Normal</option>
+        <option value="bold">Bold</option> 
+      </select></span><br>
+      <span style="float: right;">Justify:<select id="inputjustify" type="select" onchange="updateValue(this)">
+        <option value="center" default>Center</option>
+        <option value="left">Left</option>
+        <option value="right">Right</option>
+      </select></span><br>
     </div>
     <div id="color" class="w3-hide">
       <span style="float: right;">Color:<input id="inputcolor" type="color" onchange="updateValue(this)"></span>
