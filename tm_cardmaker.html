@@ -24,8 +24,8 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
     </a>
     <div id="file" class="w3-bar-block w3-hide w3-padding-large w3-medium">
       <a onclick="resetProject()" href="#" class="w3-bar-item w3-button">New</a>
-      <a href="#" class="w3-bar-item w3-button">Load</a>
-      <a href="#" class="w3-bar-item w3-button">Save</a>
+      <!-- <a href="#" class="w3-bar-item w3-button">Load</a> -->
+      <a onclick="window.alert('Right click image to save it')" href="#" class="w3-bar-item w3-button">Save</a>
     </div>
     <a onclick="myAccFunc('design')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
       Add Block <i class="fa fa-caret-down"></i>
@@ -37,8 +37,10 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       <div id="backgrounds" class="w3-bar-block w3-hide w3-padding-large w3-medium">
         <a onclick="document.getElementById('fileselection').click()" href="#" class="w3-bar-item w3-button">Load Image</a>
         <input type="file" id="fileselection" class="w3-hide" onchange="addUserFile(this)">
-        <a onclick="addColor()" href="#" class="w3-bar-item w3-button">Set Color</a>
+        <!-- <a onclick="addColor()" href="#" class="w3-bar-item w3-button">Set Color</a> -->
       </div>
+      <a onclick="addTextBox()" href="#" class="w3-bar-item w3-button">Text box</a>
+      <a onclick="addProduction()" href="#" class="w3-bar-item w3-button">Production box</a>
       <a onclick="myAccFunc('templates')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
         Templates <i class="fa fa-caret-down"></i>
       </a>
@@ -84,8 +86,6 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
      </a>
      <div id="VPs" class="w3-bar-block w3-hide w3-padding-large w3-medium">
       </div>
-      <a onclick="addTextBox('text:self')" href="#" class="w3-bar-item w3-button">Text box</a>
-      <a onclick="addProduction('production:self')" href="#" class="w3-bar-item w3-button">Production box</a>
     </div>
   </div>
 </nav>
@@ -131,7 +131,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         <span style="float: right;">sheight:<input id="inputsheight" type="number" min="1" onchange="updateValue(this)"></span><br>
       </div>
     <div id="otherbg" class="w3-hide">
-      <span>'Others' background:&nbsp;&nbsp;<input id="inputobg" type="checkbox"></span>
+      <span>'Others' background:&nbsp;&nbsp;<input id="inputobg" type="checkbox" onchange="updateValue(this)"></span>
     </div>
     <div id="alltext" class="w3-hide">
       <span style="float: right;"><textarea id="inputdata" onchange="updateValue(this)"></textarea></span><br>

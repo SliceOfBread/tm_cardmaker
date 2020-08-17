@@ -2,6 +2,7 @@
 var aLayers = {};
 
 var userImageList = [];
+var otherBgList = {};
 
 var blockList = [
   {putUnder: "templates", text: "Green Card", src:"green_normal"},
@@ -15,7 +16,7 @@ var blockList = [
   {putUnder: "globalparameters", text: "", src:"oxygen"},
   {putUnder: "globalparameters", text: "", src:"temperature"},
   {putUnder: "globalparameters", text: "", src:"venus"},
-  {putUnder: "misc", text: "", src:"megacredit"},
+  {putUnder: "misc", text: "", src:"megacredit", otherbg:"mc_otherbg"},
   {putUnder: "misc", text: "mc_otherbg", src:"other_player_background", hidden:true},
   {putUnder: "misc", text: "", src:"arrow"},
   {putUnder: "misc", text: "Asterisk", src:"asterisc"},
@@ -43,42 +44,42 @@ var blockList = [
   {putUnder: "requisites", text: "", src:"min_medium"},
   {putUnder: "requisites", text: "", src:"min_small"},
   {putUnder: "requisites", text: "", src:"normal"},
-  {putUnder: "resources", text: "", src:"animal"},
+  {putUnder: "resources", text: "", src:"animal", otherbg:"res_otherbg"},
   {putUnder: "resources", text: "", src:"card"},
-  {putUnder: "resources", text: "", src:"data"},
-  {putUnder: "resources", text: "", src:"fighter"},
-  {putUnder: "resources", text: "", src:"floater"},
-  {putUnder: "resources", text: "", src:"heat"},
-  {putUnder: "resources", text: "", src:"microbe"},
+  {putUnder: "resources", text: "", src:"data", otherbg:"res_otherbg"},
+  {putUnder: "resources", text: "", src:"fighter", otherbg:"res_otherbg"},
+  {putUnder: "resources", text: "", src:"floater", otherbg:"res_otherbg"},
+  {putUnder: "resources", text: "", src:"heat", otherbg:"res_otherbg"},
+  {putUnder: "resources", text: "", src:"microbe", otherbg:"res_otherbg"},
   {putUnder: "resources", text: "res_otherbg", src:"other_player_background", hidden:true},
-  {putUnder: "resources", text: "", src:"plant"},
-  {putUnder: "resources", text: "", src:"power"},
-  {putUnder: "resources", text: "", src:"radiation"},
-  {putUnder: "resources", text: "", src:"science"},
-  {putUnder: "resources", text: "", src:"steel"},
-  {putUnder: "resources", text: "", src:"titanium"},
+  {putUnder: "resources", text: "", src:"plant", otherbg:"res_otherbg"},
+  {putUnder: "resources", text: "", src:"power", otherbg:"res_otherbg"},
+  {putUnder: "resources", text: "", src:"radiation", otherbg:"res_otherbg"},
+  {putUnder: "resources", text: "", src:"science", otherbg:"res_otherbg"},
+  {putUnder: "resources", text: "", src:"steel", otherbg:"res_otherbg"},
+  {putUnder: "resources", text: "", src:"titanium", otherbg:"res_otherbg"},
   {putUnder: "resources", text: "", src:"TR"},
-  {putUnder: "resources", text: "", src:"wild"},
-  {putUnder: "tags", text: "", src:"animal"},
-  {putUnder: "tags", text: "", src:"building"},
-  {putUnder: "tags", text: "", src:"city"},
-  {putUnder: "tags", text: "", src:"earth"},
-  {putUnder: "tags", text: "", src:"event"},
-  {putUnder: "tags", text: "", src:"galactic"},
-  {putUnder: "tags", text: "", src:"infrastructure"},
-  {putUnder: "tags", text: "", src:"jovian"},
-  {putUnder: "tags", text: "", src:"mars"},
-  {putUnder: "tags", text: "", src:"microbe"},
-  {putUnder: "tags", text: "", src:"moon"},
+  {putUnder: "resources", text: "", src:"wild", otherbg:"res_otherbg"},
+  {putUnder: "tags", text: "", src:"animal", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"building", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"city", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"earth", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"event", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"galactic", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"infrastructure", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"jovian", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"mars", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"microbe", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"moon", otherbg:"tag_otherbg"},
   {putUnder: "tags", text: "tag_otherbg", src:"other_player_background", hidden:true},
-  {putUnder: "tags", text: "", src:"planetary"},
-  {putUnder: "tags", text: "", src:"plant"},
-  {putUnder: "tags", text: "", src:"power"},
-  {putUnder: "tags", text: "", src:"radioactive"},
-  {putUnder: "tags", text: "", src:"science"},
-  {putUnder: "tags", text: "", src:"space"},
-  {putUnder: "tags", text: "", src:"venus"},
-  {putUnder: "tags", text: "", src:"wild"},
+  {putUnder: "tags", text: "", src:"planetary", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"plant", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"power", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"radioactive", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"science", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"space", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"venus", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"wild", otherbg:"tag_otherbg"},
   {putUnder: "tiles", text: "", src:"city"},
   {putUnder: "tiles", text: "", src:"colony"},
   {putUnder: "tiles", text: "", src:"empty"},
@@ -124,6 +125,10 @@ function resetProject() {
       imageObj.src = blockList[i].putUnder + "/" + blockList[i].src + ".png";
       imageObj.dataindex = i;
       blockList[i].obj = imageObj;
+      if (blockList[i].text.indexOf("otherbg") != -1) {
+        // if this image is an 'other people bachground', save its name
+        otherBgList[blockList[i].text] = imageObj;
+      }
     }
   }
   if (maxToLoad) {
@@ -220,7 +225,11 @@ function selectLayer() {
           for (let intype of ["input", "textarea", "select"]) {
             let chInputs = thispch.getElementsByTagName(intype);
             for (let subch of chInputs) {
-              subch.value = thisLayer[subch.id.slice(5)];
+              if (subch.type == "checkbox") {
+                subch.checked = thisLayer[subch.id.slice(5)];
+              } else {
+                subch.value = thisLayer[subch.id.slice(5)];
+              }
             }
   
           }
@@ -251,6 +260,10 @@ function drawProject() {
     switch (layer.type) {
       case "block":
         // layer = {type:"block", obj:{}, x:0, y:0, width:0, height:0, params:"allimages"};
+        if (layer.obg) {
+          let brdr = 3;
+          ctx.drawImage(otherBgList[blockList[layer.iNum].otherbg],layer.x-brdr,layer.y-brdr,layer.width+2*brdr,layer.height+2*brdr);
+        }
         ctx.drawImage(blockList[layer.iNum].obj,layer.x,layer.y,layer.width,layer.height);
         break;
       case "text":
@@ -331,7 +344,10 @@ function drawProject() {
         ctx.fillRect(xpos+width-border, ypos, border, height); // right
         break;
       case "userFile":
-        ctx.drawImage(userImageList[layer.iNum],layer.sx,layer.sy,layer.swidth,layer.sheight,layer.x,layer.y,layer.width,layer.height);
+        if (layer.iNum != -1) {
+          ctx.drawImage(userImageList[layer.iNum],layer.sx,layer.sy,layer.swidth,layer.sheight,layer.x,layer.y,layer.width,layer.height);
+        }
+        
         break;
       case "base":
         // set height/width
@@ -458,6 +474,9 @@ function allLoadingDone() {
           }
           break;
         case "userFile":
+          layer.iNum = -1;
+          addLayer("Local:" + layer.filename, layer);
+          //newLayer = addUserFile(layer);
           break;
         case "base":
           // set height/width
@@ -491,10 +510,15 @@ function addBlock(th) {
     myIndex = this.id.slice(5);
   }
   layer.iNum = Number(myIndex);
+  let thisBlock = blockList[layer.iNum];
+  if (thisBlock.otherbg) {
+    layer.params += " " + thisBlock.otherbg;
+    layer.obg = false;
+  }
   let c = document.getElementById("cmcanvas");
-  layer.width = Math.min(blockList[layer.iNum].obj.width, c.width);
-  layer.height = Math.min(blockList[layer.iNum].obj.height, c.height);
-  let newLayer = addLayer(blockList[myIndex].text, layer);
+  layer.width = Math.min(thisBlock.obj.width, c.width);
+  layer.height = Math.min(thisBlock.obj.height, c.height);
+  let newLayer = addLayer(thisBlock.text, layer);
   drawProject();
   return newLayer;
 }
@@ -518,6 +542,7 @@ function addTextBox(th) {
   return newLayer;
 }
 
+var mostRecentFile = {};
 function addUserFile(th) {
   try {
     let file = th.files[0];
@@ -526,6 +551,7 @@ function addUserFile(th) {
       window.alert('File is not an image.');
       return;
     }
+    mostRecentFile = file;
     const reader = new FileReader();
     reader.addEventListener('load', function() {
       let newI = new Image();
@@ -540,17 +566,18 @@ function addUserFile(th) {
 
 function userImageLoaded() {
   // this = image object
-  let layer = {type:"userFile", iNum:0, 
+  let layer = {type:"userFile", iNum:0,
     x:0, y:0, width:0, height:0, 
     sx:0, sy:0, swidth:0, sheight:0, params:"allimages clipimages"};
   layer.iNum = userImageList.length;
+  layer.filename = mostRecentFile.name;
   layer.width = this.width;
   layer.swidth = this.width;
   layer.height = this.height;
   layer.sheight = this.height;
   
   userImageList.push(this);
-  let newLayer = addLayer("User img:" + layer.iNum, layer);
+  let newLayer = addLayer("Local:" + layer.filename, layer);
   drawProject();
 }
 
