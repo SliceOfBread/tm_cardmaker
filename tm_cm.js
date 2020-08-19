@@ -100,6 +100,22 @@ var blockList = [
   {putUnder: "VPs", text: "", src:"n_for"}
 ];
 
+var blockDefaults = {
+  tags: [
+    {label:"First Tag", x:580, y:65, width:100, height:100},
+    {label:"Second Tag", x:476, y:65, width:100, height:100},
+    {label:"Third Tag", x:372, y:65, width:100, height:100},
+    {label:"Small Tag", x:300, y:500, width:75, height:75}
+  ],
+  text: [
+    {label:"Card Cost", x:107, y:138, height:60, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
+    {label:"Card Name", x:375, y:200, height:42, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
+    {label:"Description", x:375, y:600, height:20, lineSpace:4, color:"#000000", font:"times", style:"normal", weight:"normal", justify:"center"},
+    {label:"Flavor Text", x:375, y:900, height:20, lineSpace:4, color:"#000000", font:"times", style:"italic", weight:"bold", justify:"center"},
+    {label:"FAN MADE", x:375, y:570, height:22, color:"#24770d", font:"Prototype", style:"normal", weight:"normal", justify:"center"}
+  ]
+};
+
 var ddcount = 0;
 var maxToLoad;
 var numLoaded;
@@ -219,28 +235,43 @@ function selectLayer() {
           thispch.classList.add("w3-hide");
         } else {
           // in params list, show it
+          // thispch is DOM elements such as allpreset allimages etc
           if (thispch.classList.contains("w3-hide")) {
             thispch.classList.remove("w3-hide");
           }
           for (let intype of ["input", "textarea", "select"]) {
             let chInputs = thispch.getElementsByTagName(intype);
             for (let subch of chInputs) {
-              if (subch.type == "checkbox") {
-                subch.checked = thisLayer[subch.id.slice(5)];
-              } else {
-                subch.value = thisLayer[subch.id.slice(5)];
+              if (subch.id.indexOf("input") == 0) {              
+                if (subch.type == "checkbox") {
+                  subch.checked = thisLayer[subch.id.slice(5)];
+                } else {
+                  subch.value = thisLayer[subch.id.slice(5)];
+                }
+              } else if (subch.id == "presets") {
+                // set default selections for this layer
+                // Note: we already checked above that we should do this
+                let opts = subch.getElementsByTagName("option");
+                let defType = "";
+                if (thisLayer.type == "block") {
+                  defType = blockList[thisLayer.iNum].putUnder;
+                } else if (thisLayer.type == "text") {
+                  defType = "text";
+                }
+                subch.value = "";
+                for (let i=1; i < opts.length; i++) {
+                  // for each usable <option> under presets
+                  if (i <= blockDefaults[defType].length) {
+                    opts[i].innerText = blockDefaults[defType][i-1].label;
+                    opts[i].classList.remove("w3-hide");
+                  } else {
+                    opts[i].classList.add("w3-hide");
+                  }
+                }
               }
             }
   
           }
-          // let chInputs = thispch.getElementsByTagName("input");
-          // for (let subch of chInputs) {
-          //   subch.value = thisLayer[subch.id.slice(5)];
-          // }
-          // chInputs = thispch.getElementsByTagName("textarea");
-          // for (let subch of chInputs) {
-          //   subch.value = thisLayer[subch.id.slice(5)];
-          // }
         }
       }
       allLayerNodes[ch].appendChild(domParams);
@@ -394,13 +425,29 @@ function updateValue(th) {
   drawProject();
 }
 
-// function updateColor(id) {
-//   // if we use this for anything aside from Base, we'll need to figure
-//   // out what layer it is attached to
-//   let lNum = 0;
-//   aLayers[lNum][id] = document.getElementById("input" + id).value;
-//   drawProject();
-// }
+function setPresets(th){
+  let selVal = document.getElementById("presets").value;
+  if (!selVal) return;
+  let sel = Number(selVal.slice(9));
+  let layerDom = th.parentNode.parentNode.parentNode.parentNode;
+  let layer = aLayers[layerDom.id];
+  
+  let dName = "";
+  if (layer.type == "block") {
+    dName = blockList[layer.iNum].putUnder;
+  } else if (layer.type == "text") {
+    dName = "text";
+  }
+
+  reloading = true;
+  for (let v in blockDefaults[dName][sel]) {
+    if (v == "label") continue;
+    document.getElementById("input" + v).value = blockDefaults[dName][sel][v];
+    updateValue(document.getElementById("input" + v));
+  }
+  reloading = false;
+  drawProject();
+}
 
 function onBlockLoad() {
   if (blockList[this.dataindex].hidden) {
@@ -515,6 +562,9 @@ function addBlock(th) {
     layer.params += " " + thisBlock.otherbg;
     layer.obg = false;
   }
+  if (blockDefaults[thisBlock.putUnder]) {
+    layer.params += " allpreset";
+  }
   let c = document.getElementById("cmcanvas");
   layer.width = Math.min(thisBlock.obj.width, c.width);
   layer.height = Math.min(thisBlock.obj.height, c.height);
@@ -527,7 +577,7 @@ function addTextBox(th) {
   let layer = {type:"text", data:"", x:0, y:0, width:100, height:20, 
               color: "#000000",
               font:"Prototype", style:"normal", weight:"normal", lineSpace:4, justify:"center",
-              params:"allimages color alltext"};
+              params:"allimages color alltext allpreset"};
   if ((typeof th == "string") || (typeof th == "number")) {
     layer.data = th;
   } else {

@@ -118,6 +118,16 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
 
   <!-- End page content -->
   <div id="params" class="w3-hide">
+    <div id="allpreset" class="w3-hide">
+      <span style="float: right;">Presets:<select id="presets" type="select" onchange="setPresets(this)">
+        <option value="" default>Select...</option>
+        <option value="defselect0"></option>
+        <option value="defselect1"></option>
+        <option value="defselect2"></option>
+        <option value="defselect3"></option>
+        <option value="defselect4"></option>
+      </select></span><br>
+    </div>
     <div id="allimages" class="w3-hide">
       <span style="float: right;">X:<input id="inputx" type="number" onchange="updateValue(this)"></span><br>
       <span style="float: right;">Y:<input id="inputy" type="number" onchange="updateValue(this)"></span><br>
@@ -131,7 +141,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         <span style="float: right;">sheight:<input id="inputsheight" type="number" min="1" onchange="updateValue(this)"></span><br>
       </div>
     <div id="otherbg" class="w3-hide">
-      <span>'Others' background:&nbsp;&nbsp;<input id="inputobg" type="checkbox" onchange="updateValue(this)"></span>
+      <span>'Others' background:&nbsp;&nbsp;<input id="inputobg" type="checkbox" onchange="updateValue(this)"></span><br>
     </div>
     <div id="alltext" class="w3-hide">
       <span style="float: right;"><textarea id="inputdata" onchange="updateValue(this)"></textarea></span><br>
