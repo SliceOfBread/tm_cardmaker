@@ -5,6 +5,8 @@ Web App for people to make fan cards for the game Terraforming Mars.
 This is currently 100% client side. It works best on a desktop/laptop but probably works on tablets and even (painfully) on phones.
 You can access it at https://sliceofbread.neocities.org/tm/tm_cardmaker.html
 
+(The below is from https://boardgamegeek.com/thread/2433226/article/34902171#34902171 and is not an endorsement of this project.)
+
 From Jacob Fryxelius:
 "Hi fellow terraformers!
 
