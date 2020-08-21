@@ -101,6 +101,10 @@ var blockList = [
   {putUnder: "VPs", text: "", src:"n_for"}
 ];
 
+// note: If any of blockDefaults inner arrays have more than 7 choices, 
+//      update the 'presets' select with the appropriate number of choices
+//      At some point, replace the hard coded 'presets' with JS that creates
+//      the correct # of options.
 var blockDefaults = {
   tags: [
     {label:"First Tag", x:580, y:65, width:100, height:100},
@@ -294,6 +298,8 @@ function selectLayer() {
                 } else {
                   subch.value = thisLayer[subch.id.slice(5)];
                 }
+              } else if ((subch.id == "lar") || (subch.id == "slar")) {
+                subch.checked = true;
               } else if (subch.id == "presets") {
                 // set default selections for this layer
                 // Note: we already checked above that we should do this
@@ -462,18 +468,43 @@ function autoSave(layers) {
 function updateValue(th) {
   let layer = th.parentNode.parentNode.parentNode.parentNode;
   let layerName = layer.id;
+  let fieldName = th.id.slice(5);
   if (th.tagName == "TEXTAREA") {
     layer.firstChild.firstChild.textContent = "Text:" + th.value.substr(0,10);
   }
   if (th.type == "number") {
-    aLayers[layerName][th.id.slice(5)] = Number(th.value);
+    let n =  Number(th.value);
+    if (document.getElementById("lar").checked) {
+      let ratioN = 1;
+      if (fieldName == "width") {
+        ratioN = Math.round(n * aLayers[layerName]["width"] / aLayers[layerName]["height"]);
+        aLayers[layerName]["height"] = ratioN;
+        document.getElementById("inputheight").value = ratioN;
+      } else if (fieldName == "height") {
+        ratioN = Math.round(n * aLayers[layerName]["height"] / aLayers[layerName]["width"]);
+        aLayers[layerName]["width"] = ratioN;
+        document.getElementById("inputwidth").value = ratioN;
+      }
+    } else if (document.getElementById("slar").checked) {
+      if (fieldName == "swidth") {
+        ratioN = Math.round(n * aLayers[layerName]["swidth"] / aLayers[layerName]["sheight"]);
+        aLayers[layerName]["sheight"] = ratioN;
+        document.getElementById("inputsheight").value = ratioN;
+      } else if (fieldName == "sheight") {
+        ratioN = Math.round(n * aLayers[layerName]["sheight"] / aLayers[layerName]["swidth"]);
+        aLayers[layerName]["swidth"] = ratioN;
+        document.getElementById("inputswidth").value = ratioN;
+      }
+    } 
+    aLayers[layerName][fieldName] = n;
   } else if (th.type == "checkbox") {
-    aLayers[layerName][th.id.slice(5)] = th.checked;
+    aLayers[layerName][fieldName] = th.checked;
   } else {
-    aLayers[layerName][th.id.slice(5)] = th.value;
+    aLayers[layerName][fieldName] = th.value;
   }
   drawProject();
 }
+
 
 function setPresets(th){
   let selVal = document.getElementById("presets").value;
