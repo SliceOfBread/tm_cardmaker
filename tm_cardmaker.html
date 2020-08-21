@@ -134,12 +134,14 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       <span style="float: right;">X:<input id="inputx" type="number" onchange="updateValue(this)"></span><br>
       <span style="float: right;">Y:<input id="inputy" type="number" onchange="updateValue(this)"></span><br>
       <span style="float: right;">width:<input id="inputwidth" type="number" min="1" onchange="updateValue(this)"></span><br>
+      <span>Lock aspect ratio:&nbsp;&nbsp;<input id="lar" type="checkbox" onchange="updateValue(this)" checked></span><br>
       <span style="float: right;">height:<input id="inputheight" type="number" min="1" onchange="updateValue(this)"></span><br>
     </div>
     <div id="clipimages" class="w3-hide">
         <span style="float: right;">sX:<input id="inputsx" type="number" min="0" onchange="updateValue(this)"></span><br>
         <span style="float: right;">sY:<input id="inputsy" type="number" min="0" onchange="updateValue(this)"></span><br>
         <span style="float: right;">swidth:<input id="inputswidth" type="number" min="1" onchange="updateValue(this)"></span><br>
+        <span>Lock aspect ratio:&nbsp;&nbsp;<input id="slar" type="checkbox" onchange="updateValue(this)" checked></span><br>
         <span style="float: right;">sheight:<input id="inputsheight" type="number" min="1" onchange="updateValue(this)"></span><br>
       </div>
     <div id="otherbg" class="w3-hide">
