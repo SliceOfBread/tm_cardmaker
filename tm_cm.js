@@ -432,7 +432,10 @@ function drawProject() {
         break;
       case "userFile":
         if (layer.iNum != -1) {
+          if (layer.alpha == undefined) layer.alpha = 100; 
+          ctx.globalAlpha = Number(layer.alpha) / 100;
           ctx.drawImage(userImageList[layer.iNum],layer.sx,layer.sy,layer.swidth,layer.sheight,layer.x,layer.y,layer.width,layer.height);
+          ctx.globalAlpha = 1;
         }
         
         break;
@@ -485,7 +488,8 @@ function updateValue(th) {
         aLayers[layerName]["width"] = ratioN;
         document.getElementById("inputwidth").value = ratioN;
       }
-    } else if (document.getElementById("slar").checked) {
+    }  
+    if (document.getElementById("slar").checked) {
       if (fieldName == "swidth") {
         ratioN = Math.round(n * aLayers[layerName]["swidth"] / aLayers[layerName]["sheight"]);
         aLayers[layerName]["sheight"] = ratioN;
@@ -702,7 +706,8 @@ function addUserFile(th) {
 function userImageLoaded() {
   // this = image object
   let layer = {type:"userFile", iNum:0,
-    x:0, y:0, width:0, height:0, 
+    x:0, y:0, width:0, height:0,
+    alpha:100,
     sx:0, sy:0, swidth:0, sheight:0, params:"allimages clipimages"};
   layer.iNum = userImageList.length;
   layer.filename = mostRecentFile.name;
