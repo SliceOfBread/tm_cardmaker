@@ -115,8 +115,8 @@ var blockDefaults = {
   text: [
     {label:"Card Cost", x:107, y:138, height:60, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
     {label:"Card Name", x:375, y:200, height:42, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
-    {label:"Description", x:375, y:600, height:20, lineSpace:4, color:"#000000", font:"times", style:"normal", weight:"normal", justify:"center"},
-    {label:"Flavor Text", x:375, y:900, height:20, lineSpace:4, color:"#000000", font:"times", style:"italic", weight:"bold", justify:"center"},
+    {label:"Description", x:375, y:600, height:20, lineSpace:4, color:"#000000", font:"Pagella", style:"normal", weight:"normal", justify:"center"},
+    {label:"Flavor Text", x:375, y:900, height:20, lineSpace:4, color:"#000000", font:"Pagella", style:"italic", weight:"bold", justify:"center"},
     {label:"FAN MADE", x:375, y:570, height:22, color:"#24770d", font:"Prototype", style:"normal", weight:"normal", justify:"center"}
   ],
   resources: [
@@ -477,27 +477,29 @@ function updateValue(th) {
   }
   if (th.type == "number") {
     let n =  Number(th.value);
-    if (document.getElementById("lar").checked) {
-      let ratioN = 1;
-      if (fieldName == "width") {
-        ratioN = Math.round(n * aLayers[layerName]["width"] / aLayers[layerName]["height"]);
-        aLayers[layerName]["height"] = ratioN;
-        document.getElementById("inputheight").value = ratioN;
-      } else if (fieldName == "height") {
-        ratioN = Math.round(n * aLayers[layerName]["height"] / aLayers[layerName]["width"]);
-        aLayers[layerName]["width"] = ratioN;
-        document.getElementById("inputwidth").value = ratioN;
-      }
-    }  
-    if (document.getElementById("slar").checked) {
-      if (fieldName == "swidth") {
-        ratioN = Math.round(n * aLayers[layerName]["swidth"] / aLayers[layerName]["sheight"]);
-        aLayers[layerName]["sheight"] = ratioN;
-        document.getElementById("inputsheight").value = ratioN;
-      } else if (fieldName == "sheight") {
-        ratioN = Math.round(n * aLayers[layerName]["sheight"] / aLayers[layerName]["swidth"]);
-        aLayers[layerName]["swidth"] = ratioN;
-        document.getElementById("inputswidth").value = ratioN;
+    if (aLayers[layerName].type != "text") {
+      if (document.getElementById("lar").checked) {
+        let ratioN = 1;
+        if (fieldName == "width") {
+          ratioN = Math.round(n * aLayers[layerName]["width"] / aLayers[layerName]["height"]);
+          aLayers[layerName]["height"] = ratioN;
+          document.getElementById("inputheight").value = ratioN;
+        } else if (fieldName == "height") {
+          ratioN = Math.round(n * aLayers[layerName]["height"] / aLayers[layerName]["width"]);
+          aLayers[layerName]["width"] = ratioN;
+          document.getElementById("inputwidth").value = ratioN;
+        }
+      }  
+      if (document.getElementById("slar").checked) {
+        if (fieldName == "swidth") {
+          ratioN = Math.round(n * aLayers[layerName]["swidth"] / aLayers[layerName]["sheight"]);
+          aLayers[layerName]["sheight"] = ratioN;
+          document.getElementById("inputsheight").value = ratioN;
+        } else if (fieldName == "sheight") {
+          ratioN = Math.round(n * aLayers[layerName]["sheight"] / aLayers[layerName]["swidth"]);
+          aLayers[layerName]["swidth"] = ratioN;
+          document.getElementById("inputswidth").value = ratioN;
+        }
       }
     } 
     aLayers[layerName][fieldName] = n;

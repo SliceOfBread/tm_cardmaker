@@ -3,6 +3,34 @@
   src: url(./fonts/Prototype.ttf);
 }
 
+@font-face {
+  font-family: Pagella;
+  src: url(./fonts/texgyrepagella-regular-webfont.ttf);
+  font-weight: normal;
+  font-style:normal;
+}
+
+@font-face {
+  font-family: Pagella;
+  src: url(./fonts/texgyrepagella-bold-webfont.ttf);
+  font-weight: bold;
+  font-style:normal;
+}
+
+@font-face {
+  font-family: Pagella;
+  src: url(./fonts/texgyrepagella-italic-webfont.ttf);
+  font-weight: normal;
+  font-style:italic;
+}
+
+@font-face {
+  font-family: Pagella;
+  src: url(./fonts/texgyrepagella-bolditalic-webfont.ttf);
+  font-weight: bold;
+  font-style:italic;
+}
+
 /* W3.CSS 4.13 June 2019 by Jan Egil and Borge Refsnes */
 html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
 /* Extract from normalize.css by Nicolas Gallagher and Jonathan Neal git.io/normalize */
