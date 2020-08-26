@@ -107,6 +107,11 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   <div id="loadprogress">
     <label for="files">Loading images:</label>
     <progress id="files" value="0" max="100"></progress>
+    <div id="fontload">
+      <div style="font-family: Prototype;">Prototype</div>
+      <div style="font-family: Pagella;">Palatino-like</div>
+      <div style="font-family: 'Times New Roman';">Times New Roman</div>
+    </div>
   </div>
   <div class="w3-padding w3-container">
     <canvas id="cmcanvas" height="1050px" width="750px" style="float:left; border:1px solid #101010;"></canvas>
@@ -123,11 +128,6 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         <option value="" default>Select...</option>
         <option value="defselect0"></option>
         <option value="defselect1"></option>
-        <option value="defselect2"></option>
-        <option value="defselect3"></option>
-        <option value="defselect4"></option>
-        <option value="defselect5"></option>
-        <option value="defselect6"></option>
       </select></span><br>
     </div>
     <div id="allimages" class="w3-hide">
@@ -152,9 +152,9 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       <span style="float: right;"><textarea id="inputdata" onchange="updateValue(this)"></textarea></span><br>
       <span style="float: right;">V space:<input id="inputlineSpace" type="number" onchange="updateValue(this)"></span><br>
       <span style="float: right;">Font:<select id="inputfont" type="select" onchange="updateValue(this)">
-        <option value="Prototype" default>Prototype</option>
-        <option value="Pagella" default>Palatino-like</option>
-        <option value="times">Times New Roman</option>
+        <option value="Prototype" style="font-family: Prototype;" default>Prototype</option>
+        <option value="Pagella" style="font-family: Pagella;">Palatino-like</option>
+        <option value="times" style="font-family: 'Times New Roman';">Times New Roman</option>
       </select></span><br>
       <span style="float: right;">Style:<select id="inputstyle" type="select" onchange="updateValue(this)">
         <option value="normal" default>Normal</option>

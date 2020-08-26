@@ -101,10 +101,6 @@ var blockList = [
   {putUnder: "VPs", text: "", src:"n_for"}
 ];
 
-// note: If any of blockDefaults inner arrays have more than 7 choices, 
-//      update the 'presets' select with the appropriate number of choices
-//      At some point, replace the hard coded 'presets' with JS that creates
-//      the correct # of options.
 var blockDefaults = {
   tags: [
     {label:"First Tag", x:580, y:65, width:100, height:100},
@@ -314,6 +310,11 @@ function selectLayer() {
                 }
                 if (defType) {
                   subch.value = "";
+                  while (opts.length < blockDefaults[defType].length + 1) {
+                    let cNode = opts[1].cloneNode(false);
+                    cNode.value = "defselect" + (opts.length - 1);
+                    subch.appendChild(cNode);
+                  }
                   for (let i=1; i < opts.length; i++) {
                     // for each usable <option> under presets
                     if (i <= blockDefaults[defType].length) {
