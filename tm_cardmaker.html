@@ -23,8 +23,13 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       File <i class="fa fa-caret-down"></i>
     </a>
     <div id="file" class="w3-bar-block w3-hide w3-padding-large w3-medium">
-      <a onclick="resetProject()" href="#" class="w3-bar-item w3-button">New</a>
-      <!-- <a href="#" class="w3-bar-item w3-button">Load</a> -->
+      <a onclick="clickNew()" href="#" class="w3-bar-item w3-button">New</a>
+      <a onclick="myAccFunc('fromTemplate')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
+        New from Template <i class="fa fa-caret-down"></i>
+      </a>
+      <div id="fromTemplate" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+      </div>
+        <!-- <a href="#" class="w3-bar-item w3-button">Load</a> -->
       <a onclick="window.alert('Right click image to save it')" href="#" class="w3-bar-item w3-button">Save</a>
     </div>
     <a onclick="myAccFunc('design')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
@@ -118,6 +123,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
     <div style="display:block; float:left; margin: 10px; min-width: 260px;">
       <section id="layerlist">
       </section>
+      <button onclick="copyToClipboard()" style="display: none;" >Copy</button>
     </div>
   </div>
 
