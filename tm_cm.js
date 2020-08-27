@@ -162,6 +162,103 @@ var blockDefaults = {
   ]
 };
 
+var megaTemplates = {
+  green_normal: {
+    layers: [
+      {"type":"block","iNum":0,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
+      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":375,"y":570,"width":750,"height":22,"color":"#24770d","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":700,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+    ]
+  },
+  green_big_bottom: {
+    layers: [
+      {"type":"block","iNum":2,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
+      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":375,"y":524,"width":750,"height":22,"color":"#24770d","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":700,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+    ]
+  },
+  green_small_bottom: {
+    layers: [
+      {"type":"block","iNum":1,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
+      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":375,"y":620,"width":750,"height":22,"color":"#24770d","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":700,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+    ]
+  },
+  blue_normal: {
+    layers: [
+      {"type":"block","iNum":3,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
+      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":375,"y":745,"width":750,"height":22,"color":"#0c5e84","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":800,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":13,"x":325,"y":255,"width":107,"height":50,"params":"allimages allpreset"},
+      {"type":"text","data":"Effect or Action text!","x":375,"y":335,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+    ]
+  },
+  blue_big_bottom: {
+    layers: [
+      {"type":"block","iNum":4,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
+      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":375,"y":745,"width":702,"height":22,"color":"#0c5e84","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":800,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":13,"x":325,"y":255,"width":107,"height":50,"params":"allimages allpreset"},
+      {"type":"text","data":"Effect or Action text!","x":375,"y":335,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+    ]
+  },
+  blue_big_top: {
+    layers: [
+      {"type":"block","iNum":5,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
+      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":375,"y":792,"width":702,"height":22,"color":"#0c5e84","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":831,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":13,"x":325,"y":255,"width":107,"height":50,"params":"allimages allpreset"},
+      {"type":"text","data":"Effect or Action text!","x":375,"y":335,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+    ]
+  },
+  red_normal: {
+    layers: [
+      {"type":"block","iNum":6,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
+      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":375,"y":640,"width":750,"height":22,"color":"#c36a17","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":750,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+    ]
+  },
+  red_small_bottom: {
+    layers: [
+      {"type":"block","iNum":7,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
+      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":375,"y":671,"width":750,"height":22,"color":"#c36a17","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":750,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+    ]
+  }
+};
+
 var ddcount = 0;
 var maxToLoad;
 var numLoaded;
@@ -176,6 +273,7 @@ resetProject();
 function resetProject() {
   document.getElementById("layerlist").innerHTML = "";
   ddcount = 0;
+  aLayers = {};
   addLayer("Base",{type:"base", color:"#ffffff", height:1050, width:750, params:"color"});
 
   maxToLoad = 0;
@@ -188,7 +286,7 @@ function resetProject() {
       imageObj.dataindex = i;
       blockList[i].obj = imageObj;
       if (blockList[i].text.indexOf("otherbg") != -1) {
-        // if this image is an 'other people bachground', save its name
+        // if this image is an 'other people background', save its name
         otherBgList[blockList[i].text] = imageObj;
       }
     }
@@ -563,6 +661,16 @@ function onBlockLoad() {
     toAdd.href = "#";
     toAdd.id = "image" + this.dataindex;
     document.getElementById(blockList[this.dataindex].putUnder).appendChild(toAdd);
+    if (blockList[this.dataindex].putUnder == "templates") {
+      // add Super Templates
+      toAdd.onclick = addMegaTemplate;
+      toAdd.innerText = tmpText;
+      toAdd.classList.add("w3-bar-item");
+      toAdd.classList.add("w3-button");
+      toAdd.href = "#";
+      toAdd.id = "mega" + blockList[this.dataindex].src;
+      document.getElementById("fromTemplate").appendChild(toAdd);
+    }
   }
   numLoaded++;
   document.getElementById("files").value = numLoaded;
@@ -576,11 +684,17 @@ var reloading = false;
 function allLoadingDone() {
   document.getElementById("loadprogress").style.display = "none";
   document.getElementById("cmcanvas").style.display = "block";
+  try {
+    loadFrom(JSON.parse(localStorage.getItem("autosave")));
+  } catch (error) {
+    // no autosave file
+  }
+}
+
+function loadFrom(saved) {
   // load autosave file
   reloading = true;
-  let saved = [];
   try {
-    saved = JSON.parse(localStorage.getItem("autosave"));
     for (let layer of saved) {
       let ignore = ["type", "params"];
       let newLayer = {};
@@ -633,7 +747,6 @@ function allLoadingDone() {
       }
     }
   } catch (error) {
-    // no autosave file
   }
   reloading = false;
   drawProject();
@@ -663,6 +776,18 @@ function addBlock(th) {
   let newLayer = addLayer(thisBlock.text, layer);
   drawProject();
   return newLayer;
+}
+
+function addMegaTemplate() {
+  if (!confirm("All current data will be discarded. Continue?")) return;
+  if (this.id.slice(0,4) != "mega") return;
+  let mega = this.id.slice(4);
+  if (!megaTemplates[mega]) return;
+  document.getElementById("layerlist").innerHTML = "";
+  ddcount = 0;
+  aLayers = {};
+  addLayer("Base",{type:"base", color:"#ffffff", height:1050, width:750, params:"color"});
+  loadFrom(megaTemplates[mega].layers);
 }
 
 function addTextBox(th) {
@@ -730,6 +855,23 @@ function addProduction() {
   let newLayer = addLayer("Production", layer);
   drawProject();
   return newLayer;
+}
+
+function copyToClipboard() {
+  let str = localStorage.getItem("autosave");
+  const el = document.createElement('textarea');
+  el.value = str;
+  el.setAttribute('readonly', '');
+  el.style.position = 'absolute';
+  el.style.left = '-9999px';
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+};
+
+function clickNew() {
+  if (confirm("Delete current work and start fresh?")) resetProject();
 }
 
 // Accordion 
