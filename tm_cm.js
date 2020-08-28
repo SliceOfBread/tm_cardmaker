@@ -311,7 +311,8 @@ function addLayer(title, layer) {
   toAdd.classList.add("divRec");
   let childAdd = document.createElement("div");
   childAdd.classList.add("inside");
-  childAdd.innerHTML = title;
+  //childAdd.innerHTML = title;
+  childAdd.appendChild(createTextbox(title));
   childAdd.onclick = selectLayer;
   // skip delete button for base layer
   if (ddcount) childAdd.appendChild(deleteButton());
@@ -324,6 +325,23 @@ function addLayer(title, layer) {
     /* console.log(item); */
   });
   return layer;
+}
+
+function createTextbox(txt) {
+  let toAdd = document.createElement("input");
+  toAdd.type = "text";
+  toAdd.id = "layername" + ddcount;
+  toAdd.maxLength = 20;
+  toAdd.size = 15;
+  toAdd.value = txt;
+  toAdd.onchange = function () {updateLayerName(event, this)};
+  return toAdd;
+}
+
+function updateLayerName(e, th) {
+  let layerName = th.parentNode.parentNode.id;
+  aLayers[layerName].name = th.value;
+  drawProject();
 }
 
 function deleteButton() {
@@ -367,7 +385,17 @@ function selectLayer() {
         allLayerNodes[ch].removeChild(domParams);
       }
       allLayerNodes[ch].classList.remove("selected");
+      // show delete button
+      let buttons = allLayerNodes[ch].getElementsByTagName("button");
+      if (buttons.length) {
+        buttons[0].style.display = "block";
+      }
     } else if (allLayerNodes[ch] == this.parentNode) {
+      // hide delete button
+      let buttons = allLayerNodes[ch].getElementsByTagName("button");
+      if (buttons.length) {
+        buttons[0].style.display = "none";
+      }
       allLayerNodes[ch].classList.add("selected");
       // hide/unhide correct params for this layer
       let thisLayer = aLayers[allLayerNodes[ch].id];
@@ -571,9 +599,6 @@ function updateValue(th) {
   let layer = th.parentNode.parentNode.parentNode.parentNode;
   let layerName = layer.id;
   let fieldName = th.id.slice(5);
-  if (th.tagName == "TEXTAREA") {
-    layer.firstChild.firstChild.textContent = "Text:" + th.value.substr(0,10);
-  }
   if (th.type == "number") {
     let n =  Number(th.value);
     if (aLayers[layerName].type != "text") {
@@ -745,6 +770,9 @@ function loadFrom(saved) {
           window.alert("Invalid layer type:" + layer.type);
           break;
       }
+      if (layer.name) {
+        document.getElementById("layername" + (ddcount-1)).value = layer.name;
+      } 
     }
   } catch (error) {
   }
@@ -754,7 +782,7 @@ function loadFrom(saved) {
 }
 
 function addBlock(th) {
-  let layer = {type:"block", iNum:0, x:0, y:0, width:0, height:0, params:"allimages"};
+  let layer = {type:"block", name:"", iNum:0, x:0, y:0, width:0, height:0, params:"allimages"};
   let myIndex = 0;
   if ((typeof th == "string") || (typeof th == "number")) {
     myIndex = th;
@@ -770,9 +798,8 @@ function addBlock(th) {
   if (blockDefaults[thisBlock.putUnder]) {
     layer.params += " allpreset";
   }
-  let c = document.getElementById("cmcanvas");
-  layer.width = Math.min(thisBlock.obj.width, c.width);
-  layer.height = Math.min(thisBlock.obj.height, c.height);
+  layer.width = thisBlock.obj.width;
+  layer.height = thisBlock.obj.height;
   let newLayer = addLayer(thisBlock.text, layer);
   drawProject();
   return newLayer;
