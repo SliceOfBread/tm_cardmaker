@@ -22,6 +22,7 @@ var blockList = [
   {putUnder: "misc", text: "Asterisk", src:"asterisc"},
   {putUnder: "misc", text: "Slash", src:"bar"},
   {putUnder: "misc", text: "", src:"chairman"},
+  {putUnder: "misc", text: "", src:"party_leader"},
   {putUnder: "misc", text: "", src:"colon"},
   {putUnder: "misc", text: "", src:"delegate"},
   {putUnder: "misc", text: "", src:"influence"},
@@ -107,6 +108,9 @@ var blockDefaults = {
     {label:"Second Tag", x:476, y:65, width:100, height:100},
     {label:"Third Tag", x:372, y:65, width:100, height:100},
     {label:"Small Tag", x:300, y:500, width:75, height:75}
+  ],
+  templates: [
+    {label:"Vertical Card", x:0, y:0, width:750, height:1050}
   ],
   text: [
     {label:"Card Cost", x:107, y:138, height:60, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
@@ -688,6 +692,7 @@ function onBlockLoad() {
     document.getElementById(blockList[this.dataindex].putUnder).appendChild(toAdd);
     if (blockList[this.dataindex].putUnder == "templates") {
       // add Super Templates
+      toAdd = document.createElement("a");
       toAdd.onclick = addMegaTemplate;
       toAdd.innerText = tmpText;
       toAdd.classList.add("w3-bar-item");
