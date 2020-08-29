@@ -605,7 +605,7 @@ function updateValue(th) {
   let fieldName = th.id.slice(5);
   if (th.type == "number") {
     let n =  Number(th.value);
-    if (aLayers[layerName].type != "text") {
+    if (!reloading && (aLayers[layerName].type != "text")) {
       if (document.getElementById("lar").checked) {
         let ratioN = 1;
         if (fieldName == "width") {
