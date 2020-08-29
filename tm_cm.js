@@ -22,7 +22,6 @@ var blockList = [
   {putUnder: "misc", text: "Asterisk", src:"asterisc"},
   {putUnder: "misc", text: "Slash", src:"bar"},
   {putUnder: "misc", text: "", src:"chairman"},
-  {putUnder: "misc", text: "", src:"party_leader"},
   {putUnder: "misc", text: "", src:"colon"},
   {putUnder: "misc", text: "", src:"delegate"},
   {putUnder: "misc", text: "", src:"influence"},
@@ -99,7 +98,8 @@ var blockList = [
   {putUnder: "VPs", text: "", src:"5"},
   {putUnder: "VPs", text: "", src:"blank"},
   {putUnder: "VPs", text: "", src:"VPnegative"},
-  {putUnder: "VPs", text: "", src:"n_for"}
+  {putUnder: "VPs", text: "", src:"n_for"},
+  {putUnder: "misc", text: "", src:"party_leader"}
 ];
 
 var blockDefaults = {
