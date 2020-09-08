@@ -99,7 +99,8 @@ var blockList = [
   {putUnder: "VPs", text: "VP background", src:"blank"},
   {putUnder: "VPs", text: "-VP", src:"VPnegative"},
   {putUnder: "VPs", text: "/ VP", src:"n_for"},
-  {putUnder: "misc", text: "", src:"party_leader"}
+  {putUnder: "misc", text: "", src:"party_leader"},
+  {putUnder: "templates", text: "Prelude", src:"prelude"}
 ];
 
 var blockDefaults = {
@@ -107,7 +108,10 @@ var blockDefaults = {
     {label:"First Tag", x:639, y:67, width:110, height:110},
     {label:"Second Tag", x:524, y:67, width:110, height:110},
     {label:"Third Tag", x:410, y:67, width:110, height:110},
-    {label:"Small Tag", x:330, y:536, width:82, height:82}
+    {label:"Small Tag", x:330, y:536, width:82, height:82},
+    {label:"First (wide)", x:937, y:67, width:110, height:110},
+    {label:"Second (wide)", x:822, y:67, width:110, height:110},
+    {label:"Third (wide)", x:708, y:67, width:110, height:110}
   ],
   templates: [
     {label:"Vertical Card", x:0, y:0, width:826, height:1126},
@@ -170,6 +174,7 @@ var blockDefaults = {
 var megaTemplates = {
   green_normal: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":0,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -181,6 +186,7 @@ var megaTemplates = {
   },
   green_big_bottom: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":2,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -192,6 +198,7 @@ var megaTemplates = {
   },
   green_small_bottom: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":1,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -203,6 +210,7 @@ var megaTemplates = {
   },
   blue_normal: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":3,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -216,6 +224,7 @@ var megaTemplates = {
   },
   blue_big_bottom: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":4,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -229,6 +238,7 @@ var megaTemplates = {
   },
   blue_big_top: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":5,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -242,6 +252,7 @@ var megaTemplates = {
   },
   red_normal: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":6,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -253,6 +264,7 @@ var megaTemplates = {
   },
   red_small_bottom: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":7,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -260,6 +272,17 @@ var megaTemplates = {
       {"type":"text","data":"FAN MADE","x":413,"y":718,"width":826,"height":24,"color":"#c36a17","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":810,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
       {"type":"text","data":"Flavor text!","x":413,"y":1005,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+    ]
+  },
+  prelude: {
+    layers: [
+      {type: "base", color: "#ffffff", height: 826, width: 1126, params: "color"},
+      {"type":"block","iNum":94,"x":0,"y":0,"width":1126,"height":826,"params":"allimages"},
+      {"type":"text","data":"CARD NAME","x":563,"y":218,"width":826,"height":48,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":563,"y":500,"width":826,"height":24,"color":"#ce809f","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"PRELUDE","x":563,"y":100,"width":826,"height":28,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":110,"y":560,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":563,"y":723,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
     ]
   }
 };
