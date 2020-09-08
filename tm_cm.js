@@ -39,11 +39,11 @@ var blockList = [
   {putUnder: "parties", text: "", src:"unity"},
   {putUnder: "productionboxes", text: "prod_nxn", src:"nxn", hidden: true},
   // {putUnder: "productionboxes", text: "prod_otherbg", src:"other_player_background", hidden:true},
-  {putUnder: "requisites", text: "", src:"max_big"},
-  {putUnder: "requisites", text: "", src:"min_big"},
-  {putUnder: "requisites", text: "", src:"min_medium"},
-  {putUnder: "requisites", text: "", src:"min_small"},
-  {putUnder: "requisites", text: "", src:"normal"},
+  {putUnder: "requisites", text: "Max Requirement", src:"max_big"},
+  {putUnder: "requisites", text: "Min Requirement (big)", src:"min_big"},
+  {putUnder: "requisites", text: "Min Requirement", src:"min_medium"},
+  {putUnder: "requisites", text: "Min Requirement (small)", src:"min_small"},
+  {putUnder: "requisites", text: "No Requirement", src:"normal"},
   {putUnder: "resources", text: "", src:"animal", otherbg:"res_otherbg"},
   {putUnder: "resources", text: "", src:"card", otherbg:"res_otherbg"},
   {putUnder: "resources", text: "", src:"data", otherbg:"res_otherbg"},
@@ -89,176 +89,177 @@ var blockList = [
   {putUnder: "tiles", text: "", src:"off-world_city"},
   {putUnder: "tiles", text: "", src:"special"},
   {putUnder: "tiles", text: "", src:"trade"},
-  {putUnder: "VPs", text: "", src:"1_for"},
-  {putUnder: "VPs", text: "", src:"1"},
-  {putUnder: "VPs", text: "", src:"2_for"},
-  {putUnder: "VPs", text: "", src:"2"},
-  {putUnder: "VPs", text: "", src:"3"},
-  {putUnder: "VPs", text: "", src:"4"},
-  {putUnder: "VPs", text: "", src:"5"},
-  {putUnder: "VPs", text: "", src:"blank"},
-  {putUnder: "VPs", text: "", src:"VPnegative"},
-  {putUnder: "VPs", text: "", src:"n_for"},
+  {putUnder: "VPs", text: "VP 1/", src:"1_for"},
+  {putUnder: "VPs", text: "1 VP", src:"1"},
+  {putUnder: "VPs", text: "VP 2/", src:"2_for"},
+  {putUnder: "VPs", text: "2 VP", src:"2"},
+  {putUnder: "VPs", text: "3 VP", src:"3"},
+  {putUnder: "VPs", text: "4 VP", src:"4"},
+  {putUnder: "VPs", text: "5 VP", src:"5"},
+  {putUnder: "VPs", text: "VP background", src:"blank"},
+  {putUnder: "VPs", text: "-VP", src:"VPnegative"},
+  {putUnder: "VPs", text: "/ VP", src:"n_for"},
   {putUnder: "misc", text: "", src:"party_leader"}
 ];
 
 var blockDefaults = {
   tags: [
-    {label:"First Tag", x:580, y:65, width:100, height:100},
-    {label:"Second Tag", x:476, y:65, width:100, height:100},
-    {label:"Third Tag", x:372, y:65, width:100, height:100},
-    {label:"Small Tag", x:300, y:500, width:75, height:75}
+    {label:"First Tag", x:639, y:67, width:110, height:110},
+    {label:"Second Tag", x:524, y:67, width:110, height:110},
+    {label:"Third Tag", x:410, y:67, width:110, height:110},
+    {label:"Small Tag", x:330, y:536, width:82, height:82}
   ],
   templates: [
-    {label:"Vertical Card", x:0, y:0, width:750, height:1050}
+    {label:"Vertical Card", x:0, y:0, width:826, height:1126},
+    {label:"Horizontal Card", x:0, y:0, width:1126, height:826}
   ],
   text: [
-    {label:"Card Cost", x:107, y:138, height:60, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
-    {label:"Card Name", x:375, y:200, height:42, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
-    {label:"Description", x:375, y:600, height:20, lineSpace:4, color:"#000000", font:"Pagella", style:"normal", weight:"normal", justify:"center"},
-    {label:"Flavor Text", x:375, y:900, height:20, lineSpace:4, color:"#000000", font:"Pagella", style:"italic", weight:"bold", justify:"center"},
-    {label:"FAN MADE", x:375, y:570, height:22, color:"#24770d", font:"Prototype", style:"normal", weight:"normal", justify:"center"}
+    {label:"Card Cost", x:118, y:147, height:66, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
+    {label:"Card Name", x:413, y:214, height:46, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
+    {label:"Description", x:413, y:643, height:22, lineSpace:4, color:"#000000", font:"Pagella", style:"normal", weight:"normal", justify:"center"},
+    {label:"Flavor Text", x:413, y:1005, height:22, lineSpace:4, color:"#000000", font:"Pagella", style:"italic", weight:"bold", justify:"center"},
+    {label:"FAN MADE", x:413, y:611, height:24, color:"#24770d", font:"Prototype", style:"normal", weight:"normal", justify:"center"}
   ],
   resources: [
-    {label:"Standard", x:375, y:600, width:84, height:84},
-    {label:"Card", x:375, y:600, width:80, height:111},
-    {label:"TR", x:375, y:600, width:138, height:102}
+    {label:"Standard", x:413, y:643, width:92, height:92},
+    {label:"Card", x:413, y:643, width:88, height:122},
+    {label:"TR", x:413, y:643, width:151, height:112}
   ],
   VPs: [
-    {label:"Standard", x:492, y:780, width:194, height:194},
-    {label:"Negative", x:592, y:780, width:194, height:194}
+    {label:"Standard", x:542, y:836, width:223, height:223},
+    {label:"Negative", x:652, y:836, width:223, height:223}
   ],
   tiles: [
-    {label:"Standard tile", width:102, height:117}
+    {label:"Standard tile", width:123, height:129}
   ],
   requisites: [
-    {label:"Max", x:163, y:88, width:181, height:54},
-    {label:"Min Large", x:163, y:88, width:159, height:54},
-    {label:"Min Medium", x:163, y:88, width:133, height:54},
-    {label:"Min Small", x:163, y:88, width:117, height:54},
-    {label:"No Req", x:163, y:88, width:19, height:54}
+    {label:"Max", x:180, y:92, width:200, height:60},
+    {label:"Min Large", x:180, y:92, width:176, height:60},
+    {label:"Min Medium", x:180, y:92, width:147, height:60},
+    {label:"Min Small", x:180, y:92, width:130, height:60},
+    {label:"No Req", x:180, y:92, width:21, height:60}
   ],
   globalparameters: [
-    {label:"Oxygen", x:375, y:600, width:107, height:107},
-    {label:"Temp", x:375, y:600, width:32, height:107},
-    {label:"Venus", x:375, y:600, width:114, height:65}
+    {label:"Oxygen", x:413, y:643, width:118, height:118},
+    {label:"Temp", x:413, y:643, width:35, height:118},
+    {label:"Venus", x:413, y:643, width:125, height:71}
   ], 
   misc: [  
-    {label:"MC", x:375, y:600, width:84, height:84},
-    {label:"Arrow", x:375, y:400, width:106, height:50},
-    {label:"Asterisk", x:375, y:600, width:50, height:50},
-    {label:"Slash", x:375, y:600, width:50, height:133},
-    {label:"Colon", x:375, y:600, width:10, height:50},
-    {label:"Delegate", x:375, y:600, width:70, height:90},
-    {label:"Influence", x:375, y:600, width:106, height:111}
+    {label:"MC", x:413, y:643, width:92, height:92},
+    {label:"Arrow", x:413, y:429, width:116, height:55},
+    {label:"Asterisk", x:413, y:643, width:55, height:55},
+    {label:"Slash", x:413, y:643, width:55, height:146},
+    {label:"Colon", x:413, y:643, width:11, height:55},
+    {label:"Delegate", x:413, y:643, width:77, height:99},
+    {label:"Influence", x:413, y:643, width:117, height:122}
   ],
   parties: [
-    {label:"Party", x:375, y:600, width:154, height:111}
+    {label:"Party", x:413, y:643, width:169, height:122}
   ],
   production: [
-    {label:"1x height", height:130},
-    {label:"2x height", height:213},
-    {label:"1x width", width:130},
-    {label:"1.5x width", width:171},
-    {label:"2x width", width:213},
-    {label:"2.5x width", width:254},
-    {label:"3x width", width:295}
+    {label:"1x height", height:143},
+    {label:"2x height", height:235},
+    {label:"1x width", width:143},
+    {label:"1.5x width", width:188},
+    {label:"2x width", width:235},
+    {label:"2.5x width", width:279},
+    {label:"3x width", width:325}
   ]
 };
 
 var megaTemplates = {
   green_normal: {
     layers: [
-      {"type":"block","iNum":0,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
-      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
-      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"FAN MADE","x":375,"y":570,"width":750,"height":22,"color":"#24770d","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":700,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+      {"type":"block","iNum":0,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
+      {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":413,"y":214,"width":826,"height":46,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":413,"y":612,"width":826,"height":24,"color":"#24770d","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":110,"y":770,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":413,"y":1005,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
     ]
   },
   green_big_bottom: {
     layers: [
-      {"type":"block","iNum":2,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
-      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
-      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"FAN MADE","x":375,"y":524,"width":750,"height":22,"color":"#24770d","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":700,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+      {"type":"block","iNum":2,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
+      {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":413,"y":214,"width":826,"height":46,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":413,"y":562,"width":826,"height":24,"color":"#24770d","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":110,"y":770,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":413,"y":1005,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
     ]
   },
   green_small_bottom: {
     layers: [
-      {"type":"block","iNum":1,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
-      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
-      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"FAN MADE","x":375,"y":620,"width":750,"height":22,"color":"#24770d","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":700,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+      {"type":"block","iNum":1,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
+      {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":413,"y":214,"width":826,"height":46,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":413,"y":664,"width":826,"height":24,"color":"#24770d","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":110,"y":770,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":413,"y":1005,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
     ]
   },
   blue_normal: {
     layers: [
-      {"type":"block","iNum":3,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
-      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
-      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"FAN MADE","x":375,"y":745,"width":750,"height":22,"color":"#0c5e84","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":800,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"block","iNum":13,"x":325,"y":255,"width":107,"height":50,"params":"allimages allpreset"},
-      {"type":"text","data":"Effect or Action text!","x":375,"y":335,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+      {"type":"block","iNum":3,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
+      {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":413,"y":214,"width":826,"height":46,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":413,"y":798,"width":826,"height":24,"color":"#0c5e84","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":860,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":413,"y":1005,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":13,"x":355,"y":265,"width":116,"height":55,"params":"allimages allpreset"},
+      {"type":"text","data":"Effect or Action text!","x":413,"y":360,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
     ]
   },
   blue_big_bottom: {
     layers: [
-      {"type":"block","iNum":4,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
-      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
-      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"FAN MADE","x":375,"y":745,"width":702,"height":22,"color":"#0c5e84","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":800,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"block","iNum":13,"x":325,"y":255,"width":107,"height":50,"params":"allimages allpreset"},
-      {"type":"text","data":"Effect or Action text!","x":375,"y":335,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+      {"type":"block","iNum":4,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
+      {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":413,"y":214,"width":826,"height":46,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":413,"y":753,"width":702,"height":24,"color":"#0c5e84","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":860,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":413,"y":1005,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":13,"x":355,"y":265,"width":116,"height":55,"params":"allimages allpreset"},
+      {"type":"text","data":"Effect or Action text!","x":413,"y":360,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
     ]
   },
   blue_big_top: {
     layers: [
-      {"type":"block","iNum":5,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
-      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
-      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"FAN MADE","x":375,"y":792,"width":702,"height":22,"color":"#0c5e84","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":831,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"block","iNum":13,"x":325,"y":255,"width":107,"height":50,"params":"allimages allpreset"},
-      {"type":"text","data":"Effect or Action text!","x":375,"y":335,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+      {"type":"block","iNum":5,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
+      {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":413,"y":214,"width":826,"height":46,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":413,"y":849,"width":702,"height":24,"color":"#0c5e84","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":891,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":413,"y":1005,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":13,"x":355,"y":265,"width":116,"height":55,"params":"allimages allpreset"},
+      {"type":"text","data":"Effect or Action text!","x":413,"y":360,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
     ]
   },
   red_normal: {
     layers: [
-      {"type":"block","iNum":6,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
-      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
-      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"FAN MADE","x":375,"y":640,"width":750,"height":22,"color":"#c36a17","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":750,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+      {"type":"block","iNum":6,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
+      {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":413,"y":214,"width":826,"height":46,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":413,"y":685,"width":826,"height":24,"color":"#c36a17","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":810,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":413,"y":1005,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
     ]
   },
   red_small_bottom: {
     layers: [
-      {"type":"block","iNum":7,"x":0,"y":0,"width":750,"height":1050,"params":"allimages"},
-      {"type":"text","data":"Cost","x":107,"y":138,"width":750,"height":60,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"block","iNum":37,"x":163,"y":88,"width":20,"height":54,"params":"allimages allpreset"},
-      {"type":"text","data":"CARD NAME","x":375,"y":200,"width":750,"height":42,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"FAN MADE","x":375,"y":671,"width":750,"height":22,"color":"#c36a17","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":750,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
-      {"type":"text","data":"Flavor text!","x":375,"y":950,"width":750,"height":20,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+      {"type":"block","iNum":7,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
+      {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
+      {"type":"text","data":"CARD NAME","x":413,"y":214,"width":826,"height":46,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":413,"y":718,"width":826,"height":24,"color":"#c36a17","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":810,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":413,"y":1005,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
     ]
   }
 };
@@ -278,7 +279,7 @@ function resetProject() {
   document.getElementById("layerlist").innerHTML = "";
   ddcount = 0;
   aLayers = {};
-  addLayer("Base",{type:"base", color:"#ffffff", height:1050, width:750, params:"color"});
+  addLayer("Base",{type:"base", color:"#ffffff", height:1126, width:826, params:"color"});
 
   maxToLoad = 0;
   for (let i=0; i < blockList.length; i++) {
@@ -572,7 +573,7 @@ function drawProject() {
         break;
       case "base":
         // set height/width
-        c.height = layer.height; // changing width forces clearing
+        c.height = layer.height; 
         c.width = layer.width;
         // clear to background color
         ctx.fillStyle = layer.color;
@@ -599,38 +600,34 @@ function autoSave(layers) {
   }
 }
 
+const arAlt = {
+  width: ["height", "lar"],
+  height: ["width", "lar"],
+  swidth: ["sheight", "slar"],
+  sheight: ["swidth", "slar"]
+};
+
 function updateValue(th) {
+  // called after user updates a value
+  // OR after user select preset (reloading==true, in this case)
   let layer = th.parentNode.parentNode.parentNode.parentNode;
   let layerName = layer.id;
   let fieldName = th.id.slice(5);
   if (th.type == "number") {
-    let n =  Number(th.value);
-    if (!reloading && (aLayers[layerName].type != "text")) {
-      if (document.getElementById("lar").checked) {
-        let ratioN = 1;
-        if (fieldName == "width") {
-          ratioN = Math.round(n * aLayers[layerName]["width"] / aLayers[layerName]["height"]);
-          aLayers[layerName]["height"] = ratioN;
-          document.getElementById("inputheight").value = ratioN;
-        } else if (fieldName == "height") {
-          ratioN = Math.round(n * aLayers[layerName]["height"] / aLayers[layerName]["width"]);
-          aLayers[layerName]["width"] = ratioN;
-          document.getElementById("inputwidth").value = ratioN;
-        }
+    let newValue =  Number(th.value);
+    if (arAlt[fieldName] && !reloading && (aLayers[layerName].type != "text")) {
+      // it is width/height/swidth/sheight field
+      if (document.getElementById(arAlt[fieldName][1]).checked) {
+        // lar or slar (as appropriate) is checked
+        // compute otherValue (e.g. if fieldname = width, otherValue = newValue * height/width)
+        let otherValue = newValue * aLayers[layerName][arAlt[fieldName][0]] / aLayers[layerName][fieldName];
+        otherValue = Math.round(otherValue * 1000) / 1000;
+        if ((otherValue) && (Math.abs(otherValue - Math.round(otherValue)) < 0.01)) otherValue = Math.round(otherValue);
+        aLayers[layerName][arAlt[fieldName][0]] = otherValue;
+        document.getElementById("input" + arAlt[fieldName][0]).value = otherValue;
       }  
-      if (document.getElementById("slar").checked) {
-        if (fieldName == "swidth") {
-          ratioN = Math.round(n * aLayers[layerName]["swidth"] / aLayers[layerName]["sheight"]);
-          aLayers[layerName]["sheight"] = ratioN;
-          document.getElementById("inputsheight").value = ratioN;
-        } else if (fieldName == "sheight") {
-          ratioN = Math.round(n * aLayers[layerName]["sheight"] / aLayers[layerName]["swidth"]);
-          aLayers[layerName]["swidth"] = ratioN;
-          document.getElementById("inputswidth").value = ratioN;
-        }
-      }
     } 
-    aLayers[layerName][fieldName] = n;
+    aLayers[layerName][fieldName] = newValue;
   } else if (th.type == "checkbox") {
     aLayers[layerName][fieldName] = th.checked;
   } else {
@@ -649,7 +646,9 @@ function setPresets(th){
   
   let dName = "";
   if (layer.type == "block") {
-    dName = blockList[layer.iNum].putUnder;
+    let a = layer.iNum;
+    let b = blockList[a];
+    dName = b.putUnder;
   } else if (layer.type == "text") {
     dName = "text";
   } else if (layer.type == "production") {
@@ -659,9 +658,14 @@ function setPresets(th){
   if (dName) {
     reloading = true;
     for (let v in blockDefaults[dName][sel]) {
+      // fill in presets
       if (v == "label") continue;
       document.getElementById("input" + v).value = blockDefaults[dName][sel][v];
       updateValue(document.getElementById("input" + v));
+    }
+    if (dName == "templates") {
+      aLayers["dragdropdiv0"].height = blockDefaults[dName][sel].height;
+      aLayers["dragdropdiv0"].width = blockDefaults[dName][sel].width;
     }
     reloading = false;
   }
@@ -724,6 +728,8 @@ function allLoadingDone() {
 function loadFrom(saved) {
   // load autosave file
   reloading = true;
+  let resize = false;
+  let scale = {x:1, y:1, width:1, height:1};
   try {
     for (let layer of saved) {
       let ignore = ["type", "params"];
@@ -735,25 +741,37 @@ function loadFrom(saved) {
           ignore.push("iNum");
           for (let key in layer) {
             if (ignore.indexOf(key) != -1) continue;
-            newLayer[key] = layer[key];
+            if (scale[key]) {
+              newLayer[key] = scale[key] * layer[key];
+            } else {
+              newLayer[key] = layer[key];
+            }
           }
           break;
         case "text":
-          // let layer = {type:"text", data:"", x:0, y:0, width:100, height:20, 
+          // let layer = {type:"text", data:"", x:0, y:0, width:110, height:21, 
           // color: "#000000",
           // font:"Prototype", lineSpace:4, justify:"center",
           // params:"allimages color alltext"};
           newLayer = addTextBox(layer.data);
           for (let key in layer) {
             if (ignore.indexOf(key) != -1) continue;
-            newLayer[key] = layer[key];
+            if (scale[key]) {
+              newLayer[key] = scale[key] * layer[key];
+            } else {
+              newLayer[key] = layer[key];
+            }
           }
           break;
         case "production":
           newLayer = addProduction();
           for (let key in layer) {
             if (ignore.indexOf(key) != -1) continue;
-            newLayer[key] = layer[key];
+            if (scale[key]) {
+              newLayer[key] = scale[key] * layer[key];
+            } else {
+              newLayer[key] = layer[key];
+            }
           }
           break;
         case "userFile":
@@ -762,13 +780,23 @@ function loadFrom(saved) {
           //newLayer = addUserFile(layer);
           break;
         case "base":
-          // set height/width
-          // c.height = layer.height; // changing width forces clearing
-          // c.width = layer.width;
-          // // clear to background color
-          // ctx.fillStyle = layer.color;
-          // // ctx.fillStyle = "rgb(" + layer.red + "," + layer.blue + "," + layer.green + ")";
-          // ctx.fillRect(0,0,layer.width, layer.height);
+          newLayer = aLayers.dragdropdiv0;
+          for (let key in layer) {
+            if (ignore.indexOf(key) != -1) continue;
+            newLayer[key] = layer[key];
+            if (layer[key] == 1050) {
+              if (confirm("Looks like data saved at old size. Do you want to automatically resize?")) {
+                resize = true;
+                newLayer.height = 1126;
+                newLayer.width = 826;
+                scale.x = 826 / 750;
+                scale.width = scale.x;
+                scale.y = 1126 / 1050;
+                scale.height = scale.y;
+                break;
+              }
+            }
+          }
           break;
       
         default:
@@ -787,7 +815,7 @@ function loadFrom(saved) {
 }
 
 function addBlock(th) {
-  let layer = {type:"block", name:"", iNum:0, x:0, y:0, width:0, height:0, params:"allimages"};
+  let layer = {type:"block", name:"", iNum:0, x:0, y:0, width:1, height:1, params:"allimages"};
   let myIndex = 0;
   if ((typeof th == "string") || (typeof th == "number")) {
     myIndex = th;
@@ -818,12 +846,12 @@ function addMegaTemplate() {
   document.getElementById("layerlist").innerHTML = "";
   ddcount = 0;
   aLayers = {};
-  addLayer("Base",{type:"base", color:"#ffffff", height:1050, width:750, params:"color"});
+  addLayer("Base",{type:"base", color:"#ffffff", height:1126, width:826, params:"color"});
   loadFrom(megaTemplates[mega].layers);
 }
 
 function addTextBox(th) {
-  let layer = {type:"text", data:"", x:0, y:0, width:100, height:20, 
+  let layer = {type:"text", data:"", x:0, y:0, width:110, height:21, 
               color: "#000000",
               font:"Prototype", style:"normal", weight:"normal", lineSpace:4, justify:"center",
               params:"allimages color alltext allpreset"};
@@ -866,14 +894,14 @@ function addUserFile(th) {
 function userImageLoaded() {
   // this = image object
   let layer = {type:"userFile", iNum:0,
-    x:0, y:0, width:0, height:0,
+    x:0, y:0, width:1, height:1,
     alpha:100,
     sx:0, sy:0, swidth:0, sheight:0, params:"allimages clipimages"};
   layer.iNum = userImageList.length;
   layer.filename = mostRecentFile.name;
   layer.width = this.width;
-  layer.swidth = this.width;
   layer.height = this.height;
+  layer.swidth = this.width;
   layer.sheight = this.height;
   
   userImageList.push(this);
@@ -882,7 +910,7 @@ function userImageLoaded() {
 }
 
 function addProduction() {
-  let layer = {type:"production", x:200, y:600, width:130, height:130, 
+  let layer = {type:"production", x:200, y:643, width:130, height:130, 
               params:"allimages allpreset"};
   let newLayer = addLayer("Production", layer);
   drawProject();
