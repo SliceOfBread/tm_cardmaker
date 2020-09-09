@@ -99,7 +99,11 @@ var blockList = [
   {putUnder: "VPs", text: "VP background", src:"blank"},
   {putUnder: "VPs", text: "-VP", src:"VPnegative"},
   {putUnder: "VPs", text: "/ VP", src:"n_for"},
-  {putUnder: "misc", text: "", src:"party_leader"}
+  {putUnder: "misc", text: "", src:"party_leader"},
+  {putUnder: "templates", text: "", src:"prelude"},
+  {putUnder: "templates", text: "", src:"corporation"},
+  {putUnder: "misc", text: "Tag Holder", src:"corp_tag_holder"},
+  {putUnder: "misc", text: "Effect (bg)", src:"effect"}
 ];
 
 var blockDefaults = {
@@ -107,7 +111,12 @@ var blockDefaults = {
     {label:"First Tag", x:639, y:67, width:110, height:110},
     {label:"Second Tag", x:524, y:67, width:110, height:110},
     {label:"Third Tag", x:410, y:67, width:110, height:110},
-    {label:"Small Tag", x:330, y:536, width:82, height:82}
+    {label:"Small Tag", x:330, y:536, width:82, height:82},
+    {label:"First (Prel)", x:937, y:67, width:110, height:110},
+    {label:"Second (Prel)", x:822, y:67, width:110, height:110},
+    {label:"Third (Prel)", x:708, y:67, width:110, height:110},
+    {label:"First (Corp)", x:937, y:90, width:110, height:110},
+    {label:"Second (Corp)", x:822, y:90, width:110, height:110}
   ],
   templates: [
     {label:"Vertical Card", x:0, y:0, width:826, height:1126},
@@ -118,7 +127,10 @@ var blockDefaults = {
     {label:"Card Name", x:413, y:214, height:46, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
     {label:"Description", x:413, y:643, height:22, lineSpace:4, color:"#000000", font:"Pagella", style:"normal", weight:"normal", justify:"center"},
     {label:"Flavor Text", x:413, y:1005, height:22, lineSpace:4, color:"#000000", font:"Pagella", style:"italic", weight:"bold", justify:"center"},
-    {label:"FAN MADE", x:413, y:611, height:24, color:"#24770d", font:"Prototype", style:"normal", weight:"normal", justify:"center"}
+    {label:"FAN MADE", x:413, y:611, height:24, color:"#24770d", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
+    {label:"PRELUDE", data:"P R E L U D E", x:563, y:99, height:22, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
+    {label:"CORPORATION", data:"C O R P O R A T I O N", x:563, y:109, height:24, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"},
+    {label:"EFFECT", data:"E F F E C T", x:800, y:333, height:22, color:"#000000", font:"Prototype", style:"normal", weight:"normal", justify:"center"}
   ],
   resources: [
     {label:"Standard", x:413, y:643, width:92, height:92},
@@ -151,7 +163,11 @@ var blockDefaults = {
     {label:"Slash", x:413, y:643, width:55, height:146},
     {label:"Colon", x:413, y:643, width:11, height:55},
     {label:"Delegate", x:413, y:643, width:77, height:99},
-    {label:"Influence", x:413, y:643, width:117, height:122}
+    {label:"Effect (bg)", x:631, y:307, width:346, height:36},
+    {label:"Influence", x:413, y:643, width:117, height:122},
+    {label:"Tag Holder 0", x:969, y:103, width:257, height:89},
+    {label:"Tag Holder 1", x:898, y:103, width:257, height:89},
+    {label:"Tag Holder 2", x:794, y:103, width:257, height:89}
   ],
   parties: [
     {label:"Party", x:413, y:643, width:169, height:122}
@@ -170,6 +186,7 @@ var blockDefaults = {
 var megaTemplates = {
   green_normal: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":0,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -181,6 +198,7 @@ var megaTemplates = {
   },
   green_big_bottom: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":2,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -192,6 +210,7 @@ var megaTemplates = {
   },
   green_small_bottom: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":1,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -203,6 +222,7 @@ var megaTemplates = {
   },
   blue_normal: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":3,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -216,6 +236,7 @@ var megaTemplates = {
   },
   blue_big_bottom: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":4,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -229,6 +250,7 @@ var megaTemplates = {
   },
   blue_big_top: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":5,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -242,6 +264,7 @@ var megaTemplates = {
   },
   red_normal: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":6,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -253,6 +276,7 @@ var megaTemplates = {
   },
   red_small_bottom: {
     layers: [
+      {type: "base", color: "#ffffff", height: 1126, width: 826, params: "color"},
       {"type":"block","iNum":7,"x":0,"y":0,"width":826,"height":1126,"params":"allimages"},
       {"type":"text","data":"Cost","x":118,"y":147,"width":826,"height":66,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"block","iNum":37,"x":179,"y":97,"width":22,"height":59,"params":"allimages allpreset"},
@@ -260,6 +284,31 @@ var megaTemplates = {
       {"type":"text","data":"FAN MADE","x":413,"y":718,"width":826,"height":24,"color":"#c36a17","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
       {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":100,"y":810,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
       {"type":"text","data":"Flavor text!","x":413,"y":1005,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+    ]
+  },
+  prelude: {
+    layers: [
+      {type: "base", color: "#ffffff", height: 826, width: 1126, params: "color"},
+      {"type":"block","iNum":94,"x":0,"y":0,"width":1126,"height":826,"params":"allimages"},
+      {"type":"text","data":"CARD NAME","x":563,"y":218,"width":826,"height":48,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":563,"y":500,"width":826,"height":24,"color":"#ce809f","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"P R E L U D E","x":563,"y":99,"width":826,"height":24,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":110,"y":560,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":563,"y":723,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
+    ]
+  },
+  corporation: {
+    layers: [
+      {type: "base", color: "#ffffff", height: 826, width: 1126, params: "color"},
+      {"type":"block","iNum":96,"x":969,"y":103,"width":257,"height":89,"params":"allimages"},
+      {"type":"block","iNum":95,"x":0,"y":0,"width":1126,"height":826,"params":"allimages"},
+      {type: "effect", x: 600, y: 300, width: 400, height: 300, params: "allimages allpreset"},
+      {type: "block", name: "", iNum: 97, x: 631, y: 307, width: 345.79, height: 36,"params":"allimages"},
+      {type: "text", data: "E F F E C T", x: 800, y: 333, width: 1126, height: 22, color: "#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"FAN MADE","x":198,"y":736,"width":826,"height":24,"color":"#c3c3c3","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"C O R P O R A T I O N","x":563,"y":109,"width":826,"height":24,"color":"#000000","font":"Prototype","style":"normal","weight":"normal","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Card description\nMultiple lines\nand they can be much, much, much longer\n'V space' controls the spacing between lines","x":110,"y":560,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"normal","weight":"normal","lineSpace":4,"justify":"left","params":"allimages color alltext allpreset"},
+      {"type":"text","data":"Flavor text!","x":563,"y":723,"width":826,"height":22,"color":"#000000","font":"Pagella","style":"italic","weight":"bold","lineSpace":4,"justify":"center","params":"allimages color alltext allpreset"}
     ]
   }
 };
@@ -506,63 +555,94 @@ function drawProject() {
         
         break;
       case "production":
-        let sz = 20;
-        let border = 3;
-        let xpos = Number(layer.x);
-        let ypos = Number(layer.y);
-        let width = Number(layer.width);
-        let height = Number(layer.height);
-        let img = blockList[hiddenImage["prod_nxn"]].obj ;
-        let x=xpos;
-        let w=width % sz;
-        // if (!w) w += sz;
-        let h=height % sz;
-        // if (!h) h += sz;
-        for (x=xpos; x <= xpos+width; x += sz) {
-          let y=ypos;
-          for (y=ypos; y <= ypos+height; y += sz) {
-            if ((x <= xpos+width-sz) && (y <= ypos+height-sz)) {
-              ctx.drawImage(img,x,y,sz,sz);
-            } else {
-              if (x > xpos+width-sz) {
-                if (y > ypos+height-sz) {
-                  ctx.drawImage(img,0,0,w,h,x,y,w,h);
-                } else {
-                  ctx.drawImage(img,0,0,w,sz,x,y,w,sz);
-                }
+        {
+          let sz = 20;
+          let border = 3;
+          let xpos = Number(layer.x);
+          let ypos = Number(layer.y);
+          let width = Number(layer.width);
+          let height = Number(layer.height);
+          let img = blockList[hiddenImage["prod_nxn"]].obj ;
+          let x=xpos;
+          let w=width % sz;
+          // if (!w) w += sz;
+          let h=height % sz;
+          // if (!h) h += sz;
+          for (x=xpos; x <= xpos+width; x += sz) {
+            let y=ypos;
+            for (y=ypos; y <= ypos+height; y += sz) {
+              if ((x <= xpos+width-sz) && (y <= ypos+height-sz)) {
+                ctx.drawImage(img,x,y,sz,sz);
               } else {
-                if (y > ypos+height-sz) {
-                  ctx.drawImage(img,0,0,sz,h,x,y,sz,h);
+                if (x > xpos+width-sz) {
+                  if (y > ypos+height-sz) {
+                    ctx.drawImage(img,0,0,w,h,x,y,w,h);
+                  } else {
+                    ctx.drawImage(img,0,0,w,sz,x,y,w,sz);
+                  }
                 } else {
-                  window.alert("What?");
-                  ctx.drawImage(img,0,0,sz,sz,x,y,sz,sz);
+                  if (y > ypos+height-sz) {
+                    ctx.drawImage(img,0,0,sz,h,x,y,sz,h);
+                  } else {
+                    window.alert("What?");
+                    ctx.drawImage(img,0,0,sz,sz,x,y,sz,sz);
+                  }
                 }
               }
-            }
-           
-          }          
+            
+            }          
+          }
+          // inner gradient
+          let my_gradient = ctx.createLinearGradient(0, ypos, 0, ypos + height);
+          my_gradient.addColorStop(0, "#9d6c43");
+          my_gradient.addColorStop(1, "#5a412c");
+          ctx.fillStyle = my_gradient;
+          ctx.fillRect(xpos, ypos+border, width, border); // top
+          ctx.fillRect(xpos, ypos+height-border*2, width, border); // bottom
+          ctx.fillRect(xpos+border, ypos, border, height); // left
+          ctx.fillRect(xpos+width-border*2, ypos, border, height); // right
+        
+          // outer gradient
+          my_gradient = ctx.createLinearGradient(0, ypos, 0, ypos + height);
+          my_gradient.addColorStop(0, "#505050");
+          my_gradient.addColorStop(1, "#c0c0c0");
+          ctx.fillStyle = my_gradient;
+          ctx.fillRect(xpos, ypos, width, border);// top
+          ctx.fillRect(xpos, ypos+height-border, width, border); // bottom
+          ctx.fillRect(xpos, ypos, border, height); // left
+          ctx.fillRect(xpos+width-border, ypos, border, height); // right
         }
-        // inner gradient
-        let my_gradient = ctx.createLinearGradient(0, ypos, 0, ypos + height);
-        my_gradient.addColorStop(0, "#9d6c43");
-        my_gradient.addColorStop(1, "#5a412c");
-        ctx.fillStyle = my_gradient;
-        ctx.fillRect(xpos, ypos+border, width, border); // top
-        ctx.fillRect(xpos, ypos+height-border*2, width, border); // bottom
-        ctx.fillRect(xpos+border, ypos, border, height); // left
-        ctx.fillRect(xpos+width-border*2, ypos, border, height); // right
-      
-        // outer gradient
-        my_gradient = ctx.createLinearGradient(0, ypos, 0, ypos + height);
-        my_gradient.addColorStop(0, "#505050");
-        my_gradient.addColorStop(1, "#c0c0c0");
-        ctx.fillStyle = my_gradient;
-        ctx.fillRect(xpos, ypos, width, border);// top
-        ctx.fillRect(xpos, ypos+height-border, width, border); // bottom
-        ctx.fillRect(xpos, ypos, border, height); // left
-        ctx.fillRect(xpos+width-border, ypos, border, height); // right
+          
         break;
-      case "userFile":
+      case "effect":
+        {
+          let border = 5;
+          let xpos = Number(layer.x);
+          let ypos = Number(layer.y);
+          let width = Number(layer.width);
+          let height = Number(layer.height);
+          // draw border (actually draws whole rectange but we overwrite below)
+          let grd = ctx.createLinearGradient(xpos, ypos, xpos+width, ypos);
+          let stops = [0, 0.1, 0.2, 0.3, 0.4, 0.6, 0.68, 0.76, 0.84, 0.92];
+          let stopColors = ["#333333", "#999999"];
+          for (let s=0; s < stops.length; s++) {
+            grd.addColorStop(stops[s], stopColors[s % 2]);
+          }
+          grd.addColorStop(1, "#777777");
+          ctx.fillStyle = grd;
+          ctx.fillRect(xpos, ypos, layer.width, layer.height); 
+          // draw center
+          grd = ctx.createLinearGradient(xpos+border, ypos+border, xpos+layer.width-border, ypos+layer.height-border);
+          stops = [0, 0.07, 0.25, 0.6, 0.85, 1.0];
+          stopColors = ["#ffffff", "#999999"];
+          for (let s=0; s < stops.length; s++) {
+            grd.addColorStop(stops[s], stopColors[s % 2]);
+          }
+          ctx.fillStyle = grd;
+          ctx.fillRect(xpos+border, ypos+border, layer.width-2*border, layer.height-2*border); 
+        }
+        break;
+      case "userFile":      case "userFile":
         if (layer.iNum != -1) {
           if (layer.alpha == undefined) layer.alpha = 100; 
           ctx.globalAlpha = Number(layer.alpha) / 100;
@@ -764,7 +844,13 @@ function loadFrom(saved) {
           }
           break;
         case "production":
-          newLayer = addProduction();
+        case "effect":
+          if (layer.type == "effect") {
+            newLayer = addEffectBox();
+          } else {
+            newLayer = addProduction();
+          }
+          
           for (let key in layer) {
             if (ignore.indexOf(key) != -1) continue;
             if (scale[key]) {
@@ -913,6 +999,14 @@ function addProduction() {
   let layer = {type:"production", x:200, y:643, width:130, height:130, 
               params:"allimages allpreset"};
   let newLayer = addLayer("Production", layer);
+  drawProject();
+  return newLayer;
+}
+
+function addEffectBox() {
+  let layer = {type:"effect", x:600, y:300, width:400, height:300, 
+              params:"allimages allpreset"};
+  let newLayer = addLayer("Effect Box", layer);
   drawProject();
   return newLayer;
 }
