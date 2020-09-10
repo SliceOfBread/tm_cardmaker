@@ -544,12 +544,18 @@ function drawProject() {
         ctx.font = layer.style + " " + layer.weight + " " + layer.height + "px " + layer.font;
         ctx.fillStyle = layer.color;
         // TBD break up long text into mutiple parts
-        if (layer.data.indexOf("\n") == -1) {
-          ctx.fillText(layer.data, layer.x, layer.y);
-        } else {
-          let lines = layer.data.split("\n");
-          for (var ln=0; ln < lines.length; ln++) {
-            ctx.fillText(lines[ln], layer.x, 0 + layer.y + (layer.height + layer.lineSpace) * ln);
+        let lines = layer.data.split("\n");
+        let cnt = 0;
+        for (var ln=0; ln < lines.length; ln++) {
+          let spl = lines[ln].split(" ");
+          let o = "";
+          while (spl.length) {
+            o = spl.shift();
+            while (spl.length && (ctx.measureText(o + " " + spl[0]).width < layer.width)) {
+              o += " " + spl.shift();
+            }
+            ctx.fillText(o, layer.x, 0 + layer.y + (layer.height + layer.lineSpace) * cnt);
+            cnt++;
           }
         }
         
