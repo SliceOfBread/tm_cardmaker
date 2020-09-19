@@ -648,7 +648,8 @@ function drawProject() {
           ctx.fillRect(xpos+border, ypos+border, layer.width-2*border, layer.height-2*border); 
         }
         break;
-      case "userFile":      case "userFile":
+      case "userFile":      
+      case "webFile":
         if (layer.iNum != -1) {
           if (layer.alpha == undefined) layer.alpha = 100; 
           ctx.globalAlpha = Number(layer.alpha) / 100;
@@ -866,6 +867,11 @@ function loadFrom(saved) {
             }
           }
           break;
+        case "webFile": // TBD add code to fetch web file and replace it when loaded
+          reloadWebImage(layer.filename);
+          layer.iNum = -1;
+          addLayer("Web:" + layer.filename, layer);
+          break;
         case "userFile":
           layer.iNum = -1;
           addLayer("Local:" + layer.filename, layer);
@@ -1029,6 +1035,81 @@ function copyToClipboard() {
   document.execCommand('copy');
   document.body.removeChild(el);
 };
+
+function clickLoadWebImage() {
+  let o = document.getElementById("overlay");
+  if (o.classList.contains("w3-hide")) {
+    o.classList.remove("w3-hide");
+    o.classList.add("w3-show");
+  } else {
+    o.classList.remove("w3-show");
+    o.classList.add("w3-hide");
+  }
+}
+
+function loadWebImage() {
+  let url = document.getElementById("url2load").value;
+  let img = new Image();
+  img.onload = function () {
+      webImageLoaded(img);
+  };
+  img.src = url;
+  let o = document.getElementById("overlay");
+  o.classList.remove("w3-show");
+  o.classList.add("w3-hide");
+}
+
+function webImageLoaded(th) {
+  // th = image object
+  let layer = {type:"webFile", iNum:0,
+    x:0, y:0, width:1, height:1,
+    alpha:100,
+    sx:0, sy:0, swidth:0, sheight:0, params:"allimages clipimages"};
+  layer.iNum = userImageList.length;
+  layer.filename = th.src;
+  layer.width = th.width;
+  layer.height = th.height;
+  layer.swidth = th.width;
+  layer.sheight = th.height;
+  
+  userImageList.push(th);
+  let newLayer = addLayer("Web image", layer);
+  drawProject();
+}
+
+function reloadWebImage(url) {
+  let img = new Image();
+  img.onload = function () {
+      webImageReloaded(img);
+  };
+  img.src = url;
+}
+
+function webImageReloaded(th) {
+  // th = image object
+  let iNum = userImageList.length;
+  userImageList.push(th);
+
+  let alreadyHaveLayer = false;
+  // is image
+  for (let l in aLayers) {
+    let thisLayer = aLayers[l];
+    if ((thisLayer.type == "webFile") && (thisLayer.filename == th.src)) {
+      if (thisLayer.iNum == -1) {
+        thisLayer.iNum = iNum;
+      }
+
+    }
+  }
+
+  drawProject();
+}
+
+function cancelOverlay() {
+  let o = document.getElementById("overlay");
+  o.classList.remove("w3-show");
+  o.classList.add("w3-hide");
+}
 
 function clickNew() {
   if (confirm("Delete current work and start fresh?")) resetProject();

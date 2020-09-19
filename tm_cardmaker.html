@@ -15,7 +15,16 @@ or more specifically https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css
 body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
 </style>
 <body class="w3-content" style="max-width:1800px">
-
+  <div class="w3-hide" id="overlay">
+    <div class="centerme">
+      <div class="w3-white" style="padding: 50px;">
+        Enter url to load image from:
+        <input id="url2load" type="url">
+        <button onclick="cancelOverlay()">Cancel</button>
+        <button onclick="loadWebImage()">Load</button>
+      </div>
+    </div>
+  </div>
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="z-index:3;width:250px" id="mySidebar">
   <div class="w3-large w3-text-grey" style="font-weight:bold">
@@ -40,7 +49,8 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         Backgrounds <i class="fa fa-caret-down"></i>
       </a>
       <div id="backgrounds" class="w3-bar-block w3-hide w3-padding-large w3-medium">
-        <a onclick="document.getElementById('fileselection').click()" href="#" class="w3-bar-item w3-button">Load Image</a>
+        <a onclick="clickLoadWebImage()" href="#" class="w3-bar-item w3-button">Load Web Image</a>
+        <a onclick="document.getElementById('fileselection').click()" href="#" class="w3-bar-item w3-button">Load Local Image</a>
         <input type="file" id="fileselection" class="w3-hide" onchange="addUserFile(this)">
         <!-- <a onclick="addColor()" href="#" class="w3-bar-item w3-button">Set Color</a> -->
       </div>
