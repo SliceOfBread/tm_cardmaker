@@ -293,6 +293,7 @@ section { */
   }
   
   .inside {
+    display: inline-block;
     background-color: #fff;
   }
 
@@ -342,5 +343,6 @@ section { */
   }
   input[type=checkbox]{
     transform: scale(2);
+    margin: 0px 8px;
   } 
 

@@ -3,6 +3,7 @@ var aLayers = {};
 
 var userImageList = [];
 var otherBgList = {};
+// var groupList = [];
 
 var blockList = [
   {putUnder: "templates", text: "Green Card", src:"green_normal"},
@@ -334,25 +335,66 @@ function resetProject() {
   for (let i=0; i < blockList.length; i++) {
     if (!blockList[i].obj) {
       maxToLoad++;
-      let imageObj = new Image();
-      imageObj.onload = onBlockLoad;
-      imageObj.src = blockList[i].putUnder + "/" + blockList[i].src + ".png";
-      imageObj.dataindex = i;
-      blockList[i].obj = imageObj;
-      if (blockList[i].text.indexOf("otherbg") != -1) {
-        // if this image is an 'other people background', save its name
-        otherBgList[blockList[i].text] = imageObj;
-      }
+      addBlockMenuItem(i);
     }
   }
-  if (maxToLoad) {
-    numLoaded = 0;
-    document.getElementById("files").max = maxToLoad;
-    document.getElementById("files").value = numLoaded;
-    document.getElementById("loadprogress").style.display = "block";
-    document.getElementById("cmcanvas").style.display = "none";
-  } else {
+  // if (maxToLoad) {
+  //   numLoaded = 0;
+  //   document.getElementById("files").max = maxToLoad;
+  //   document.getElementById("files").value = numLoaded;
+  //   document.getElementById("loadprogress").style.display = "block";
+  //   document.getElementById("cmcanvas").style.display = "none";
+  // } else {
     allLoadingDone();
+  // }
+}
+
+function fetchBlock(num) {
+  let imageObj = new Image();
+  imageObj.onload = onBlockLoad;
+  imageObj.src = blockList[num].putUnder + "/" + blockList[num].src + ".png";
+  imageObj.dataindex = num;
+  blockList[num].obj = imageObj;
+  if (blockList[num].text.indexOf("otherbg") != -1) {
+    // if this image is an 'other people background', save its name
+    otherBgList[blockList[num].text] = imageObj;
+  }
+}
+
+function addBlockMenuItem(num) {
+
+  if (blockList[num].hidden) {
+    // hidden images don't get menu items
+    hiddenImage[blockList[num].text] = num;
+  } else {
+    let tmpText = blockList[num].text;
+    if (!tmpText) {
+      tmpText = blockList[num].src;
+      tmpText = tmpText.replace(/_/g, ' ');
+      tmpText = tmpText.replace(tmpText.charAt(0), tmpText.charAt(0).toUpperCase());
+      blockList[num].text = tmpText;
+    }
+    // add menu item for image
+    // <a onclick="addBlock('template:green')" href="#" class="w3-bar-item w3-button">Green Card</a>
+    let toAdd = document.createElement("a");
+    toAdd.onclick = addBlock;
+    toAdd.innerText = tmpText;
+    toAdd.classList.add("w3-bar-item");
+    toAdd.classList.add("w3-button");
+    toAdd.href = "#";
+    toAdd.id = "image" + num;
+    document.getElementById(blockList[num].putUnder).appendChild(toAdd);
+    if (blockList[num].putUnder == "templates") {
+      // add Super Templates
+      toAdd = document.createElement("a");
+      toAdd.onclick = addMegaTemplate;
+      toAdd.innerText = tmpText;
+      toAdd.classList.add("w3-bar-item");
+      toAdd.classList.add("w3-button");
+      toAdd.href = "#";
+      toAdd.id = "mega" + blockList[num].src;
+      document.getElementById("fromTemplate").appendChild(toAdd);
+    }
   }
 }
 
@@ -363,6 +405,7 @@ function addLayer(title, layer) {
   if (!ddcount && (ddcount != 0)) ddcount = 0;
   toAdd.id = "dragdropdiv" + ddcount;
   toAdd.classList.add("divRec");
+  if (ddcount) toAdd.appendChild(createGroupCheckbox());
   let childAdd = document.createElement("div");
   childAdd.classList.add("inside");
   //childAdd.innerHTML = title;
@@ -379,6 +422,16 @@ function addLayer(title, layer) {
     /* console.log(item); */
   });
   return layer;
+}
+
+function createGroupCheckbox() {
+  let toAdd = document.createElement("input");
+  toAdd.type = "checkbox";
+  toAdd.classList.add("groupcheck");
+  toAdd.classList.add("w3-hide");
+  toAdd.checked = false;
+  //toAdd.style.display = "none";
+  return toAdd;
 }
 
 function createTextbox(txt) {
@@ -528,11 +581,15 @@ function drawProject() {
     switch (layer.type) {
       case "block":
         // layer = {type:"block", obj:{}, x:0, y:0, width:0, height:0, params:"allimages"};
-        if (layer.obg) {
+        if (layer.obg) { // draw others background?
           let brdr = 3;
           ctx.drawImage(otherBgList[blockList[layer.iNum].otherbg],layer.x-brdr,layer.y-brdr,layer.width+2*brdr,layer.height+2*brdr);
         }
-        ctx.drawImage(blockList[layer.iNum].obj,layer.x,layer.y,layer.width,layer.height);
+        if (!blockList[layer.iNum].obj) {
+          fetchBlock(layer.iNum);
+        } else if (blockList[layer.iNum].obj.complete) {
+          ctx.drawImage(blockList[layer.iNum].obj,layer.x,layer.y,layer.width,layer.height);
+        }
         break;
       case "text":
         // layer = {type:"text", data:"", x:0, y:0, width:0, height:0, 
@@ -658,6 +715,8 @@ function drawProject() {
         }
         
         break;
+      // case "group":
+      //   break;
       case "base":
         // set height/width
         c.height = layer.height; 
@@ -702,6 +761,20 @@ function updateValue(th) {
   let fieldName = th.id.slice(5);
   if (th.type == "number") {
     let newValue =  Number(th.value);
+    // deal with group moves
+    if ((fieldName == "x") || (fieldName == "y")) {
+      // check if part of group
+      if (layer.getElementsByClassName("groupcheck")[0].checked) {
+        // adjust all other members of group by same amount
+        let thisgroup = document.getElementsByClassName("groupcheck");
+        let diff = newValue - aLayers[layerName][fieldName];
+        for (let x=0; x < thisgroup.length; x++) {
+          if (!thisgroup[x].checked) continue;
+          let groupLayerId = thisgroup[x].parentNode.id;
+          aLayers[groupLayerId][fieldName] += diff;
+        }
+      }
+    }
     if (arAlt[fieldName] && !reloading && (aLayers[layerName].type != "text")) {
       // it is width/height/swidth/sheight field
       if (document.getElementById(arAlt[fieldName][1]).checked) {
@@ -793,11 +866,18 @@ function onBlockLoad() {
       document.getElementById("fromTemplate").appendChild(toAdd);
     }
   }
-  numLoaded++;
-  document.getElementById("files").value = numLoaded;
-  if (numLoaded == maxToLoad) {
-    allLoadingDone();
+  // numLoaded++;
+  // document.getElementById("files").value = numLoaded;
+  // if (numLoaded == maxToLoad) {
+  //   allLoadingDone();
+  // }
+  for (let l in aLayers) {
+    if ((aLayers[l].type == "block") && (aLayers[l].iNum == this.dataindex)) {
+      if (!aLayers[l].width) aLayers[l].width = blockList[this.dataindex].obj.width;
+      if (!aLayers[l].height) aLayers[l].height = blockList[this.dataindex].obj.height;
+    }
   }
+  drawProject();
 }
 
 var reloading = false;
@@ -823,36 +903,15 @@ function loadFrom(saved) {
       let newLayer = {};
       switch (layer.type) {
         case "block":
-          // layer = {type:"block", iNum:0, x:0, y:0, width:0, height:0, params:"allimages"};
-          newLayer = addBlock(layer.iNum);
-          ignore.push("iNum");
-          for (let key in layer) {
-            if (ignore.indexOf(key) != -1) continue;
-            if (scale[key]) {
-              newLayer[key] = scale[key] * layer[key];
-            } else {
-              newLayer[key] = layer[key];
-            }
-          }
-          break;
         case "text":
-          // let layer = {type:"text", data:"", x:0, y:0, width:110, height:21, 
-          // color: "#000000",
-          // font:"Prototype", lineSpace:4, justify:"center",
-          // params:"allimages color alltext"};
-          newLayer = addTextBox(layer.data);
-          for (let key in layer) {
-            if (ignore.indexOf(key) != -1) continue;
-            if (scale[key]) {
-              newLayer[key] = scale[key] * layer[key];
-            } else {
-              newLayer[key] = layer[key];
-            }
-          }
-          break;
         case "production":
         case "effect":
-          if (layer.type == "effect") {
+          if (layer.type == "block") {
+            newLayer = addBlock(layer.iNum);
+            ignore.push("iNum");
+          } else if (layer.type == "text") {
+            newLayer = addTextBox(layer.data);
+          } else if (layer.type == "effect") {
             newLayer = addEffectBox();
           } else {
             newLayer = addProduction();
@@ -867,6 +926,9 @@ function loadFrom(saved) {
             }
           }
           break;
+        // case "group":
+        //   addLayer(layer.name, layer);
+        //   break;
         case "webFile": // TBD add code to fetch web file and replace it when loaded
           reloadWebImage(layer.filename);
           layer.iNum = -1;
@@ -913,7 +975,7 @@ function loadFrom(saved) {
 }
 
 function addBlock(th) {
-  let layer = {type:"block", name:"", iNum:0, x:0, y:0, width:1, height:1, params:"allimages"};
+  let layer = {type:"block", name:"", iNum:0, x:0, y:0, width:0, height:0, params:"allimages"};
   let myIndex = 0;
   if ((typeof th == "string") || (typeof th == "number")) {
     myIndex = th;
@@ -929,10 +991,15 @@ function addBlock(th) {
   if (blockDefaults[thisBlock.putUnder]) {
     layer.params += " allpreset";
   }
-  layer.width = thisBlock.obj.width;
-  layer.height = thisBlock.obj.height;
+  // layer.width = thisBlock.obj.width;
+  // layer.height = thisBlock.obj.height;
   let newLayer = addLayer(thisBlock.text, layer);
-  drawProject();
+  if (thisBlock.obj) {
+    drawProject();
+  } else {
+    fetchBlock(layer.iNum);
+  }
+  
   return newLayer;
 }
 
@@ -1090,15 +1157,12 @@ function webImageReloaded(th) {
   let iNum = userImageList.length;
   userImageList.push(th);
 
-  let alreadyHaveLayer = false;
-  // is image
   for (let l in aLayers) {
     let thisLayer = aLayers[l];
     if ((thisLayer.type == "webFile") && (thisLayer.filename == th.src)) {
       if (thisLayer.iNum == -1) {
         thisLayer.iNum = iNum;
       }
-
     }
   }
 
@@ -1114,6 +1178,58 @@ function cancelOverlay() {
 function clickNew() {
   if (confirm("Delete current work and start fresh?")) resetProject();
 }
+
+function groupModeToggle() {
+  let c = document.getElementsByClassName("groupcheck");
+  for (let l=0; l < c.length; l++) {
+    if (document.getElementById("groupmode").checked) {
+      // turn on group check box
+      c[l].classList.add("w3-show-inline-block");
+      c[l].classList.remove("w3-hide");
+      // make sure they are all unchecked
+      c[l].checked = false;
+    } else {
+      c[l].classList.remove("w3-show-inline-block");
+      c[l].classList.add("w3-hide");
+      // make sure they are all unchecked
+      c[l].checked = false;
+    }
+  }
+}
+
+// function clickMakeGroup() {
+//   let c = document.getElementsByClassName("groupcheck");
+//   let ch = [];
+//   let gap = false;
+//   for (let l=0; l < c.length; l++) {
+//     if (c[l].checked) {
+//       if (gap) {
+//         // only true is found checked box after unchecked box after checked box
+//         window.alert("Error:Group layers must be contiguous.");
+//         return;
+//       } else {
+//         ch.push(c[l].parentNode.id);
+//       }
+//     } else if (ch.length) {
+//       gap = true; // found unchecked box after checked box
+//     }
+//   }
+//   if (ch.length < 2) return;
+//   // make ch into a group
+//   let layer = {type:"group", name:"", groupNum:0, params:""};
+//   layer.groupNum = groupList.length;
+//   layer.name = "Group:" + layer.groupNum;
+//   let newLayer = addLayer("Group:" + layer.groupNum, layer);
+//   for (let l=0; l < ch.length; l++) {
+//     aLayers[ch[l]].group = layer.groupNum;
+//   }
+
+//   return newLayer;
+// }
+
+// function clickUngroup() {
+
+// }
 
 // Accordion 
 function myAccFunc(acc) {
