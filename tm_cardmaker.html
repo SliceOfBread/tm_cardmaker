@@ -135,6 +135,9 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
     <div style="display:block; float:left; margin: 10px; min-width: 260px;">
       <section id="layerlist">
       </section>
+      <span class="w3-padding-16"><input id="groupmode" type="checkbox" onchange="groupModeToggle()" class="w3-show-inline-block" >Group Mode</span>
+      <!-- <button onclick="clickMakeGroup()" class="groupcheck w3-hide">Make Group</button>
+      <button onclick="clickUngroup()" class="groupcheck w3-hide">Ungroup</button> -->
       <button onclick="copyToClipboard()" style="display: none;" >Copy</button>
     </div>
   </div>
@@ -152,7 +155,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       <span style="float: right;">X:<input id="inputx" type="number" onchange="updateValue(this)"></span><br>
       <span style="float: right;">Y:<input id="inputy" type="number" onchange="updateValue(this)"></span><br>
       <span style="float: right;">width:<input id="inputwidth" type="number" min="1" onchange="updateValue(this)"></span><br>
-      <span style="float: right;">Lock aspect ratio:&nbsp;&nbsp;<input id="lar" type="checkbox" onchange="updateValue(this)" checked>&nbsp;</span><br>
+      <span style="float: right;">Lock aspect ratio:<input id="lar" type="checkbox" onchange="updateValue(this)" checked></span><br>
       <span style="float: right;">height:<input id="inputheight" type="number" min="1" onchange="updateValue(this)"></span><br>
     </div>
     <div id="clipimages" class="w3-hide">
@@ -160,11 +163,11 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       <span style="float: right;">sX:<input id="inputsx" type="number" min="0" onchange="updateValue(this)"></span><br>
       <span style="float: right;">sY:<input id="inputsy" type="number" min="0" onchange="updateValue(this)"></span><br>
       <span style="float: right;">swidth:<input id="inputswidth" type="number" min="1" onchange="updateValue(this)"></span><br>
-      <span style="float: right;">Lock aspect ratio:&nbsp;&nbsp;<input id="slar" type="checkbox" onchange="updateValue(this)" checked>&nbsp;</span><br>
+      <span style="float: right;">Lock aspect ratio:<input id="slar" type="checkbox" onchange="updateValue(this)" checked></span><br>
       <span style="float: right;">sheight:<input id="inputsheight" type="number" min="1" onchange="updateValue(this)"></span><br>
     </div>
     <div id="otherbg" class="w3-hide">
-      <span>'Others' background:&nbsp;&nbsp;<input id="inputobg" type="checkbox" onchange="updateValue(this)"></span><br>
+      <span>'Others' background:<input id="inputobg" type="checkbox" onchange="updateValue(this)"></span><br>
     </div>
     <div id="alltext" class="w3-hide">
       <span style="float: right;"><textarea id="inputdata" cols="17" onchange="updateValue(this)"></textarea></span><br>
