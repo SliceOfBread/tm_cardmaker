@@ -57,6 +57,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       <a onclick="addTextBox()" href="#" class="w3-bar-item w3-button">Text box</a>
       <a onclick="addProduction()" href="#" class="w3-bar-item w3-button">Production box</a>
       <a onclick="addEffectBox()" href="#" class="w3-bar-item w3-button">Effect box</a>
+      <a onclick="addLine()" href="#" class="w3-bar-item w3-button">Line</a>
       <a onclick="myAccFunc('templates')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
         Templates <i class="fa fa-caret-down"></i>
       </a>
@@ -151,12 +152,20 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         <option value="defselect1"></option>
       </select></span><br>
     </div>
-    <div id="allimages" class="w3-hide">
+    <div id="allall" class="w3-hide">
       <span style="float: right;">X:<input id="inputx" type="number" onchange="updateValue(this)"></span><br>
       <span style="float: right;">Y:<input id="inputy" type="number" onchange="updateValue(this)"></span><br>
       <span style="float: right;">width:<input id="inputwidth" type="number" min="1" onchange="updateValue(this)"></span><br>
+    </div>
+    <div id="allimages" class="w3-hide">
       <span style="float: right;">Lock aspect ratio:<input id="lar" type="checkbox" onchange="updateValue(this)" checked></span><br>
       <span style="float: right;">height:<input id="inputheight" type="number" min="1" onchange="updateValue(this)"></span><br>
+    </div>
+    <div id="allangle" class="w3-hide">
+      <span style="float: right;">Angle:<input id="inputangle" type="number" min="0" max="359" onchange="updateValue(this)"></span><br>
+    </div>
+    <div id="alllen" class="w3-hide">
+      <span style="float: right;">Length:<input id="inputlen" type="number" min="1" onchange="updateValue(this)"></span><br>
     </div>
     <div id="clipimages" class="w3-hide">
       <span style="float: right;">Opacity:<input id="inputalpha" type="number" min="0" max="100" onchange="updateValue(this)">%</span><br>

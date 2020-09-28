@@ -3,6 +3,7 @@ var aLayers = {};
 
 var userImageList = [];
 var otherBgList = {};
+var type2FuncList = {};
 // var groupList = [];
 
 var blockList = [
@@ -323,8 +324,6 @@ var hiddenImage = {};
 var domParams = document.getElementById("params").parentNode.removeChild(document.getElementById("params"));
 domParams.classList.remove("w3-hide");
 
-resetProject();
-
 function resetProject() {
   document.getElementById("layerlist").innerHTML = "";
   ddcount = 0;
@@ -506,18 +505,20 @@ function selectLayer() {
       allLayerNodes[ch].classList.add("selected");
       // hide/unhide correct params for this layer
       let thisLayer = aLayers[allLayerNodes[ch].id];
+      let thisLayerParams = thisLayer.params;
+      if (this.parentNode.id != "dragdropdiv0") {
+        thisLayerParams += " allall";
+      }
       
       for (let pch=0; pch < domParams.children.length; pch++) {
         let thispch = domParams.children[pch];
-        if (thisLayer.params.indexOf(thispch.id) == -1) {
+        if (thisLayerParams.indexOf(thispch.id) == -1) {
           // not in params, hide it
           thispch.classList.add("w3-hide");
         } else {
           // in params list, show it
           // thispch is DOM elements such as allpreset allimages etc
-          if (thispch.classList.contains("w3-hide")) {
-            thispch.classList.remove("w3-hide");
-          }
+          thispch.classList.remove("w3-hide");
           for (let intype of ["input", "textarea", "select"]) {
             let chInputs = thispch.getElementsByTagName(intype);
             for (let subch of chInputs) {
@@ -715,6 +716,17 @@ function drawProject() {
         }
         
         break;
+      case "line":
+        ctx.lineWidth = layer.width;
+        ctx.strokeStyle = layer.color;
+        ctx.translate(layer.x, layer.y);
+        ctx.rotate(Math.PI * layer.angle / 180);
+        ctx.moveTo(0,0);
+        ctx.lineTo(layer.len,0);
+        ctx.stroke();
+        ctx.setTransform();
+        ctx.lineWidth = 1;
+        break;
       // case "group":
       //   break;
       case "base":
@@ -906,15 +918,19 @@ function loadFrom(saved) {
         case "text":
         case "production":
         case "effect":
+        case "line":
           if (layer.type == "block") {
             newLayer = addBlock(layer.iNum);
             ignore.push("iNum");
           } else if (layer.type == "text") {
             newLayer = addTextBox(layer.data);
-          } else if (layer.type == "effect") {
-            newLayer = addEffectBox();
+          // } else if (layer.type == "effect") {
+          //   newLayer = addEffectBox();
+          // } else if (layer.type == "line") {
+          //   newLayer = addLine();
           } else {
-            newLayer = addProduction();
+            newLayer = type2FuncList[layer.type]();
+          //   newLayer = addProduction();
           }
           
           for (let key in layer) {
@@ -974,6 +990,8 @@ function loadFrom(saved) {
   
 }
 
+type2FuncList.block = addBlock;
+
 function addBlock(th) {
   let layer = {type:"block", name:"", iNum:0, x:0, y:0, width:0, height:0, params:"allimages"};
   let myIndex = 0;
@@ -1014,6 +1032,8 @@ function addMegaTemplate() {
   addLayer("Base",{type:"base", color:"#ffffff", height:1126, width:826, params:"color"});
   loadFrom(megaTemplates[mega].layers);
 }
+
+type2FuncList.text = addTextBox;
 
 function addTextBox(th) {
   let layer = {type:"text", data:"", x:0, y:0, width:110, height:21, 
@@ -1074,6 +1094,8 @@ function userImageLoaded() {
   drawProject();
 }
 
+type2FuncList.production = addProduction;
+
 function addProduction() {
   let layer = {type:"production", x:200, y:643, width:130, height:130, 
               params:"allimages allpreset"};
@@ -1082,10 +1104,22 @@ function addProduction() {
   return newLayer;
 }
 
+type2FuncList.effect = addEffectBox;
+
 function addEffectBox() {
   let layer = {type:"effect", x:600, y:300, width:400, height:300, 
               params:"allimages allpreset"};
   let newLayer = addLayer("Effect Box", layer);
+  drawProject();
+  return newLayer;
+}
+
+type2FuncList.line = addLine;
+
+function addLine() {
+  let layer = {type:"line", x:0, y:0, width:2, angle:0, len:100, color:"#000000", 
+              opacity:1, params:"allangle alllen allpreset allcolor"};
+  let newLayer = addLayer("Line", layer);
   drawProject();
   return newLayer;
 }
@@ -1336,4 +1370,6 @@ function sortable(section, onUpdate){
      
   });
 }
-                                        
+     
+
+resetProject();
