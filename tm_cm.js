@@ -3,6 +3,7 @@ var aLayers = {};
 
 var userImageList = [];
 var otherBgList = {};
+var type2FuncList = {};
 // var groupList = [];
 
 var blockList = [
@@ -323,9 +324,7 @@ var hiddenImage = {};
 var domParams = document.getElementById("params").parentNode.removeChild(document.getElementById("params"));
 domParams.classList.remove("w3-hide");
 
-resetProject();
-
-function resetProject() {
+function resetProject(loadautosave) {
   document.getElementById("layerlist").innerHTML = "";
   ddcount = 0;
   aLayers = {};
@@ -345,7 +344,7 @@ function resetProject() {
   //   document.getElementById("loadprogress").style.display = "block";
   //   document.getElementById("cmcanvas").style.display = "none";
   // } else {
-    allLoadingDone();
+    allLoadingDone(loadautosave);
   // }
 }
 
@@ -506,18 +505,20 @@ function selectLayer() {
       allLayerNodes[ch].classList.add("selected");
       // hide/unhide correct params for this layer
       let thisLayer = aLayers[allLayerNodes[ch].id];
+      let thisLayerParams = thisLayer.params;
+      if (this.parentNode.id != "dragdropdiv0") {
+        thisLayerParams += " allall";
+      }
       
       for (let pch=0; pch < domParams.children.length; pch++) {
         let thispch = domParams.children[pch];
-        if (thisLayer.params.indexOf(thispch.id) == -1) {
+        if (thisLayerParams.indexOf(thispch.id) == -1) {
           // not in params, hide it
           thispch.classList.add("w3-hide");
         } else {
           // in params list, show it
           // thispch is DOM elements such as allpreset allimages etc
-          if (thispch.classList.contains("w3-hide")) {
-            thispch.classList.remove("w3-hide");
-          }
+          thispch.classList.remove("w3-hide");
           for (let intype of ["input", "textarea", "select"]) {
             let chInputs = thispch.getElementsByTagName(intype);
             for (let subch of chInputs) {
@@ -574,16 +575,29 @@ function drawProject() {
   let c = document.getElementById("cmcanvas");
   let ctx = c.getContext("2d");
   let layerDivs = document.getElementsByClassName("divRec");
-  let layersForSaving = [];
+  let imagesForSaving = [];
   for (let i=0; i < layerDivs.length; i++) {
     let layer = aLayers[layerDivs[i].id];
-    layersForSaving.push(layer);
+    imagesForSaving.push(layer);
     switch (layer.type) {
       case "block":
+        if (i==0) {
+          c.height = layer.height;
+          c.width = layer.width;
+        }
         // layer = {type:"block", obj:{}, x:0, y:0, width:0, height:0, params:"allimages"};
         if (layer.obg) { // draw others background?
           let brdr = 3;
-          ctx.drawImage(otherBgList[blockList[layer.iNum].otherbg],layer.x-brdr,layer.y-brdr,layer.width+2*brdr,layer.height+2*brdr);
+          if (!otherBgList[blockList[layer.iNum].otherbg]) {
+            for (let j=0; j < blockList.length; j++) {
+              if (blockList[j].text == blockList[layer.iNum].otherbg) {
+                fetchBlock(j);
+                break;
+              }
+            }
+          } else if (otherBgList[blockList[layer.iNum].otherbg].complete) {
+            ctx.drawImage(otherBgList[blockList[layer.iNum].otherbg],layer.x-brdr,layer.y-brdr,layer.width+2*brdr,layer.height+2*brdr);
+          }
         }
         if (!blockList[layer.iNum].obj) {
           fetchBlock(layer.iNum);
@@ -592,6 +606,7 @@ function drawProject() {
         }
         break;
       case "text":
+        
         // layer = {type:"text", data:"", x:0, y:0, width:0, height:0, 
         // color:"#000000", 
         // font:"Prototype", lineSpace:4, justify:"center",
@@ -618,6 +633,7 @@ function drawProject() {
         
         break;
       case "production":
+        
         {
           let sz = 20;
           let border = 3;
@@ -678,6 +694,7 @@ function drawProject() {
           
         break;
       case "effect":
+        
         {
           let border = 5;
           let xpos = Number(layer.x);
@@ -715,9 +732,22 @@ function drawProject() {
         }
         
         break;
+      case "line":
+        
+        ctx.lineWidth = layer.width;
+        ctx.strokeStyle = layer.color;
+        ctx.translate(layer.x, layer.y);
+        ctx.rotate(Math.PI * layer.angle / 180);
+        ctx.moveTo(0,0);
+        ctx.lineTo(layer.len,0);
+        ctx.stroke();
+        ctx.setTransform();
+        ctx.lineWidth = 1;
+        break;
       // case "group":
       //   break;
       case "base":
+        
         // set height/width
         c.height = layer.height; 
         c.width = layer.width;
@@ -732,13 +762,15 @@ function drawProject() {
         break;
     }
   }
-  autoSave(layersForSaving);
+  autoSave(imagesForSaving);
 }
 
+var lastAutoSave = "";
 function autoSave(layers) {
+  lastAutoSave = JSON.stringify(layers);
   try {
     if (typeof(Storage) !== "undefined") {
-      localStorage.setItem("autosave", JSON.stringify(layers));
+      localStorage.setItem("autosave", lastAutoSave);
     }
 
   } catch (error) {
@@ -846,24 +878,26 @@ function onBlockLoad() {
     }
     // add menu item for image
     // <a onclick="addBlock('template:green')" href="#" class="w3-bar-item w3-button">Green Card</a>
-    let toAdd = document.createElement("a");
-    toAdd.onclick = addBlock;
-    toAdd.innerText = tmpText;
-    toAdd.classList.add("w3-bar-item");
-    toAdd.classList.add("w3-button");
-    toAdd.href = "#";
-    toAdd.id = "image" + this.dataindex;
-    document.getElementById(blockList[this.dataindex].putUnder).appendChild(toAdd);
-    if (blockList[this.dataindex].putUnder == "templates") {
-      // add Super Templates
-      toAdd = document.createElement("a");
-      toAdd.onclick = addMegaTemplate;
+    if (!document.getElementById("image" + this.dataindex)) {
+      let toAdd = document.createElement("a");
+      toAdd.onclick = addBlock;
       toAdd.innerText = tmpText;
       toAdd.classList.add("w3-bar-item");
       toAdd.classList.add("w3-button");
       toAdd.href = "#";
-      toAdd.id = "mega" + blockList[this.dataindex].src;
-      document.getElementById("fromTemplate").appendChild(toAdd);
+      toAdd.id = "image" + this.dataindex;
+      document.getElementById(blockList[this.dataindex].putUnder).appendChild(toAdd);
+      if (blockList[this.dataindex].putUnder == "templates") {
+        // add Super Templates
+        toAdd = document.createElement("a");
+        toAdd.onclick = addMegaTemplate;
+        toAdd.innerText = tmpText;
+        toAdd.classList.add("w3-bar-item");
+        toAdd.classList.add("w3-button");
+        toAdd.href = "#";
+        toAdd.id = "mega" + blockList[this.dataindex].src;
+        document.getElementById("fromTemplate").appendChild(toAdd);
+      }
     }
   }
   // numLoaded++;
@@ -882,11 +916,15 @@ function onBlockLoad() {
 
 var reloading = false;
 
-function allLoadingDone() {
+function allLoadingDone(loadautosave) {
   document.getElementById("loadprogress").style.display = "none";
   document.getElementById("cmcanvas").style.display = "block";
   try {
-    loadFrom(JSON.parse(localStorage.getItem("autosave")));
+    if (loadautosave) {
+      loadFrom(JSON.parse(localStorage.getItem("autosave")));
+    } else {
+      drawProject();
+    }
   } catch (error) {
     // no autosave file
   }
@@ -906,15 +944,19 @@ function loadFrom(saved) {
         case "text":
         case "production":
         case "effect":
+        case "line":
           if (layer.type == "block") {
             newLayer = addBlock(layer.iNum);
             ignore.push("iNum");
           } else if (layer.type == "text") {
             newLayer = addTextBox(layer.data);
-          } else if (layer.type == "effect") {
-            newLayer = addEffectBox();
+          // } else if (layer.type == "effect") {
+          //   newLayer = addEffectBox();
+          // } else if (layer.type == "line") {
+          //   newLayer = addLine();
           } else {
-            newLayer = addProduction();
+            newLayer = type2FuncList[layer.type]();
+          //   newLayer = addProduction();
           }
           
           for (let key in layer) {
@@ -974,6 +1016,8 @@ function loadFrom(saved) {
   
 }
 
+type2FuncList.block = addBlock;
+
 function addBlock(th) {
   let layer = {type:"block", name:"", iNum:0, x:0, y:0, width:0, height:0, params:"allimages"};
   let myIndex = 0;
@@ -1015,6 +1059,8 @@ function addMegaTemplate() {
   loadFrom(megaTemplates[mega].layers);
 }
 
+type2FuncList.text = addTextBox;
+
 function addTextBox(th) {
   let layer = {type:"text", data:"", x:0, y:0, width:110, height:21, 
               color: "#000000",
@@ -1043,49 +1089,190 @@ function addUserFile(th) {
       window.alert('File is not an image.');
       return;
     }
-    mostRecentFile = file;
-    const reader = new FileReader();
-    reader.addEventListener('load', function() {
-      let newI = new Image();
-      newI.onload = userImageLoaded;
-      newI.src = reader.result;
-    });
-    reader.readAsDataURL(file);  
+      // load a local file
+      mostRecentFile = file;
+      const reader = new FileReader();
+      reader.addEventListener('load', function() {
+        let newI = new Image();
+        newI.onload = userImageLoaded;
+        newI.src = reader.result;
+        newI.crossOrigin = "Anonymous";
+      });
+      reader.readAsDataURL(file);  
+
   } catch (error) {
+    projectLoad = false;
     window.alert("Something went wrong loading file.")
   }
 }
 
 function userImageLoaded() {
   // this = image object
-  let layer = {type:"userFile", iNum:0,
-    x:0, y:0, width:1, height:1,
-    alpha:100,
-    sx:0, sy:0, swidth:0, sheight:0, params:"allimages clipimages"};
-  layer.iNum = userImageList.length;
-  layer.filename = mostRecentFile.name;
-  layer.width = this.width;
-  layer.height = this.height;
-  layer.swidth = this.width;
-  layer.sheight = this.height;
-  
-  userImageList.push(this);
-  let newLayer = addLayer("Local:" + layer.filename, layer);
-  drawProject();
+  if (projectLoad) {
+    // verify image is a project (we support)
+    try {
+      let c = document.getElementById("cmcanvas");
+      let ctx = c.getContext("2d");
+      // set canvas size to hold image
+      c.width = this.width;
+      c.height = this.height;
+      // put image on canvas
+      ctx.drawImage(this, 0, 0);
+
+      // need to wait until canvas drawn
+      setTimeout(function(){      
+        // now we can access the image
+        let c = document.getElementById("cmcanvas");
+        let ctx = c.getContext("2d");
+        let imgData = ctx.getImageData(0,0,c.width,c.height);
+        let tmp = "tm_cmV01";
+        let p = 0;
+
+        let ob = array2string(imgData.data, p, 8);
+        if (ob.str != tmp) throw "project";
+        p = ob.pos;
+
+        // get image pos data
+        ob = array2string(imgData.data, p, 0);
+        let posStr = ob.str;
+        p = ob.pos;
+
+        // get layer data
+        ob = array2string(imgData.data, p, 0);
+        let layerStr = ob.str;
+        //p = ob.pos;
+
+        // parse pos data and extract images 
+        let pos=JSON.parse(posStr);
+        if (pos.length) window.alert("User files not yet supported. :(");
+        for (let i=0; i<pos.length; i++) {
+          // TBD
+        }
+
+        // parse layer data
+        let newLayers = JSON.parse(layerStr);
+        for (let i=0; i < newLayers.length; i++) {
+          // update dragdropdiv0 and remove that newLayer (if it existed)
+          let layer;
+          if ((newLayers[0].type == "block") && (aLayers["dragdropdiv0"])) {
+            layer = aLayers["dragdropdiv0"];
+            layer.width = newLayers[0].width;
+            layer.height = newLayers[0].height;
+            layer.color = newLayers[0].color;
+            newLayers.shift();
+          }
+          // load the rest of newLayers using loadFrom
+          loadFrom(newLayers);
+        }
+
+        // redraw project
+        drawProject();
+      }, 50);
+
+      
+    } catch (error) {
+      // end up here for a variety of reasons
+      if (error == "project") {
+        // doesn't look like a project file, or one we support
+      } else {
+        // probably a JSON parse error, just call it parse error
+      }
+      
+    }
+    
+    
+    // TBD
+  } else {
+    let layer = {type:"userFile", iNum:0,
+      x:0, y:0, width:1, height:1,
+      alpha:100,
+      sx:0, sy:0, swidth:0, sheight:0, params:"allimages clipimages"};
+    layer.iNum = userImageList.length;
+    layer.filename = mostRecentFile.name;
+    layer.width = this.width;
+    layer.height = this.height;
+    layer.swidth = this.width;
+    layer.sheight = this.height;
+    
+    userImageList.push(this);
+    let newLayer = addLayer("Local:" + layer.filename, layer);
+    drawProject();
+  }
 }
+
+function array2string(arr, aPos, len) {
+  // convert part of array to string of length len(if len is 0, it is a zero terminated string)
+  // start at array position pos
+  let str = "";
+  let pos = aPos;
+  do {
+    let n = 0;
+    for (let j=0; j < 8; j++) {
+      if (pos % 4 == 3) pos++;
+      let v = arr[pos];
+      if (v > 127) {
+        n |= 1 << j;
+      }
+      pos++;
+    }
+    if (!n) break;
+    str += String.fromCharCode(n);
+  } while (str.length != len);
+  return {str:str, pos:pos};
+}
+
+function string2array(str, arr, aPos, zeroTerminate) {
+  // assume array is a image data array
+  let pos=aPos;
+  for (let i=0; i < str.length; i++) {
+    for (let j=0; j < 8; j++) {
+      if (pos % 4 == 3) pos++;
+      arr[pos] = (str.charCodeAt(i) & (1 << j)) ? 0xff : 0;
+      pos++;
+    }
+  }
+  if (pos % 4 == 3) pos++;
+  if (zeroTerminate) {
+    for (let j=0; j < 8; j++) {
+      if (pos % 4 == 3) pos++;
+      arr[pos] = 0;
+      pos++;
+    }
+  }
+  return pos;
+}
+
+type2FuncList.production = addProduction;
 
 function addProduction() {
   let layer = {type:"production", x:200, y:643, width:130, height:130, 
               params:"allimages allpreset"};
   let newLayer = addLayer("Production", layer);
-  drawProject();
+  let thisBlock = blockList[hiddenImage["prod_nxn"]];
+  if (thisBlock.obj) {
+    drawProject();
+  } else {
+    fetchBlock(hiddenImage["prod_nxn"]);
+  }  
   return newLayer;
 }
+
+type2FuncList.effect = addEffectBox;
 
 function addEffectBox() {
   let layer = {type:"effect", x:600, y:300, width:400, height:300, 
               params:"allimages allpreset"};
   let newLayer = addLayer("Effect Box", layer);
+  drawProject();
+  return newLayer;
+}
+
+type2FuncList.line = addLine;
+
+function addLine() {
+  let layer = {type:"line", x:0, y:0, width:2, angle:0, len:100, color:"#000000", 
+              opacity:1, params:"allangle alllen allpreset allcolor"};
+  let newLayer = addLayer("Line", layer);
   drawProject();
   return newLayer;
 }
@@ -1121,6 +1308,7 @@ function loadWebImage() {
       webImageLoaded(img);
   };
   img.src = url;
+  img.crossOrigin = "Anonymous";
   let o = document.getElementById("overlay");
   o.classList.remove("w3-show");
   o.classList.add("w3-hide");
@@ -1150,6 +1338,7 @@ function reloadWebImage(url) {
       webImageReloaded(img);
   };
   img.src = url;
+  img.crossOrigin = "Anonymous";
 }
 
 function webImageReloaded(th) {
@@ -1176,7 +1365,140 @@ function cancelOverlay() {
 }
 
 function clickNew() {
-  if (confirm("Delete current work and start fresh?")) resetProject();
+  if (confirm("Delete current work and start fresh?")) resetProject(false);
+}
+
+var extraRows = 0;
+var oldHeight = 0;
+
+var projectLoad = false;
+
+function clickLoadProject() {
+  projectLoad = true;
+  // following click eventually runs addUserFile()
+  document.getElementById('fileselection').click();
+}
+
+function clickSaveProject() {
+  // make array of user images
+  let layerDivs = document.getElementsByClassName("divRec");
+  let imagesForSaving = [];
+  for (let i=0; i < layerDivs.length; i++) {
+    let layer = aLayers[layerDivs[i].id];
+    if (layer.type != "userFile") continue;
+    imagesForSaving.push(userImageList[layer.iNum]);
+  }
+  // if no images, assume canvas of 200x200
+  let imgData = {container:{width:200,height:200}, pos:[]};
+  // if 1+ image, run fitImages and assume canvas of max(height,200) x max(width,200);
+  if (imagesForSaving.length) {
+    imgData = fitImages(imagesForSaving);
+    if (imgData.container.width < 200) imgData.container.width=200;
+    if (imgData.container.height < 200) imgData.container.height=200;
+    for (let i=0; i < imagesForSaving.length; i++) {
+      imgData.pos[i].width = imagesForSaving[i].width;
+      imgData.pos[i].height = imagesForSaving[i].height;
+    }
+  }
+  // determine number of extra rows, add this value to all pos.y values returned from fitImages
+  // currently our storeage is 2 bytes per pixel (4 worked but BGG does something that ruins it)
+  let posStr = JSON.stringify(imgData.pos);
+  extraRows = Math.ceil(8 + (lastAutoSave.length + posStr.length + 10) / .375 / imgData.container.width);
+  for (let i=0; i < imgData.pos.length; i++) {
+    imgData.pos[i].y += extraRows;
+  }
+  posStr = JSON.stringify(imgData.pos);
+  // NOTE: we are making the not so crazy judgement that changing the pos.y data will not increase
+  //  posStr by much and certainly nothing near the minimum 600+ bytes 
+  //  (8 extra height * 200 (min) * .375 byte per pixel) we have available.
+  // make canvas assumed.height+extrarows x assumed.width
+  let c = document.getElementById("cmcanvas");
+  let ctx = c.getContext("2d");
+  c.height = imgData.container.height + extraRows;
+  c.width = imgData.container.width;
+
+  // insert JSON and other data
+  let tmp = "tm_cmV01";
+  let imgPlus = ctx.createImageData(imgData.container.width, extraRows+1);
+  imgPlus.data.fill(255);
+  let p = 0;
+  // insert our 8 byte signature
+  p = string2array(tmp,imgPlus.data,p,false);
+  // insert image pos data 
+  p = string2array(posStr, imgPlus.data, p, true);
+  // insert layer info
+  p = string2array(lastAutoSave, imgPlus.data, p, true);
+  // and put that onto the canvas
+  ctx.putImageData(imgPlus, 0, 0);
+  
+  // insert images at their pos.x/y locations
+  for (let i=0; i < imgData.pos.length; i++) {
+    let layer = imagesForSaving[i];
+    let pos = imgData.pos[i];
+    c.drawImage(userImageList[layer.iNum],pos.x,pos.y);
+  }
+
+  // allow time for drawing then prompt for save
+  setTimeout(saveProjectCont,100) ;
+
+
+  // figure out how much extra height we need (assume UTF-8)
+  // oldHeight = h;
+  // c.height = h+extraRows;
+  // drawProject(true);
+}
+
+function saveProjectCont() {
+  let c = document.getElementById("cmcanvas");
+  // let ctx = c.getContext("2d");
+  // let w=c.width;
+  // let h = oldHeight;
+  // let imgData = ctx.getImageData(0, 0, w, h);
+  // ctx.putImageData(imgData, 0, 0);
+  // let imgPlus = ctx.getImageData(0, 0, w, h+extraRows);
+  // // imgPlus contains the image data we want to save plus the extra rows
+  // // where we will save our data
+  // let storePos = w*h*4;
+  // let tmp = "tm_cmV01";
+  // {
+  //   let j=0;
+  //   // store 8 bytes to verify it's our special image
+  //   for (let i=w*h*4; i < w*h*4+tmp.length; i++) {
+  //     imgPlus.data[i] = tmp.charCodeAt(j++);
+  //     storePos++;
+  //   }
+  // }
+  // let l = lastAutoSave.length;
+  // imgPlus.data[storePos++] = l & 0xff;
+  // l = l >> 8;
+  // imgPlus.data[storePos++] = l & 0xff;
+  // l = l >> 8;
+  // imgPlus.data[storePos++] = l & 0xff;
+  // l = l >> 8;
+  // imgPlus.data[storePos++] = l & 0xff;
+  // {
+  //   let j=0;
+  //   for (let i=storePos; i < storePos+lastAutoSave.length; i++) {
+  //     imgPlus.data[i] = lastAutoSave.charCodeAt(j++);
+  //   }
+  // }
+  // ctx.putImageData(imgPlus, 0, 0);
+  let projectlink = document.getElementById('projectlink');
+  projectlink.setAttribute('download', 'cardMaker.png');
+  projectlink.setAttribute('href', c.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+  projectlink.click();
+  saveDone();
+}
+
+function saveDone() {
+  let ans = confirm("Click when done.");
+  if (ans || !ans) {
+      let c = document.getElementById("cmcanvas");
+    c.height = c.height-extraRows;
+    extraRows = 0;
+    drawProject();
+
+  }
 }
 
 function groupModeToggle() {
@@ -1336,4 +1658,6 @@ function sortable(section, onUpdate){
      
   });
 }
-                                        
+     
+
+resetProject(true);
