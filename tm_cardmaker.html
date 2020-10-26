@@ -40,6 +40,9 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       </div>
         <!-- <a href="#" class="w3-bar-item w3-button">Load</a> -->
       <a onclick="window.alert('Right click image to save it')" href="#" class="w3-bar-item w3-button">Save</a>
+      <a onclick="clickLoadNewProject()" href="#" class="w3-bar-item w3-button">Clear &amp; Load Project</a>
+      <a onclick="clickLoadProject()" href="#" class="w3-bar-item w3-button">Load Project</a>
+      <a onclick="clickSaveProject()" href="#" class="w3-bar-item w3-button">Save as Project</a>
     </div>
     <a onclick="myAccFunc('design')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
       Add Block <i class="fa fa-caret-down"></i>
@@ -57,6 +60,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       <a onclick="addTextBox()" href="#" class="w3-bar-item w3-button">Text box</a>
       <a onclick="addProduction()" href="#" class="w3-bar-item w3-button">Production box</a>
       <a onclick="addEffectBox()" href="#" class="w3-bar-item w3-button">Effect box</a>
+      <a onclick="addLine()" href="#" class="w3-bar-item w3-button">Line</a>
       <a onclick="myAccFunc('templates')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
         Templates <i class="fa fa-caret-down"></i>
       </a>
@@ -132,6 +136,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   </div>
   <div class="w3-padding w3-container">
     <canvas id="cmcanvas" height="1050px" width="750px" style="float:left; border:1px solid #101010;"></canvas>
+    <a id="projectlink"></a>
     <div style="display:block; float:left; margin: 10px; min-width: 260px;">
       <section id="layerlist">
       </section>
@@ -140,6 +145,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       <button onclick="clickUngroup()" class="groupcheck w3-hide">Ungroup</button> -->
       <button onclick="copyToClipboard()" style="display: none;" >Copy</button>
     </div>
+    <div id="xcanvases" width="100%"></div>
   </div>
 
   <!-- End page content -->
@@ -151,12 +157,20 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         <option value="defselect1"></option>
       </select></span><br>
     </div>
-    <div id="allimages" class="w3-hide">
+    <div id="allall" class="w3-hide">
       <span style="float: right;">X:<input id="inputx" type="number" onchange="updateValue(this)"></span><br>
       <span style="float: right;">Y:<input id="inputy" type="number" onchange="updateValue(this)"></span><br>
       <span style="float: right;">width:<input id="inputwidth" type="number" min="1" onchange="updateValue(this)"></span><br>
+    </div>
+    <div id="allimages" class="w3-hide">
       <span style="float: right;">Lock aspect ratio:<input id="lar" type="checkbox" onchange="updateValue(this)" checked></span><br>
       <span style="float: right;">height:<input id="inputheight" type="number" min="1" onchange="updateValue(this)"></span><br>
+    </div>
+    <div id="allangle" class="w3-hide">
+      <span style="float: right;">Angle:<input id="inputangle" type="number" min="0" max="359" onchange="updateValue(this)"></span><br>
+    </div>
+    <div id="alllen" class="w3-hide">
+      <span style="float: right;">Length:<input id="inputlen" type="number" min="1" onchange="updateValue(this)"></span><br>
     </div>
     <div id="clipimages" class="w3-hide">
       <span style="float: right;">Opacity:<input id="inputalpha" type="number" min="0" max="100" onchange="updateValue(this)">%</span><br>
@@ -200,6 +214,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
   </div>
 </div>
 
+<script src="imageFit.js"></script>
 
 <script src="tm_cm.js"></script>
 
