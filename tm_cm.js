@@ -328,6 +328,8 @@ function resetProject(loadautosave) {
   document.getElementById("layerlist").innerHTML = "";
   ddcount = 0;
   aLayers = {};
+  document.getElementById("xcanvases").innerHTML = "";
+  aCanvases = [];
   addLayer("Base",{type:"base", color:"#ffffff", height:1126, width:826, params:"color"});
 
   maxToLoad = 0;
@@ -722,7 +724,8 @@ function drawProject() {
           ctx.fillRect(xpos+border, ypos+border, layer.width-2*border, layer.height-2*border); 
         }
         break;
-      case "userFile":      
+      case "userFile": 
+      case "embedded":     
       case "webFile":
         if (layer.iNum != -1) {
           if (layer.alpha == undefined) layer.alpha = 100; 
@@ -921,7 +924,7 @@ function allLoadingDone(loadautosave) {
   document.getElementById("cmcanvas").style.display = "block";
   try {
     if (loadautosave) {
-      loadFrom(JSON.parse(localStorage.getItem("autosave")));
+      loadFrom(JSON.parse(localStorage.getItem("autosave")), true);
     } else {
       drawProject();
     }
@@ -930,9 +933,10 @@ function allLoadingDone(loadautosave) {
   }
 }
 
-function loadFrom(saved) {
+function loadFrom(saved, autoload) {
   // load autosave file
   reloading = true;
+  unreloadable = false;
   let resize = false;
   let scale = {x:1, y:1, width:1, height:1};
   try {
@@ -971,12 +975,22 @@ function loadFrom(saved) {
         // case "group":
         //   addLayer(layer.name, layer);
         //   break;
-        case "webFile": // TBD add code to fetch web file and replace it when loaded
+        case "embedded":
+          if (autoload) {unreloadable=true; break};
+          if (layer.name) {
+            addLayer(layer.name, layer);
+          } else {
+            addLayer("embed" + layer.iNum, layer);
+          }
+          break;
+          
+        case "webFile": 
           reloadWebImage(layer.filename);
           layer.iNum = -1;
           addLayer("Web:" + layer.filename, layer);
           break;
         case "userFile":
+          if (autoload) {unreloadable=true; break};
           layer.iNum = -1;
           addLayer("Local:" + layer.filename, layer);
           //newLayer = addUserFile(layer);
@@ -1011,6 +1025,7 @@ function loadFrom(saved) {
     }
   } catch (error) {
   }
+  if (unreloadable) window.alert("User local files not reloaded. You must do this manually.");
   reloading = false;
   drawProject();
   
@@ -1082,6 +1097,7 @@ function addTextBox(th) {
 
 var mostRecentFile = {};
 function addUserFile(th) {
+  if (!th.value) return;
   try {
     let file = th.files[0];
     // Check if the file is an image.
@@ -1104,7 +1120,10 @@ function addUserFile(th) {
     projectLoad = false;
     window.alert("Something went wrong loading file.")
   }
+  th.value = "";
 }
+
+var oLoadedProject;
 
 function userImageLoaded() {
   // this = image object
@@ -1118,6 +1137,7 @@ function userImageLoaded() {
       c.height = this.height;
       // put image on canvas
       ctx.drawImage(this, 0, 0);
+      oLoadedProject = this;
 
       // need to wait until canvas drawn
       setTimeout(function(){      
@@ -1144,8 +1164,32 @@ function userImageLoaded() {
 
         // parse pos data and extract images 
         let pos=JSON.parse(posStr);
-        if (pos.length) window.alert("User files not yet supported. :(");
+        // if (pos.length) window.alert("User files not yet supported. :(");
+        let aCanvases = [];
         for (let i=0; i<pos.length; i++) {
+          // draw images on new canvases, use canvas{i} for each
+          // later we could retrieve 'i' if needed
+          let cvs = document.createElement("CANVAS");
+          cvs.id = "canvas" + i;
+          cvs.width = pos[i].width;
+          cvs.height = pos[i].height;
+          let nctx = cvs.getContext("2d");
+          nctx.drawImage(oLoadedProject, pos[i].x, pos[i].y, pos[i].width, pos[i].height, 0, 0, pos[i].width, pos[i].height);
+          // add cvs to DOM (needed, I think, or they won't draw)
+          //document.getElementById("xcanvases").appendChild(cvs);
+          aCanvases.push(cvs);
+
+          // TBD put canvases into a temporary array
+          // when we first try to draw them, we will pull them out in the order they went in.
+
+          // // use setTimeout to ensure image is drawn before we extract it
+          // setTimeout(function (oCvs, num) {
+          //   // oCvs is canvas object
+          //   // num should match up with iNum of save layer
+          //   userImageList[num] = oCvs.toDataURL("image/png");
+          //   // disappear this canvas
+          //   oCvs.style.display = "none";
+          // },0,cvs, i);
           // TBD
         }
 
@@ -1154,24 +1198,33 @@ function userImageLoaded() {
         for (let i=0; i < newLayers.length; i++) {
           // update dragdropdiv0 and remove that newLayer (if it existed)
           let layer;
-          if ((newLayers[0].type == "block") && (aLayers["dragdropdiv0"])) {
+          if ((newLayers[0].type == "base") && (aLayers["dragdropdiv0"])) {
             layer = aLayers["dragdropdiv0"];
             layer.width = newLayers[0].width;
             layer.height = newLayers[0].height;
             layer.color = newLayers[0].color;
             newLayers.shift();
           }
-          // load the rest of newLayers using loadFrom
-          loadFrom(newLayers);
+          // normally userFile cannot reload but here we have userFile data embedded
+          // so change from userFile to embedded if needed
+          if (newLayers[i].type == "userFile") {
+            newLayers[i].iNum = userImageList.length;
+            // set iNum above to point to canvas we add to userImageList below
+            userImageList.push(aCanvases.shift());
+            newLayers[i].type = "embedded";
+          }
         }
-
+        // load the rest of newLayers using loadFrom
+        loadFrom(newLayers);
+        projectLoad = false;
         // redraw project
-        drawProject();
+        setTimeout(drawProject, 100);
       }, 50);
 
       
     } catch (error) {
       // end up here for a variety of reasons
+      projectLoad = false;
       if (error == "project") {
         // doesn't look like a project file, or one we support
       } else {
@@ -1265,6 +1318,23 @@ function addEffectBox() {
   let newLayer = addLayer("Effect Box", layer);
   drawProject();
   return newLayer;
+}
+
+function addEmbed() {
+  let layer = {type:"embedded", iNum:-1,
+    x:0, y:0, width:1, height:1,
+    alpha:100,
+    sx:0, sy:0, swidth:0, sheight:0, params:"allimages clipimages"};
+  layer.iNum = userImageList.length;
+  layer.filename = th.src;
+  layer.width = th.width;
+  layer.height = th.height;
+  layer.swidth = th.width;
+  layer.sheight = th.height;
+  
+  userImageList.push(th);
+  let newLayer = addLayer("Web image", layer);
+
 }
 
 type2FuncList.line = addLine;
@@ -1368,6 +1438,13 @@ function clickNew() {
   if (confirm("Delete current work and start fresh?")) resetProject(false);
 }
 
+function clickLoadNewProject() {
+  if (confirm("Delete current work and start fresh?")) {
+    resetProject(false);
+    clickLoadProject();
+  }
+}
+
 var extraRows = 0;
 var oldHeight = 0;
 
@@ -1385,14 +1462,14 @@ function clickSaveProject() {
   let imagesForSaving = [];
   for (let i=0; i < layerDivs.length; i++) {
     let layer = aLayers[layerDivs[i].id];
-    if (layer.type != "userFile") continue;
+    if ((layer.type != "userFile") && (layer.type != "embedded")) continue;
     imagesForSaving.push(userImageList[layer.iNum]);
   }
   // if no images, assume canvas of 200x200
   let imgData = {container:{width:200,height:200}, pos:[]};
   // if 1+ image, run fitImages and assume canvas of max(height,200) x max(width,200);
   if (imagesForSaving.length) {
-    imgData = fitImages(imagesForSaving);
+    imgData = fitImages(imagesForSaving, 200);
     if (imgData.container.width < 200) imgData.container.width=200;
     if (imgData.container.height < 200) imgData.container.height=200;
     for (let i=0; i < imagesForSaving.length; i++) {
@@ -1419,7 +1496,7 @@ function clickSaveProject() {
 
   // insert JSON and other data
   let tmp = "tm_cmV01";
-  let imgPlus = ctx.createImageData(imgData.container.width, extraRows+1);
+  let imgPlus = ctx.createImageData(imgData.container.width, extraRows);
   imgPlus.data.fill(255);
   let p = 0;
   // insert our 8 byte signature
@@ -1435,7 +1512,7 @@ function clickSaveProject() {
   for (let i=0; i < imgData.pos.length; i++) {
     let layer = imagesForSaving[i];
     let pos = imgData.pos[i];
-    c.drawImage(userImageList[layer.iNum],pos.x,pos.y);
+    ctx.drawImage(layer,pos.x,pos.y);
   }
 
   // allow time for drawing then prompt for save
