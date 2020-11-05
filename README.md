@@ -18,7 +18,7 @@ Other than that, feel free to continue the creative journey of expanding your Te
 
 Cheers!"
 
-##How to Use
+## How to Use
 
 This part will assume you want to make a normal project. Corporation or Prelude cards are similar.
 - Click 'File'
