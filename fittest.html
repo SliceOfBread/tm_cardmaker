@@ -1,0 +1,30 @@
+<html>
+    <canvas id="cvs" height=100 width=100></canvas>
+</html>
+<script src="imageFit.js"></script>
+<script>
+
+    let images = [
+        {width:100, height:100},
+        {width:150, height:80},
+        {width:40, height:125},
+        {width:100, height:300},
+        {width:120, height:100},
+    ];
+
+    for (let i of images) {
+        i.width = Math.ceil(Math.random() * 170 + 60);
+        i.height = Math.ceil(Math.random() * 150 + 50);
+    }
+
+        let cList = fitImages(images);
+        let c = document.getElementById("cvs");
+        c.height = cList.container.height;
+        c.width = cList.container.width;
+        let ctx = c.getContext("2d");
+        for (let i=0; i<images.length; i++) {
+            let pos = cList.pos[i];
+            let size = images[i];
+            ctx.strokeRect(pos.x, pos.y, size.width, size.height);
+        }
+</script>

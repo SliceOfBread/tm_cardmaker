@@ -15,13 +15,23 @@ or more specifically https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css
 body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
 </style>
 <body class="w3-content" style="max-width:1800px">
-  <div class="w3-hide" id="overlay">
+  <div class="overlay w3-nodisplay" id="overlay">
     <div class="centerme">
       <div class="w3-white" style="padding: 50px;">
         Enter url to load image from:
         <input id="url2load" type="url">
         <button onclick="cancelOverlay()">Cancel</button>
         <button onclick="loadWebImage()">Load</button>
+      </div>
+    </div>
+  </div>
+  <div class="overlay w3-nodisplay" id="fontoverlay">
+    <div class="centerme">
+      <div class="w3-white" style="padding: 50px;">
+        Enter url to load font from:
+        <input id="fonturl2load" type="text">
+        <button onclick="cancelFontOverlay()">Cancel</button>
+        <button onclick="loadSpecifiedFont()">Load</button>
       </div>
     </div>
   </div>
@@ -39,7 +49,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
       <div id="fromTemplate" class="w3-bar-block w3-hide w3-padding-large w3-medium">
       </div>
         <!-- <a href="#" class="w3-bar-item w3-button">Load</a> -->
-      <a onclick="window.alert('Right click image to save it')" href="#" class="w3-bar-item w3-button">Save</a>
+      <a onclick="saveProjectCont(false)" href="#" class="w3-bar-item w3-button">Save</a>
       <a onclick="clickLoadNewProject()" href="#" class="w3-bar-item w3-button">Clear &amp; Load Project</a>
       <a onclick="clickLoadProject()" href="#" class="w3-bar-item w3-button">Load Project</a>
       <a onclick="clickSaveProject()" href="#" class="w3-bar-item w3-button">Save as Project</a>
@@ -49,7 +59,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
     </a>
     <div id="design" class="w3-bar-block w3-hide w3-padding-large w3-medium">
       <a onclick="myAccFunc('backgrounds')" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align">
-        Backgrounds <i class="fa fa-caret-down"></i>
+        User Images <i class="fa fa-caret-down"></i>
       </a>
       <div id="backgrounds" class="w3-bar-block w3-hide w3-padding-large w3-medium">
         <a onclick="clickLoadWebImage()" href="#" class="w3-bar-item w3-button">Load Web Image</a>
@@ -57,6 +67,7 @@ body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         <input type="file" id="fileselection" class="w3-hide" onchange="addUserFile(this)">
         <!-- <a onclick="addColor()" href="#" class="w3-bar-item w3-button">Set Color</a> -->
       </div>
+      <a onclick="clickLoadFont()" href="#" class="w3-bar-item w3-button">Add Web Font</a>
       <a onclick="addTextBox()" href="#" class="w3-bar-item w3-button">Text box</a>
       <a onclick="addProduction()" href="#" class="w3-bar-item w3-button">Production box</a>
       <a onclick="addEffectBox()" href="#" class="w3-bar-item w3-button">Effect box</a>

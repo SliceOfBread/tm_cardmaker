@@ -5,6 +5,11 @@ var userImageList = [];
 var otherBgList = {};
 var type2FuncList = {};
 // var groupList = [];
+var fontList = {
+  Prototype: "",
+  Pagella: "",
+  times: ""
+};
 
 var blockList = [
   {putUnder: "templates", text: "Green Card", src:"green_normal"},
@@ -82,14 +87,14 @@ var blockList = [
   {putUnder: "tags", text: "", src:"space", otherbg:"tag_otherbg"},
   {putUnder: "tags", text: "", src:"venus", otherbg:"tag_otherbg"},
   {putUnder: "tags", text: "", src:"wild", otherbg:"tag_otherbg"},
-  {putUnder: "tiles", text: "", src:"city"},
+  {putUnder: "tiles", text: "", src:"city", otherbg:"tiles_otherbg"},
   {putUnder: "tiles", text: "", src:"colony"},
-  {putUnder: "tiles", text: "", src:"empty"},
-  {putUnder: "tiles", text: "", src:"greenery_no_O2"},
-  {putUnder: "tiles", text: "", src:"greenery"},
-  {putUnder: "tiles", text: "", src:"ocean"},
-  {putUnder: "tiles", text: "", src:"off-world_city"},
-  {putUnder: "tiles", text: "", src:"special"},
+  {putUnder: "tiles", text: "", src:"empty", otherbg:"tiles_otherbg"},
+  {putUnder: "tiles", text: "", src:"greenery_no_O2", otherbg:"tiles_otherbg"},
+  {putUnder: "tiles", text: "", src:"greenery", otherbg:"tiles_otherbg"},
+  {putUnder: "tiles", text: "", src:"ocean", otherbg:"tiles_otherbg"},
+  {putUnder: "tiles", text: "", src:"off-world_city", otherbg:"tiles_otherbg"},
+  {putUnder: "tiles", text: "", src:"special", otherbg:"tiles_otherbg"},
   {putUnder: "tiles", text: "", src:"trade"},
   {putUnder: "VPs", text: "VP 1/", src:"1_for"},
   {putUnder: "VPs", text: "1 VP", src:"1"},
@@ -105,7 +110,9 @@ var blockList = [
   {putUnder: "templates", text: "", src:"prelude"},
   {putUnder: "templates", text: "", src:"corporation"},
   {putUnder: "misc", text: "Tag Holder", src:"corp_tag_holder"},
-  {putUnder: "misc", text: "Effect (bg)", src:"effect"}
+  {putUnder: "misc", text: "Effect (bg)", src:"effect"},
+  {putUnder: "tags", text: "", src:"multitag", otherbg:"tag_otherbg"},
+  {putUnder: "tiles", text: "tiles_otherbg", src:"other_player_background", hidden:true}
 ];
 
 var blockDefaults = {
@@ -144,7 +151,7 @@ var blockDefaults = {
     {label:"Negative", x:652, y:836, width:223, height:223}
   ],
   tiles: [
-    {label:"Standard tile", width:123, height:129}
+    {label:"Standard tile", height:142}
   ],
   requisites: [
     {label:"Max", x:180, y:92, width:200, height:60},
@@ -321,6 +328,7 @@ var numLoaded;
 
 var hiddenImage = {};
 
+var domInputfont = document.getElementById("inputfont");
 var domParams = document.getElementById("params").parentNode.removeChild(document.getElementById("params"));
 domParams.classList.remove("w3-hide");
 
@@ -377,24 +385,26 @@ function addBlockMenuItem(num) {
     }
     // add menu item for image
     // <a onclick="addBlock('template:green')" href="#" class="w3-bar-item w3-button">Green Card</a>
-    let toAdd = document.createElement("a");
-    toAdd.onclick = addBlock;
-    toAdd.innerText = tmpText;
-    toAdd.classList.add("w3-bar-item");
-    toAdd.classList.add("w3-button");
-    toAdd.href = "#";
-    toAdd.id = "image" + num;
-    document.getElementById(blockList[num].putUnder).appendChild(toAdd);
-    if (blockList[num].putUnder == "templates") {
-      // add Super Templates
-      toAdd = document.createElement("a");
-      toAdd.onclick = addMegaTemplate;
+    if (!document.getElementById("image" + num)) {
+      let toAdd = document.createElement("a");
+      toAdd.onclick = addBlock;
       toAdd.innerText = tmpText;
       toAdd.classList.add("w3-bar-item");
       toAdd.classList.add("w3-button");
       toAdd.href = "#";
-      toAdd.id = "mega" + blockList[num].src;
-      document.getElementById("fromTemplate").appendChild(toAdd);
+      toAdd.id = "image" + num;
+      document.getElementById(blockList[num].putUnder).appendChild(toAdd);
+      if (blockList[num].putUnder == "templates") {
+        // add Super Templates
+        toAdd = document.createElement("a");
+        toAdd.onclick = addMegaTemplate;
+        toAdd.innerText = tmpText;
+        toAdd.classList.add("w3-bar-item");
+        toAdd.classList.add("w3-button");
+        toAdd.href = "#";
+        toAdd.id = "mega" + blockList[num].src;
+        document.getElementById("fromTemplate").appendChild(toAdd);
+      }
     }
   }
 }
@@ -826,6 +836,9 @@ function updateValue(th) {
   } else if (th.type == "checkbox") {
     aLayers[layerName][fieldName] = th.checked;
   } else {
+    if (th.id == "inputfont") {
+      aLayers[layerName].filename = fontList[th.value];
+    }
     aLayers[layerName][fieldName] = th.value;
   }
   drawProject();
@@ -856,6 +869,9 @@ function setPresets(th){
       // fill in presets
       if (v == "label") continue;
       document.getElementById("input" + v).value = blockDefaults[dName][sel][v];
+      if (dName == "tiles") {
+        reloading = false;
+      }
       updateValue(document.getElementById("input" + v));
     }
     if (dName == "templates") {
@@ -953,6 +969,10 @@ function loadFrom(saved, autoload) {
             newLayer = addBlock(layer.iNum);
             ignore.push("iNum");
           } else if (layer.type == "text") {
+            if (layer.filename  && !fontList[layer.font]) {
+              // this font has not been reloaded
+              loadFont(layer.filename);
+            } 
             newLayer = addTextBox(layer.data);
           // } else if (layer.type == "effect") {
           //   newLayer = addEffectBox();
@@ -1054,6 +1074,9 @@ function addBlock(th) {
   // layer.height = thisBlock.obj.height;
   let newLayer = addLayer(thisBlock.text, layer);
   if (thisBlock.obj) {
+
+    if (!newLayer.width) newLayer.width = thisBlock.obj.width;
+    if (!newLayer.height) newLayer.height = thisBlock.obj.height;
     drawProject();
   } else {
     fetchBlock(layer.iNum);
@@ -1207,7 +1230,7 @@ function userImageLoaded() {
           }
           // normally userFile cannot reload but here we have userFile data embedded
           // so change from userFile to embedded if needed
-          if (newLayers[i].type == "userFile") {
+          if ((newLayers[i].type == "userFile") || (newLayers[i].type == "embedded")) {
             newLayers[i].iNum = userImageList.length;
             // set iNum above to point to canvas we add to userImageList below
             userImageList.push(aCanvases.shift());
@@ -1360,14 +1383,69 @@ function copyToClipboard() {
   document.body.removeChild(el);
 };
 
+function clickLoadFont() {
+  let o = document.getElementById("fontoverlay");
+  if (o.classList.contains("w3-nodisplay")) {
+    o.classList.remove("w3-nodisplay");
+    o.classList.add("w3-display");
+  } else {
+    o.classList.remove("w3-display");
+    o.classList.add("w3-nodisplay");
+  }
+}
+
+function loadSpecifiedFont() {
+  let url = document.getElementById("fonturl2load").value;
+
+  let o = document.getElementById("fontoverlay");
+  o.classList.remove("w3-display");
+  o.classList.add("w3-nodisplay");
+  
+  loadFont(url);
+}
+
+function loadFont(url) {
+  // <link href="https://fonts.googleapis.com/css2?family=Turret+Road:wght@400;700;800&display=swap" rel="stylesheet">
+  // <link href="https://fonts.googleapis.com/css2?family=Turret+Road&display=swap" rel="stylesheet">
+
+  if (!url.startsWith("http")) {
+    let httpPos = url.indexOf('http');
+    if (httpPos > 0) {
+      // assume url enclosed on double or single quotes
+      // extract url start from http, end at char before close quote
+      url = url.slice(httpPos, url.indexOf(url.charAt(httpPos-1),httpPos));
+    }
+  }
+  let domLink = document.createElement("link");
+  domLink.href = url;
+  domLink.rel = "stylesheet";
+  document.body.appendChild(domLink);
+
+  // <span style="float: right;">Font:<select id="inputfont" type="select" onchange="updateValue(this)">
+  // <option value="Prototype" style="font-family: Prototype;" default>Prototype</option>
+  let fontName = url.slice(url.indexOf('family=')+7);
+  fontName = fontName.replace(/["&]/g,":"); // change " or & to : 
+  fontName = fontName.slice(0,fontName.indexOf(":")); // now use : to find end of name
+  fontName = fontName.replace(/[+]/g, " ");
+  let domOpt = document.createElement("option");
+  domOpt.value = fontName;
+  domOpt.style.fontFamily = fontName;
+  domOpt.innerText = fontName;
+  fontList[fontName] = url;
+  
+  domInputfont.appendChild(domOpt);
+
+  return;
+}
+
 function clickLoadWebImage() {
   let o = document.getElementById("overlay");
-  if (o.classList.contains("w3-hide")) {
-    o.classList.remove("w3-hide");
-    o.classList.add("w3-show");
+  if (o.classList.contains("w3-nodisplay")) {
+    o.classList.remove("w3-nodisplay");
+    o.classList.add("w3-display");
   } else {
-    o.classList.remove("w3-show");
-    o.classList.add("w3-hide");
+    o.classList.remove("w3-display");
+    o.classList.add("w3-nodisplay");
   }
 }
 
@@ -1380,8 +1458,8 @@ function loadWebImage() {
   img.src = url;
   img.crossOrigin = "Anonymous";
   let o = document.getElementById("overlay");
-  o.classList.remove("w3-show");
-  o.classList.add("w3-hide");
+  o.classList.remove("w3-display");
+  o.classList.add("w3-nodisplay");
 }
 
 function webImageLoaded(th) {
@@ -1430,6 +1508,12 @@ function webImageReloaded(th) {
 
 function cancelOverlay() {
   let o = document.getElementById("overlay");
+  o.classList.remove("w3-show");
+  o.classList.add("w3-hide");
+}
+
+function cancelFontOverlay() {
+  let o = document.getElementById("fontoverlay");
   o.classList.remove("w3-show");
   o.classList.add("w3-hide");
 }
@@ -1516,7 +1600,7 @@ function clickSaveProject() {
   }
 
   // allow time for drawing then prompt for save
-  setTimeout(saveProjectCont,100) ;
+  setTimeout(saveProjectCont,100, true) ;
 
 
   // figure out how much extra height we need (assume UTF-8)
@@ -1525,46 +1609,14 @@ function clickSaveProject() {
   // drawProject(true);
 }
 
-function saveProjectCont() {
+function saveProjectCont(need2wait) {
   let c = document.getElementById("cmcanvas");
-  // let ctx = c.getContext("2d");
-  // let w=c.width;
-  // let h = oldHeight;
-  // let imgData = ctx.getImageData(0, 0, w, h);
-  // ctx.putImageData(imgData, 0, 0);
-  // let imgPlus = ctx.getImageData(0, 0, w, h+extraRows);
-  // // imgPlus contains the image data we want to save plus the extra rows
-  // // where we will save our data
-  // let storePos = w*h*4;
-  // let tmp = "tm_cmV01";
-  // {
-  //   let j=0;
-  //   // store 8 bytes to verify it's our special image
-  //   for (let i=w*h*4; i < w*h*4+tmp.length; i++) {
-  //     imgPlus.data[i] = tmp.charCodeAt(j++);
-  //     storePos++;
-  //   }
-  // }
-  // let l = lastAutoSave.length;
-  // imgPlus.data[storePos++] = l & 0xff;
-  // l = l >> 8;
-  // imgPlus.data[storePos++] = l & 0xff;
-  // l = l >> 8;
-  // imgPlus.data[storePos++] = l & 0xff;
-  // l = l >> 8;
-  // imgPlus.data[storePos++] = l & 0xff;
-  // {
-  //   let j=0;
-  //   for (let i=storePos; i < storePos+lastAutoSave.length; i++) {
-  //     imgPlus.data[i] = lastAutoSave.charCodeAt(j++);
-  //   }
-  // }
-  // ctx.putImageData(imgPlus, 0, 0);
+  
   let projectlink = document.getElementById('projectlink');
   projectlink.setAttribute('download', 'cardMaker.png');
   projectlink.setAttribute('href', c.toDataURL("image/png").replace("image/png", "image/octet-stream"));
   projectlink.click();
-  saveDone();
+  if (need2wait) saveDone();
 }
 
 function saveDone() {
