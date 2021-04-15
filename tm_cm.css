@@ -3,6 +3,41 @@
   src: url(./fonts/Prototype.ttf);
 }
 
+@font-face {
+  font-family: Pagella;
+  src: url(./fonts/texgyrepagella-regular-webfont.ttf);
+  font-weight: normal;
+  font-style:normal;
+}
+
+@font-face {
+  font-family: Pagella;
+  src: url(./fonts/texgyrepagella-bold-webfont.ttf);
+  font-weight: bold;
+  font-style:normal;
+}
+
+@font-face {
+  font-family: Pagella;
+  src: url(./fonts/texgyrepagella-italic-webfont.ttf);
+  font-weight: normal;
+  font-style:italic;
+}
+
+@font-face {
+  font-family: Pagella;
+  src: url(./fonts/texgyrepagella-bolditalic-webfont.ttf);
+  font-weight: bold;
+  font-style:italic;
+}
+
+.fa-bars {
+  width: 35px;
+  height: 5px;
+  background-color: white;
+  margin: 6px 0;
+}
+
 /* W3.CSS 4.13 June 2019 by Jan Egil and Borge Refsnes */
 html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
 /* Extract from normalize.css by Nicolas Gallagher and Jonathan Neal git.io/normalize */
@@ -79,7 +114,9 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .w3-content,.w3-auto{margin-left:auto;margin-right:auto}.w3-content{max-width:980px}.w3-auto{max-width:1140px}
 .w3-cell-row{display:table;width:100%}.w3-cell{display:table-cell}
 .w3-cell-top{vertical-align:top}.w3-cell-middle{vertical-align:middle}.w3-cell-bottom{vertical-align:bottom}
-.w3-hide{display:none!important}.w3-show-block,.w3-show{display:block!important}.w3-show-inline-block{display:inline-block!important}
+/* .w3-hide{display:none!important}.w3-show-block,.w3-show{display:block!important}.w3-show-inline-block{display:inline-block!important} */
+.w3-hide{visibility: hidden; position: absolute;} .w3-show{visibility: initial; position: initial;}
+.w3-display{display:block!important}.w3-nodisplay{display:none!important}
 @media (max-width:1205px){.w3-auto{max-width:95%}}
 @media (max-width:600px){.w3-modal-content{margin:0 10px;width:auto!important}.w3-modal{padding-top:30px}
 .w3-dropdown-hover.w3-mobile .w3-dropdown-content,.w3-dropdown-click.w3-mobile .w3-dropdown-content{position:relative}	
@@ -220,6 +257,26 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .w3-border-pale-red,.w3-hover-border-pale-red:hover{border-color:#ffe7e7!important}.w3-border-pale-green,.w3-hover-border-pale-green:hover{border-color:#e7ffe7!important}
 .w3-border-pale-yellow,.w3-hover-border-pale-yellow:hover{border-color:#ffffcc!important}.w3-border-pale-blue,.w3-hover-border-pale-blue:hover{border-color:#e7ffff!important}
 
+.overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 5;
+  cursor: pointer;
+}
+
+.centerme {
+  width: 300px;
+  padding: 200px 0px;
+  margin: auto;
+}
+
 #layerlist {
     /* list-style-type:none;
 }
@@ -238,6 +295,7 @@ section { */
   }
   
   .inside {
+    display: inline-block;
     background-color: #fff;
   }
 
@@ -287,5 +345,6 @@ section { */
   }
   input[type=checkbox]{
     transform: scale(2);
+    margin: 0px 8px;
   } 
 
