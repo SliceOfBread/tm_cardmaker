@@ -112,7 +112,8 @@ var blockList = [
   {putUnder: "misc", text: "Tag Holder", src:"corp_tag_holder"},
   {putUnder: "misc", text: "Effect (bg)", src:"effect"},
   {putUnder: "tags", text: "", src:"multitag", otherbg:"tag_otherbg"},
-  {putUnder: "tiles", text: "tiles_otherbg", src:"other_player_background", hidden:true}
+  {putUnder: "tiles", text: "tiles_otherbg", src:"other_player_background", hidden:true},
+  {putUnder: "tags", text: "", src:"tourism", otherbg:"tag_otherbg"},
 ];
 
 var blockDefaults = {
