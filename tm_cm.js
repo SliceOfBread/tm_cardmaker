@@ -1146,7 +1146,7 @@ function addUserFile(th) {
   th.value = "";
 }
 
-function getImageFormUrl(url, callback) {
+function getImageFromUrl(url, callback) {
   var img = new Image();
   img.setAttribute('crossOrigin', 'anonymous');
   img.onload = function (a) {
@@ -1183,7 +1183,7 @@ function getImageFormUrl(url, callback) {
 function loadInitialProject(url) {
   projectLoad = true;
   try {
-      getImageFormUrl(url, function (blobImage) {
+      getImageFromUrl(url, function (blobImage) {
         const reader = new FileReader();
         reader.addEventListener('load', function() {
           let newI = new Image();
