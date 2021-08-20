@@ -1854,11 +1854,12 @@ function getParameterByName(name, url = window.location.href) {
 
 var projectUrl = getParameterByName('project')
 let str = localStorage.getItem("loadedProjectUrl");
-if (projectUrl && projectUrl != "" && projectUrl != str) {
+if (projectUrl && projectUrl != "") {
   localStorage.setItem("loadedProjectUrl", projectUrl);
+  window.location.assign("https://sliceofbread.neocities.org/tm/tm_cardmaker.html");
+} else if (str && str != "") {
   resetProject(false);
-  loadInitialProject(projectUrl)
-}
-else {
+  loadInitialProject(str)
+} else {
   resetProject(true);
 }
