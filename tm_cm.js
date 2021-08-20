@@ -1852,7 +1852,13 @@ function getParameterByName(name, url = window.location.href) {
 }
 
 var projectUrl = getParameterByName('project')
-if (projectUrl != "") {
+let str = ""
+try {
+  str = localStorage.getItem("loadedProjectUrl");
+} catch (error) {
+}
+if (projectUrl != "" && projectUrl != str) {
+  localStorage.setItem("loadedProjectUrl", projectUrl);
   resetProject(false);
   loadInitialProject(projectUrl)
 }
