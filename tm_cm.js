@@ -1147,6 +1147,59 @@ function addUserFile(th) {
   th.value = "";
 }
 
+function getImageFromUrl(url, callback) {
+  var img = new Image();
+  img.setAttribute('crossOrigin', 'anonymous');
+  img.onload = function (a) {
+  var canvas = document.createElement("canvas");
+  canvas.width = this.width;
+  canvas.height = this.height;
+  var ctx = canvas.getContext("2d");
+  ctx.drawImage(this, 0, 0);
+
+  var dataURI = canvas.toDataURL("image/jpg");
+
+  // convert base64/URLEncoded data component to raw binary data held in a string
+  var byteString;
+  if (dataURI.split(',')[0].indexOf('base64') >= 0)
+    byteString = atob(dataURI.split(',')[1]);
+  else
+    byteString = unescape(dataURI.split(',')[1]);
+
+  // separate out the mime component
+  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+  // write the bytes of the string to a typed array
+  var ia = new Uint8Array(byteString.length);
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  return callback(new Blob([ia], { type: mimeString }));
+  }
+
+  img.src = url;
+}
+
+function loadInitialProject(url) {
+  projectLoad = true;
+  try {
+      getImageFromUrl(url, function (blobImage) {
+        const reader = new FileReader();
+        reader.addEventListener('load', function() {
+          let newI = new Image();
+          newI.onload = userImageLoaded;
+          newI.src = reader.result;
+          newI.crossOrigin = "Anonymous";
+        });
+        reader.readAsDataURL(blobImage);
+      });
+  } catch (error) {
+    projectLoad = false;
+    window.alert("Something went wrong loading initial project." + error)
+  }
+}
+
 var oLoadedProject;
 
 function userImageLoaded() {
@@ -1790,4 +1843,22 @@ function sortable(section, onUpdate){
 }
      
 
-resetProject(true);
+function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+var projectUrl = getParameterByName('project')
+let str = localStorage.getItem("loadedProjectUrl");
+if (projectUrl != "" && projectUrl != str) {
+  localStorage.setItem("loadedProjectUrl", projectUrl);
+  resetProject(false);
+  loadInitialProject(projectUrl)
+}
+else {
+  resetProject(true);
+}
