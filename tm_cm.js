@@ -1854,7 +1854,7 @@ function getParameterByName(name, url = window.location.href) {
 
 var projectUrl = getParameterByName('project')
 let str = localStorage.getItem("loadedProjectUrl");
-if (projectUrl != "" && projectUrl != str) {
+if (projectUrl && projectUrl != "" && projectUrl != str) {
   localStorage.setItem("loadedProjectUrl", projectUrl);
   resetProject(false);
   loadInitialProject(projectUrl)
