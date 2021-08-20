@@ -1856,7 +1856,9 @@ var projectUrl = getParameterByName('project')
 let str = localStorage.getItem("loadedProjectUrl");
 if (projectUrl && projectUrl != "") {
   localStorage.setItem("loadedProjectUrl", projectUrl);
-  window.location.assign("https://sliceofbread.neocities.org/tm/tm_cardmaker.html");
+  // Redirect without the query parameters now that they are stored in local
+  // storage, so that they do not cause problems e.g. on reload or "new".
+  window.location.assign(location.protocol + '//' + location.host + location.pathname);
 } else if (str && str != "") {
   resetProject(false);
   loadInitialProject(str)
