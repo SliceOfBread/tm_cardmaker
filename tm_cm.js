@@ -599,7 +599,7 @@ function drawProject() {
           c.width = layer.width;
         }
         // layer = {type:"block", obj:{}, x:0, y:0, width:0, height:0, params:"allimages"};
-        if (layer.obg) { // draw others background?
+        if (layer.obg) { // draw the 'any player' red border, aka 'others' background?
           let brdr = 3;
           if (!otherBgList[blockList[layer.iNum].otherbg]) {
             for (let j=0; j < blockList.length; j++) {
