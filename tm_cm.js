@@ -781,7 +781,7 @@ function drawProject() {
 
 var lastAutoSave = "";
 function autoSave(layers) {
-  lastAutoSave = JSON.stringify(layers);
+  lastAutoSave = projectDataToJson(layers);
   try {
     if (typeof(Storage) !== "undefined") {
       localStorage.setItem("autosave", lastAutoSave);
@@ -1594,6 +1594,13 @@ function clickLoadProject() {
   document.getElementById('fileselection').click();
 }
 
+function projectDataToJson(data) {
+  let jsonStr = JSON.stringify(data)
+  return jsonStr.replace(/[\u007F-\uFFFF]/g, function(chr) {
+    return "\\u" + ("0000" + chr.charCodeAt(0).toString(16)).substr(-4)
+  })
+}
+
 function clickSaveProject() {
   // make array of user images
   let layerDivs = document.getElementsByClassName("divRec");
@@ -1617,12 +1624,12 @@ function clickSaveProject() {
   }
   // determine number of extra rows, add this value to all pos.y values returned from fitImages
   // currently our storeage is 2 bytes per pixel (4 worked but BGG does something that ruins it)
-  let posStr = JSON.stringify(imgData.pos);
+  let posStr = projectDataToJson(imgData.pos);
   extraRows = Math.ceil(8 + (lastAutoSave.length + posStr.length + 10) / .375 / imgData.container.width);
   for (let i=0; i < imgData.pos.length; i++) {
     imgData.pos[i].y += extraRows;
   }
-  posStr = JSON.stringify(imgData.pos);
+  posStr = projectDataToJson(imgData.pos);
   // NOTE: we are making the not so crazy judgement that changing the pos.y data will not increase
   //  posStr by much and certainly nothing near the minimum 600+ bytes 
   //  (8 extra height * 200 (min) * .375 byte per pixel) we have available.
