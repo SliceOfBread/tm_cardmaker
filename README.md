@@ -31,6 +31,7 @@ This part will assume you want to make a normal project. Corporation or Prelude 
 - 'Base' is just the size of your card, in pixels and the background color.
 - 'Green Card' is almost everything else you see (sans text). Generally you won't adjust this layer.
 - 'No Requirement' is that little graphic near the card cost. In this case the card has no requirements.
+- Some layer types have a checkbox labeled 'Any player' red boarder. Check this if you want to put a red border around the tag, resource or tile icon, indicating that the card effect can target any player.
 - Let's change the card to a card with a requirement.
 - Delete the 'No Requirement' layer by clicking the 'X' next to its name.
 - On the left menu, click 'Add Block' then 'Requirements' then 'Min Requirement (small)'. Wow that is NOT small!
