@@ -1872,3 +1872,51 @@ if (projectUrl && projectUrl != "") {
 } else {
   resetProject(true);
 }
+
+var elem = document.getElementById('cmcanvas'),
+    elemLeft = elem.offsetLeft + elem.clientLeft,
+    elemTop = elem.offsetTop + elem.clientTop,
+    context = elem.getContext('2d')
+
+var layerToDrag
+var dragOffsetX
+var dragOffsetY
+
+// Add event listener for `drag` events.
+elem.addEventListener("mousedown", dragStart, false);
+elem.addEventListener("mouseup", dragEnd, false);
+elem.addEventListener("mousemove", drag, false);
+
+function dragStart(event) {
+    var x = event.clientX - elemLeft,
+        y = event.clientY - elemTop;
+
+    // Collision detection between clicked offset and element.
+    let layerDivs = document.getElementsByClassName("divRec");
+    for (let i=layerDivs.length - 1; i >= 0; i--) {
+      let layer = aLayers[layerDivs[i].id];
+      console.log('look at a layer named ' + layer.name + ' of type ' + layer.type + ' at ' + layer.x + ',' + layer.y + ' with params ' + layer.params)
+      if (y > layer.y && y < layer.y + layer.height 
+          && x > layer.x && x < layer.x + layer.width) {
+        layerToDrag = layer
+        dragOffsetX = layer.x - x
+        dragOffsetY = layer.y - y
+        return
+      }
+    }
+}
+
+function dragEnd(event) {
+  layerToDrag = null
+}
+
+function drag(event) {
+  var x = event.clientX - elemLeft + dragOffsetX,
+      y = event.clientY - elemTop + dragOffsetY;
+
+  if (layerToDrag != null) {
+      layerToDrag.x = x
+      layerToDrag.y = y
+      drawProject();
+  }
+}
