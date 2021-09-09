@@ -629,6 +629,7 @@ function drawProject() {
         ctx.font = layer.style + " " + layer.weight + " " + layer.height + "px " + layer.font;
         ctx.fillStyle = layer.color;
         // TBD break up long text into mutiple parts
+        // Note that this algorithm is copied in clickIsWithinText()
         let lines = layer.data.split("\n");
         let cnt = 0;
         for (var ln=0; ln < lines.length; ln++) {
@@ -1888,22 +1889,74 @@ elem.addEventListener("mouseup", dragEnd, false);
 elem.addEventListener("mousemove", drag, false);
 
 function dragStart(event) {
-    var x = event.clientX - elemLeft,
-        y = event.clientY - elemTop;
+    var x = (event.clientX - elemLeft),
+        y = (event.clientY - elemTop);
 
     // Collision detection between clicked offset and element.
     let layerDivs = document.getElementsByClassName("divRec");
     for (let i=layerDivs.length - 1; i >= 0; i--) {
       let layer = aLayers[layerDivs[i].id];
-      console.log('look at a layer named ' + layer.name + ' of type ' + layer.type + ' at ' + layer.x + ',' + layer.y + ' with params ' + layer.params)
-      if (y > layer.y && y < layer.y + layer.height 
-          && x > layer.x && x < layer.x + layer.width) {
+      if (clickIsWithinLayer(layer, x, y)) {
         layerToDrag = layer
         dragOffsetX = layer.x - x
         dragOffsetY = layer.y - y
         return
       }
     }
+}
+
+function clickIsWithinLayer(layer, x, y) {
+  let c = document.getElementById("cmcanvas");
+  let ctx = c.getContext("2d");
+
+  // Check to see if we are inside the text bounding box of a text layer
+  // n.b. Text is rendered just above the bounding box (bug?).
+  if (layer.type == 'text') {
+    return clickIsWithinText(layer, x - layer.x, (y - layer.y) + layer.height)
+  }
+
+  // If the x,y is not inside the bounding box, then it's definitely a miss
+  if (y < layer.y || y > layer.y + layer.height
+          || x < layer.x || x > layer.x + layer.width) {
+    return false
+  }
+
+  // If the bounding box is the only info we have about the layer, then that's what we'll use.
+  return true
+}
+
+// This function is a copy of the text-wrapping algorithm in drawProject()
+function clickIsWithinText(layer, x, y) {
+  if (y < 0) {
+    return false
+  }
+  text = layer.data
+  let c = document.getElementById("cmcanvas");
+  let ctx = c.getContext("2d");
+  let lines = text.split("\n");
+  let cnt = 0;
+  for (var ln=0; ln < lines.length; ln++) {
+    let spl = lines[ln].split(" ");
+    let o = "";
+    while (spl.length) {
+      o = spl.shift();
+      while (spl.length && (ctx.measureText(o + " " + spl[0]).width < layer.width)) {
+        o += " " + spl.shift();
+      }
+      cnt++;
+      lineWidth = ctx.measureText(o).width
+      if (y < ((layer.height + layer.lineSpace) * cnt)) {
+        if (layer.justify == "center") {
+          x = x + (lineWidth / 2);
+        }
+        if (layer.justify == "right") {
+          x = x + lineWidth;
+        }
+
+        return (x > 0) && (x < lineWidth);
+      }
+    }
+  }
 }
 
 function dragEnd(event) {
