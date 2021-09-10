@@ -1888,18 +1888,26 @@ elem.addEventListener("mousedown", dragStart, false);
 elem.addEventListener("mouseup", dragEnd, false);
 elem.addEventListener("mousemove", drag, false);
 
+function getMousePos(event) {
+    let c = document.getElementById("cmcanvas");
+    var rect = c.getBoundingClientRect();
+    return {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top
+    };
+}
+
 function dragStart(event) {
-    var x = (event.clientX - elemLeft),
-        y = (event.clientY - elemTop);
+    var mouse = getMousePos(event)
 
     // Collision detection between clicked offset and element.
     let layerDivs = document.getElementsByClassName("divRec");
     for (let i=layerDivs.length - 1; i >= 0; i--) {
       let layer = aLayers[layerDivs[i].id];
-      if (clickIsWithinLayer(layer, x, y)) {
+      if (clickIsWithinLayer(layer, mouse.x, mouse.y)) {
         layerToDrag = layer
-        dragOffsetX = layer.x - x
-        dragOffsetY = layer.y - y
+        dragOffsetX = layer.x - mouse.x
+        dragOffsetY = layer.y - mouse.y
         return
       }
     }
@@ -1964,8 +1972,9 @@ function dragEnd(event) {
 }
 
 function drag(event) {
-  var x = event.clientX - elemLeft + dragOffsetX,
-      y = event.clientY - elemTop + dragOffsetY;
+  var mouse = getMousePos(event)
+  var x = mouse.x + dragOffsetX,
+      y = mouse.y + dragOffsetY;
 
   if (layerToDrag != null) {
       layerToDrag.x = x
