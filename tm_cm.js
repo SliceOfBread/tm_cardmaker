@@ -497,6 +497,7 @@ function deleteListItem(e,th) {
 }
 
 function selectLayer() {
+  removeKeyInputFocus()
   let allLayerNodes = document.getElementById("layerlist").children;
   for (let ch=0; ch < allLayerNodes.length; ch++) {
     if (allLayerNodes[ch].classList.contains("selected")) {
@@ -1746,6 +1747,7 @@ function groupModeToggle() {
 
 // Accordion 
 function myAccFunc(acc) {
+  removeKeyInputFocus()
   var x = document.getElementById(acc);
   if (x.classList.contains("w3-hide")) {
     x.classList.remove("w3-hide");
@@ -1882,6 +1884,7 @@ var elem = document.getElementById('cmcanvas'),
 var layerToDrag
 var dragOffsetX
 var dragOffsetY
+var keyFocusLayer
 
 // Add event listener for `drag` events.
 elem.addEventListener("mousedown", dragStart, false);
@@ -1906,6 +1909,7 @@ function dragStart(event) {
       let layer = aLayers[layerDivs[i].id];
       if (clickIsWithinLayer(layer, mouse.x, mouse.y)) {
         layerToDrag = layer
+        focusKeyInput(layer)
         dragOffsetX = layer.x - mouse.x
         dragOffsetY = layer.y - mouse.y
         return
@@ -1982,3 +1986,68 @@ function drag(event) {
       drawProject();
   }
 }
+
+function focusKeyInput(layer) {
+  keyFocusLayer = layer
+  document.addEventListener("keydown", moveLayerWithKey, false);
+}
+
+function removeKeyInputFocus() {
+  keyFocusLayer = null
+  document.removeEventListener("keydown", moveLayerWithKey, false);
+}
+
+function moveLayerWithKey(event) {
+  if (keyFocusLayer != null) {
+    aspectRatio = keyFocusLayer.height / keyFocusLayer.width;
+    delta = getMoveDeltas(event, aspectRatio)
+    if (delta.x || delta.y || delta.w || delta.h) {
+      keyFocusLayer.x = keyFocusLayer.x + delta.x
+      keyFocusLayer.y = keyFocusLayer.y + delta.y
+      keyFocusLayer.width = keyFocusLayer.width + delta.w
+      keyFocusLayer.height = keyFocusLayer.height + delta.h
+      drawProject();
+    }
+  }
+}
+
+function getMoveDeltas(event, aspectRatio) {
+    var delta = {
+      x: 0,
+      y: 0,
+      w: 0,
+      h: 0
+    };
+
+    // One pixel if shift is up, 1/6" if shift is down
+    magnitude = 1;
+    if (event.shiftKey) {
+      magnitude = 50;
+    }
+
+    // Set the directions based on the key
+    switch (event.key) {
+      case "ArrowRight":
+        delta.x = magnitude;
+        break;
+      case "ArrowLeft":
+        delta.x = -magnitude;
+        break;
+      case "ArrowUp":
+        delta.y = -magnitude;
+        break;
+      case "ArrowDown":
+        delta.y = magnitude;
+        break;
+    }
+
+    // If alt is down, convert movement into resize
+    if (event.altKey) {
+      delta.w = delta.x - (2 * delta.y);
+      delta.h = delta.w * aspectRatio;
+      delta.x = delta.w * (delta.y / 2);
+      delta.y = delta.h * (delta.y / 2);
+    }
+    return delta
+}
+
