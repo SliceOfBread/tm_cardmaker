@@ -1908,6 +1908,7 @@ function dragStart(event) {
     for (let i=layerDivs.length - 1; i >= 0; i--) {
       let layer = aLayers[layerDivs[i].id];
       if (clickIsWithinLayer(layer, mouse.x, mouse.y)) {
+        selectLayer()
         layerToDrag = layer
         focusKeyInput(layer)
         dragOffsetX = layer.x - mouse.x
