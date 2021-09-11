@@ -2007,6 +2007,7 @@ function moveLayerWithKey(event) {
       keyFocusLayer.width = keyFocusLayer.width + delta.w
       keyFocusLayer.height = keyFocusLayer.height + delta.h
       drawProject();
+      event.preventDefault()
     }
   }
 }
