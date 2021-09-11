@@ -1969,6 +1969,21 @@ function moveLayerWithKey(event) {
     aspectRatio = keyFocusLayer.height / keyFocusLayer.width;
     delta = getMoveDeltas(event, aspectRatio)
     if (delta.x || delta.y || delta.w || delta.h) {
+      if (keyFocusLayer.type == "text") {
+        if (event.altKey) {
+          delta.x = 0;
+          delta.y = 0;
+          if ((event.key == "ArrowUp") || (event.key == "ArrowDown")) {
+            // Do not adjust the width for alt up / down, only change the font size
+            delta.w = 0;
+            delta.h = 2 * Math.sign(delta.h);
+            delta.y = delta.h
+          } else {
+            // Do not adjust the height for alt left / right, only change the width (wrap point)
+            delta.h = 0;
+          }
+        }
+      }
       newX = keyFocusLayer.x + delta.x;
       newY = keyFocusLayer.y + delta.y;
       newWidth = keyFocusLayer.width + delta.w;
