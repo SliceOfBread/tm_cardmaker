@@ -2019,10 +2019,10 @@ function getMoveDeltas(event, aspectRatio) {
       h: 0
     };
 
-    // One pixel if shift is up, 1/6" if shift is down
+    // One pixel if shift is up, 1/12" if shift is down
     magnitude = 1;
     if (event.shiftKey) {
-      magnitude = 50;
+      magnitude = 25;
     }
 
     // Set the directions based on the key
