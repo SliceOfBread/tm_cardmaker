@@ -2002,10 +2002,16 @@ function moveLayerWithKey(event) {
     aspectRatio = keyFocusLayer.height / keyFocusLayer.width;
     delta = getMoveDeltas(event, aspectRatio)
     if (delta.x || delta.y || delta.w || delta.h) {
-      keyFocusLayer.x = keyFocusLayer.x + delta.x
-      keyFocusLayer.y = keyFocusLayer.y + delta.y
-      keyFocusLayer.width = keyFocusLayer.width + delta.w
-      keyFocusLayer.height = keyFocusLayer.height + delta.h
+      newX = keyFocusLayer.x + delta.x;
+      newY = keyFocusLayer.y + delta.y;
+      newWidth = keyFocusLayer.width + delta.w;
+      newHeight = keyFocusLayer.height + delta.h;
+      if (((newWidth >= 8) && (newHeight >=8)) || (delta.w > 0)) {
+        keyFocusLayer.x = newX;
+        keyFocusLayer.y = newY;
+        keyFocusLayer.width = newWidth;
+        keyFocusLayer.height = newHeight;
+      }
       drawProject();
       event.preventDefault()
     }
@@ -2044,11 +2050,16 @@ function getMoveDeltas(event, aspectRatio) {
 
     // If alt is down, convert movement into resize
     if (event.altKey) {
+      var centered = (delta.y != 0);
       delta.w = delta.x - (2 * delta.y);
       delta.h = delta.w * aspectRatio;
-      delta.x = delta.w * (delta.y / 2);
-      delta.y = delta.h * (delta.y / 2);
+      delta.x = 0
+      delta.y = 0
+      if (centered) {
+        delta.x = -delta.w / 2;
+        delta.y = -delta.h / 2;
+      }
     }
-    return delta
+    return delta;
 }
 
