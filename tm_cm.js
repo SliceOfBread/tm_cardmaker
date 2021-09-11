@@ -11,6 +11,11 @@ var fontList = {
   times: ""
 };
 
+var layerToDrag;
+var dragOffsetX;
+var dragOffsetY;
+var keyFocusLayer;
+
 var blockList = [
   {putUnder: "templates", text: "Green Card", src:"green_normal"},
   {putUnder: "templates", text: "Green Small Bottom", src:"green_small_bottom"},
@@ -1851,45 +1856,6 @@ function sortable(section, onUpdate){
      
   });
 }
-     
-
-function getParameterByName(name, url = window.location.href) {
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-var projectUrl = getParameterByName('project')
-let str = localStorage.getItem("loadedProjectUrl");
-if (projectUrl && projectUrl != "") {
-  localStorage.setItem("loadedProjectUrl", projectUrl);
-  // Redirect without the query parameters now that they are stored in local
-  // storage, so that they do not cause problems e.g. on reload or "new".
-  window.location.assign(location.protocol + '//' + location.host + location.pathname);
-} else if (str && str != "") {
-  resetProject(false);
-  loadInitialProject(str)
-} else {
-  resetProject(true);
-}
-
-var elem = document.getElementById('cmcanvas'),
-    elemLeft = elem.offsetLeft + elem.clientLeft,
-    elemTop = elem.offsetTop + elem.clientTop,
-    context = elem.getContext('2d')
-
-var layerToDrag
-var dragOffsetX
-var dragOffsetY
-var keyFocusLayer
-
-// Add event listener for `drag` events.
-elem.addEventListener("mousedown", dragStart, false);
-elem.addEventListener("mouseup", dragEnd, false);
-elem.addEventListener("mousemove", drag, false);
 
 function getMousePos(event) {
     let c = document.getElementById("cmcanvas");
@@ -1901,19 +1867,19 @@ function getMousePos(event) {
 }
 
 function dragStart(event) {
-    var mouse = getMousePos(event)
+    var mouse = getMousePos(event);
 
     // Collision detection between clicked offset and element.
     let layerDivs = document.getElementsByClassName("divRec");
     for (let i=layerDivs.length - 1; i >= 0; i--) {
       let layer = aLayers[layerDivs[i].id];
       if (clickIsWithinLayer(layer, mouse.x, mouse.y)) {
-        selectLayer()
-        layerToDrag = layer
-        focusKeyInput(layer)
-        dragOffsetX = layer.x - mouse.x
-        dragOffsetY = layer.y - mouse.y
-        return
+        selectLayer();
+        layerToDrag = layer;
+        focusKeyInput(layer);
+        dragOffsetX = layer.x - mouse.x;
+        dragOffsetY = layer.y - mouse.y;
+        return;
       }
     }
 }
@@ -1925,23 +1891,23 @@ function clickIsWithinLayer(layer, x, y) {
   // Check to see if we are inside the text bounding box of a text layer
   // n.b. Text is rendered just above the bounding box (bug?).
   if (layer.type == 'text') {
-    return clickIsWithinText(layer, x - layer.x, (y - layer.y) + layer.height)
+    return clickIsWithinText(layer, x - layer.x, (y - layer.y) + layer.height);
   }
 
   // If the x,y is not inside the bounding box, then it's definitely a miss
   if (y < layer.y || y > layer.y + layer.height
           || x < layer.x || x > layer.x + layer.width) {
-    return false
+    return false;
   }
 
   // If the bounding box is the only info we have about the layer, then that's what we'll use.
-  return true
+  return true;
 }
 
 // This function is a copy of the text-wrapping algorithm in drawProject()
 function clickIsWithinText(layer, x, y) {
   if (y < 0) {
-    return false
+    return false;
   }
   text = layer.data
   let c = document.getElementById("cmcanvas");
@@ -1957,7 +1923,7 @@ function clickIsWithinText(layer, x, y) {
         o += " " + spl.shift();
       }
       cnt++;
-      lineWidth = ctx.measureText(o).width
+      lineWidth = ctx.measureText(o).width;
       if (y < ((layer.height + layer.lineSpace) * cnt)) {
         if (layer.justify == "center") {
           x = x + (lineWidth / 2);
@@ -1973,7 +1939,7 @@ function clickIsWithinText(layer, x, y) {
 }
 
 function dragEnd(event) {
-  layerToDrag = null
+  layerToDrag = null;
 }
 
 function drag(event) {
@@ -1982,19 +1948,19 @@ function drag(event) {
       y = mouse.y + dragOffsetY;
 
   if (layerToDrag != null) {
-      layerToDrag.x = x
-      layerToDrag.y = y
+      layerToDrag.x = x;
+      layerToDrag.y = y;
       drawProject();
   }
 }
 
 function focusKeyInput(layer) {
-  keyFocusLayer = layer
+  keyFocusLayer = layer;
   document.addEventListener("keydown", moveLayerWithKey, false);
 }
 
 function removeKeyInputFocus() {
-  keyFocusLayer = null
+  keyFocusLayer = null;
   document.removeEventListener("keydown", moveLayerWithKey, false);
 }
 
@@ -2014,7 +1980,7 @@ function moveLayerWithKey(event) {
         keyFocusLayer.height = newHeight;
       }
       drawProject();
-      event.preventDefault()
+      event.preventDefault();
     }
   }
 }
@@ -2054,8 +2020,8 @@ function getMoveDeltas(event, aspectRatio) {
       var centered = (delta.y != 0);
       delta.w = delta.x - (2 * delta.y);
       delta.h = delta.w * aspectRatio;
-      delta.x = 0
-      delta.y = 0
+      delta.x = 0;
+      delta.y = 0;
       if (centered) {
         delta.x = -delta.w / 2;
         delta.y = -delta.h / 2;
@@ -2063,4 +2029,36 @@ function getMoveDeltas(event, aspectRatio) {
     }
     return delta;
 }
+
+function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+var projectUrl = getParameterByName('project')
+let str = localStorage.getItem("loadedProjectUrl");
+if (projectUrl && projectUrl != "") {
+  localStorage.setItem("loadedProjectUrl", projectUrl);
+  // Redirect without the query parameters now that they are stored in local
+  // storage, so that they do not cause problems e.g. on reload or "new".
+  window.location.assign(location.protocol + '//' + location.host + location.pathname);
+} else if (str && str != "") {
+  resetProject(false);
+  loadInitialProject(str)
+} else {
+  resetProject(true);
+}
+
+var elem = document.getElementById('cmcanvas'),
+    elemLeft = elem.offsetLeft + elem.clientLeft,
+    elemTop = elem.offsetTop + elem.clientTop;
+
+// Add event listener for `drag` events.
+elem.addEventListener("mousedown", dragStart, false);
+elem.addEventListener("mouseup", dragEnd, false);
+elem.addEventListener("mousemove", drag, false);
 
