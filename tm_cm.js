@@ -1884,6 +1884,57 @@ function dragStart(event) {
     }
 }
 
+// Check to see if the given coordinates are within the specified layer
+//
+// Block objects are anchored at the upper left, and may contain
+// transparent areas:
+//
+//    O-----------+
+//    |     .     |
+//    |   .....   |
+//    | ......... |
+//    | ......... |
+//    | ......... |
+//    |   .....   |
+//    |     .     |
+//    +-----------+
+//
+// For these sorts of layers, we can first check to see whether the
+// point is within the bounding rectangle, and then check to see if
+// the pixel under the point is transparent or not.
+//
+// Text layers do not lie within their bounding box. The width
+// of the bounding box is used to determine where text should wrap,
+// and the height of the bounding box controls the font size. The
+// anchor is on the baseline of the text. Text layers therefore
+// look something like this:
+//
+// Left-justified:
+//
+//                     THIS IS SOME TEXT
+//                     O--------------------+
+//                     +--------------------+
+//
+// Centered:
+//
+//             THIS IS SOME TEXT
+//                     O--------------------+
+//                     +--------------------+
+//
+// Right-justified:
+//
+//    THIS IS SOME TEXT
+//                     O--------------------+
+//                     +--------------------+
+//
+// Multi-line text layers will vertically overlap with the
+// bounding box on the second line only, with the third and
+// subsequent lines lying below the bounding box. To do hit
+// testing on text, then, we replicate the word-wrapping
+// algorithm and calculate a bounding rectangle for each line
+// individually, checkin each one until a hit is found.
+//
+// For all other layer types, the bounding box is used as specified.
 function clickIsWithinLayer(layer, x, y) {
   let c = document.getElementById("cmcanvas");
   let ctx = c.getContext("2d");
