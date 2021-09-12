@@ -1900,8 +1900,31 @@ function clickIsWithinLayer(layer, x, y) {
     return false;
   }
 
-  // If the bounding box is the only info we have about the layer, then that's what we'll use.
+  // If the click hits a transparent area, then count it as a miss
+  if (clickIsWithinTransparentArea(layer, x - layer.x, y - layer.y)) {
+    return false;
+  }
+
+  // If the click hasn't been found to be outside the area, then it is inside.
   return true;
+}
+
+function clickIsWithinTransparentArea(layer, x, y) {
+  if ((layer.type != "block") || (!blockList[layer.iNum].obj.complete)) {
+    console.log(layer);
+    return false;
+  }
+
+  try {
+    var ctx = document.createElement("canvas").getContext("2d");
+    ctx.drawImage(blockList[layer.iNum].obj, 0, 0, layer.width, layer.height);
+    alpha = ctx.getImageData(x, y, 1, 1).data[3]; // [0]R [1]G [2]B [3]A
+
+    return alpha === 0;
+  } catch (error) {
+    // https://stackoverflow.com/questions/16217521/i-get-a-canvas-has-been-tainted-error-in-chrome-but-not-in-ff/16218015#16218015
+    return false;
+  }
 }
 
 // This function is a copy of the text-wrapping algorithm in drawProject()
@@ -1993,8 +2016,8 @@ function moveLayerWithKey(event) {
         keyFocusLayer.y = newY;
         keyFocusLayer.width = newWidth;
         keyFocusLayer.height = newHeight;
+        drawProject();
       }
-      drawProject();
       event.preventDefault();
     }
   }
