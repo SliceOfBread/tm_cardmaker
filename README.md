@@ -20,25 +20,50 @@ Cheers!"
 
 ## How to Use
 
-This part will assume you want to make a normal project. Corporation or Prelude cards are similar.
-- Click 'File'
-- Click 'New from Template'
-- Click one of the templates that appears. For this example let's choose 'Green Card'
-- On the right (possibly bottom if you have a small screen) you will see the list of layers. Let's set the cost of the card by first selecting that layer. To start, it is labelled  'Text:Cost'. Click that.
-- That opens up all the information for the layer. Where it is positioned, the font, etc. Change the text, which is in the box jest below 'height'. It currently says 'Cost'. Change it to a number. To see the change, you need to 'tab' or click outside this box. If you felt like the number wasn't in the right spot, you can adjust the 'x' and 'y' to move it. If you want the font to be bigger or smaller, adjust the 'height'. You can also change the font/color. Click 'Text:Cost' when you're done (note you can change the layer name from 'Text:Cost' to anything else that you prefer.
-- The above holds for all the text layers. Additionally, if you have longer text, you can use 'width' to set the maximum width a line can be (in pixels) and you can use 'V space' to adjust the line-to-line spacing when the program splits your text across multiple lines. There's also a 'Justify' selection if you want your text to be centered, aligned on the left or right.
-- Other than text, there are a few other things already in your card.
-- 'Base' is just the size of your card, in pixels and the background color.
+TM_Cardmaker provides **templates**, **presets** and graphic assets called **blocks** to help build attractive card that match the look and feel of the original game.
+
+To begin, click on **File** > **New from Template**, and select an appropriate starting template for the card that you wish to design. The available templates include:
+
+- Corporation
+- Prelude card
+- Green project card (three layouts)
+- Blue project card (three layouts)
+- Red event card (two layouts)
+
+For this example, we'll choose 'Green Card'. This will create layers with the elements of the most common type of project card. On the right (possibly bottom if you have a small screen) you will see the list of layers. Let's set the cost of the card by first selecting that layer. To start, it is labelled  'Text:Cost'. Click that.
+
+Clicking on a layer opens up the layer information pane, which contains all of the information needed to render the layer (postion, font color, etc). Change the text, which is in the box jest below 'height'. It currently says 'Cost'. Change it to a number. To see the change, you need to 'tab' or click outside this box.
+
+If you felt like the number wasn't in the right spot, you can click on it on the rendered card, and drag it to the right spot. You can make fine adjustments by using the keyboard shortcuts:
+
+- The arrow keys will move the object one pixel
+- Shift + arrow keys move 1/12" at a time
+- Alt + up and down arrows will make the text size larger or smaller
+- Alt + left and right arrows will change the width of the text bounding box, which controls where word-wrapping happens.
+
+If you know exactly where you want the object to go, you can also type in its X and Y coordinates in the layer information pane. The 'height' controls the size of the text, and the 'width' is the aforementioned word-wrapping boundary. There is also a 'V space' setting that controls the line-to--line spacing. There's also a 'Justify' selection if you want your text to be centered, aligned on the left or right. Click on the layer name to apply your changes and re-render the object. Note that you can change the layer names to anything that you prefer.
+
+Other than text, there are a few other things already in your card.
+
+- 'Base' is just the size of your card, in pixels, and the background color.
 - 'Green Card' is almost everything else you see (sans text). Generally you won't adjust this layer.
 - 'No Requirement' is that little graphic near the card cost. In this case the card has no requirements.
-- Let's change the card to a card with a requirement.
+
+To demonstrate how to place new blocks and use presets, we'll change the card to a card with a requirement.
+
 - Delete the 'No Requirement' layer by clicking the 'X' next to its name.
 - On the left menu, click 'Add Block' then 'Requirements' then 'Min Requirement (small)'. Wow that is NOT small!
 - On the right, the layer has been added 'Min Requirement (sma'. Click it. Under 'Presets' choose the obvious 'Min Small'. Things should look much more normal. There are presets for almost anything you add. Some are more useful than others
 - Let's require an Ocean tile. On the left click 'Tiles' then 'Ocean'. On the right, click the new layer 'Ocean'. There is one preset, 'Standard'. Hmm, that is not very useful.
 - Change 'X' to 214 and 'y' to 87. Change 'width' to 67 (and watch height will change automatically). Mostly you will leave the 'Lock aspect ratio' box checked but if you want to change height and width independently, just uncheck it.
 
+Blocks can also be moved around with the mouse and arrow keys, just like text layers. Resizing blocks is a little different, though.
+
+- Alt + left and right arrow keys resize the selected object, maintaining anchor at upper-left
+- Alt + up and down arrow keys resize the selected object, maintaining anchor at the center of the object
+
 A couple other things to highlight:
+
 - If you want to use an image from the Web (with permission of course), that's under 'Add Block' -> 'User Images' -> 'Load Web Image'.
 - If you want to use an image from your computer, it's the same as above but 'Load Local Image'
 - You might want the above (or some other) layer to look like it's in the background. Drag the layer name to where you want it. The layers are draw, in order, from the top of the list to the bottom. 'Base' is always the first layer.

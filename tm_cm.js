@@ -11,6 +11,11 @@ var fontList = {
   times: ""
 };
 
+var layerToDrag;
+var dragOffsetX;
+var dragOffsetY;
+var keyFocusLayer;
+
 var blockList = [
   {putUnder: "templates", text: "Green Card", src:"green_normal"},
   {putUnder: "templates", text: "Green Small Bottom", src:"green_small_bottom"},
@@ -497,6 +502,7 @@ function deleteListItem(e,th) {
 }
 
 function selectLayer() {
+  removeKeyInputFocus()
   let allLayerNodes = document.getElementById("layerlist").children;
   for (let ch=0; ch < allLayerNodes.length; ch++) {
     if (allLayerNodes[ch].classList.contains("selected")) {
@@ -629,6 +635,7 @@ function drawProject() {
         ctx.font = layer.style + " " + layer.weight + " " + layer.height + "px " + layer.font;
         ctx.fillStyle = layer.color;
         // TBD break up long text into mutiple parts
+        // Note that this algorithm is copied in clickIsWithinText()
         let lines = layer.data.split("\n");
         let cnt = 0;
         for (var ln=0; ln < lines.length; ln++) {
@@ -1745,6 +1752,7 @@ function groupModeToggle() {
 
 // Accordion 
 function myAccFunc(acc) {
+  removeKeyInputFocus()
   var x = document.getElementById(acc);
   if (x.classList.contains("w3-hide")) {
     x.classList.remove("w3-hide");
@@ -1848,7 +1856,268 @@ function sortable(section, onUpdate){
      
   });
 }
-     
+
+function getMousePos(event) {
+    let c = document.getElementById("cmcanvas");
+    var rect = c.getBoundingClientRect();
+    return {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top
+    };
+}
+
+function dragStart(event) {
+    var mouse = getMousePos(event);
+
+    // Collision detection between clicked offset and element.
+    let layerDivs = document.getElementsByClassName("divRec");
+    for (let i=layerDivs.length - 1; i >= 0; i--) {
+      let layer = aLayers[layerDivs[i].id];
+      if (clickIsWithinLayer(layer, mouse.x, mouse.y)) {
+        selectLayer();
+        layerToDrag = layer;
+        focusKeyInput(layer);
+        dragOffsetX = layer.x - mouse.x;
+        dragOffsetY = layer.y - mouse.y;
+        return;
+      }
+    }
+}
+
+// Check to see if the given coordinates are within the specified layer
+//
+// Block objects are anchored at the upper left, and may contain
+// transparent areas:
+//
+//    O-----------+
+//    |     .     |
+//    |   .....   |
+//    | ......... |
+//    | ......... |
+//    | ......... |
+//    |   .....   |
+//    |     .     |
+//    +-----------+
+//
+// For these sorts of layers, we can first check to see whether the
+// point is within the bounding rectangle, and then check to see if
+// the pixel under the point is transparent or not.
+//
+// Text layers do not lie within their bounding box. The width
+// of the bounding box is used to determine where text should wrap,
+// and the height of the bounding box controls the font size. The
+// anchor is on the baseline of the text. Text layers therefore
+// look something like this:
+//
+// Left-justified:
+//
+//                     THIS IS SOME TEXT
+//                     O--------------------+
+//                     +--------------------+
+//
+// Centered:
+//
+//             THIS IS SOME TEXT
+//                     O--------------------+
+//                     +--------------------+
+//
+// Right-justified:
+//
+//    THIS IS SOME TEXT
+//                     O--------------------+
+//                     +--------------------+
+//
+// Multi-line text layers will vertically overlap with the
+// bounding box on the second line only, with the third and
+// subsequent lines lying below the bounding box. To do hit
+// testing on text, then, we replicate the word-wrapping
+// algorithm and calculate a bounding rectangle for each line
+// individually, checkin each one until a hit is found.
+//
+// For all other layer types, the bounding box is used as specified.
+function clickIsWithinLayer(layer, x, y) {
+  let c = document.getElementById("cmcanvas");
+  let ctx = c.getContext("2d");
+
+  // Check to see if we are inside the text bounding box of a text layer
+  // n.b. Text is rendered just above the bounding box (bug?).
+  if (layer.type == 'text') {
+    return clickIsWithinText(layer, x - layer.x, (y - layer.y) + layer.height);
+  }
+
+  // If the x,y is not inside the bounding box, then it's definitely a miss
+  if (y < layer.y || y > layer.y + layer.height
+          || x < layer.x || x > layer.x + layer.width) {
+    return false;
+  }
+
+  // If the click hits a transparent area, then count it as a miss
+  if (clickIsWithinTransparentArea(layer, x - layer.x, y - layer.y)) {
+    return false;
+  }
+
+  // If the click hasn't been found to be outside the area, then it is inside.
+  return true;
+}
+
+function clickIsWithinTransparentArea(layer, x, y) {
+  if ((layer.type != "block") || (!blockList[layer.iNum].obj.complete)) {
+    console.log(layer);
+    return false;
+  }
+
+  try {
+    var ctx = document.createElement("canvas").getContext("2d");
+    ctx.drawImage(blockList[layer.iNum].obj, 0, 0, layer.width, layer.height);
+    alpha = ctx.getImageData(x, y, 1, 1).data[3]; // [0]R [1]G [2]B [3]A
+
+    return alpha === 0;
+  } catch (error) {
+    // https://stackoverflow.com/questions/16217521/i-get-a-canvas-has-been-tainted-error-in-chrome-but-not-in-ff/16218015#16218015
+    return false;
+  }
+}
+
+// This function is a copy of the text-wrapping algorithm in drawProject()
+function clickIsWithinText(layer, x, y) {
+  if (y < 0) {
+    return false;
+  }
+  text = layer.data
+  let c = document.getElementById("cmcanvas");
+  let ctx = c.getContext("2d");
+  let lines = text.split("\n");
+  let cnt = 0;
+  for (var ln=0; ln < lines.length; ln++) {
+    let spl = lines[ln].split(" ");
+    let o = "";
+    while (spl.length) {
+      o = spl.shift();
+      while (spl.length && (ctx.measureText(o + " " + spl[0]).width < layer.width)) {
+        o += " " + spl.shift();
+      }
+      cnt++;
+      lineWidth = ctx.measureText(o).width;
+      if (y < ((layer.height + layer.lineSpace) * cnt)) {
+        if (layer.justify == "center") {
+          x = x + (lineWidth / 2);
+        }
+        if (layer.justify == "right") {
+          x = x + lineWidth;
+        }
+
+        return (x > 0) && (x < lineWidth);
+      }
+    }
+  }
+}
+
+function dragEnd(event) {
+  layerToDrag = null;
+}
+
+function drag(event) {
+  var mouse = getMousePos(event)
+  var x = mouse.x + dragOffsetX,
+      y = mouse.y + dragOffsetY;
+
+  if (layerToDrag != null) {
+      layerToDrag.x = x;
+      layerToDrag.y = y;
+      drawProject();
+  }
+}
+
+function focusKeyInput(layer) {
+  keyFocusLayer = layer;
+  document.addEventListener("keydown", moveLayerWithKey, false);
+}
+
+function removeKeyInputFocus() {
+  keyFocusLayer = null;
+  document.removeEventListener("keydown", moveLayerWithKey, false);
+}
+
+function moveLayerWithKey(event) {
+  if (keyFocusLayer != null) {
+    aspectRatio = keyFocusLayer.height / keyFocusLayer.width;
+    delta = getMoveDeltas(event, aspectRatio)
+    if (delta.x || delta.y || delta.w || delta.h) {
+      if (keyFocusLayer.type == "text") {
+        if (event.altKey) {
+          delta.x = 0;
+          delta.y = 0;
+          if ((event.key == "ArrowUp") || (event.key == "ArrowDown")) {
+            // Do not adjust the width for alt up / down, only change the font size
+            delta.w = 0;
+            delta.h = 2 * Math.sign(delta.h);
+            delta.y = delta.h
+          } else {
+            // Do not adjust the height for alt left / right, only change the width (wrap point)
+            delta.h = 0;
+          }
+        }
+      }
+      newX = keyFocusLayer.x + delta.x;
+      newY = keyFocusLayer.y + delta.y;
+      newWidth = keyFocusLayer.width + delta.w;
+      newHeight = keyFocusLayer.height + delta.h;
+      if (((newWidth >= 8) && (newHeight >=8)) || (delta.w > 0)) {
+        keyFocusLayer.x = newX;
+        keyFocusLayer.y = newY;
+        keyFocusLayer.width = newWidth;
+        keyFocusLayer.height = newHeight;
+        drawProject();
+      }
+      event.preventDefault();
+    }
+  }
+}
+
+function getMoveDeltas(event, aspectRatio) {
+    var delta = {
+      x: 0,
+      y: 0,
+      w: 0,
+      h: 0
+    };
+
+    // One pixel if shift is up, 1/12" if shift is down
+    magnitude = 1;
+    if (event.shiftKey) {
+      magnitude = 25;
+    }
+
+    // Set the directions based on the key
+    switch (event.key) {
+      case "ArrowRight":
+        delta.x = magnitude;
+        break;
+      case "ArrowLeft":
+        delta.x = -magnitude;
+        break;
+      case "ArrowUp":
+        delta.y = -magnitude;
+        break;
+      case "ArrowDown":
+        delta.y = magnitude;
+        break;
+    }
+
+    // If alt is down, convert movement into resize
+    if (event.altKey) {
+      var centered = (delta.y != 0);
+      delta.w = delta.x - (2 * delta.y);
+      delta.h = delta.w * aspectRatio;
+      delta.x = 0;
+      delta.y = 0;
+      if (centered) {
+        delta.x = -delta.w / 2;
+        delta.y = -delta.h / 2;
+      }
+    }
+    return delta;
+}
 
 function getParameterByName(name, url = window.location.href) {
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -1872,3 +2141,13 @@ if (projectUrl && projectUrl != "") {
 } else {
   resetProject(true);
 }
+
+var elem = document.getElementById('cmcanvas'),
+    elemLeft = elem.offsetLeft + elem.clientLeft,
+    elemTop = elem.offsetTop + elem.clientTop;
+
+// Add event listener for `drag` events.
+elem.addEventListener("mousedown", dragStart, false);
+elem.addEventListener("mouseup", dragEnd, false);
+elem.addEventListener("mousemove", drag, false);
+
