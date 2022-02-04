@@ -119,6 +119,12 @@ var blockList = [
   {putUnder: "tags", text: "", src:"multitag", otherbg:"tag_otherbg"},
   {putUnder: "tiles", text: "tiles_otherbg", src:"other_player_background", hidden:true},
   {putUnder: "tags", text: "", src:"tourism", otherbg:"tag_otherbg"},
+  {putUnder: "tags", text: "", src:"mercury", otherbg:"tag_otherbg"},
+  {putUnder: "resources", text: "", src:"asteroid", otherbg:"res_otherbg"},
+  {putUnder: "resources", text: "", src:"ore", otherbg:"res_otherbg"},
+  {putUnder: "misc", text: "", src:"asset"},
+  {putUnder: "misc", text: "Colony Tile", src:"colonytile"},
+  {putUnder: "misc", text: "", src:"population"}
 ];
 
 var blockDefaults = {
